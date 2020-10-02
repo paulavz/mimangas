@@ -1,10 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-//import firebase from "./Inicializer/firebase";
+import firebase from "./Inicializer/firebase";
 import App from './App';
 import * as serviceWorker from './serviceWorker';
-//require("firebase/firebase-firestore");
+require("firebase/firebase-firestore");
 
 
 ReactDOM.render(
@@ -13,7 +13,7 @@ ReactDOM.render(
   </React.StrictMode>,
   document.getElementById('root')
 );
-/*
+
 firebase
   .firestore()
   .enablePersistence()
@@ -28,7 +28,7 @@ firebase
       // ...
     }
   });
-  */
+
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
