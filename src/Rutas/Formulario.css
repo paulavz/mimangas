@@ -1,0 +1,10 @@
+.links, .links:visited {
+  cursor: pointer;
+  text-decoration: none;
+  color: black;
+}
+
+.links:hover {
+  color: #3f51b5;
+  font-weight: bold;
+}

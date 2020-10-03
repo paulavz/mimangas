@@ -1,7 +1,10 @@
 import React from 'react';
+import Login from './Login';
 
-export default function Formulario(props){
+export default function Formulario(props) {
 
-    return <div>Ruta 2 mi pana</div>
+    return <div>
+        <Login />
+    </div>
 
 }

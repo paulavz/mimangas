@@ -3,9 +3,9 @@ import './App.css';
 import {
   BrowserRouter as Router,
   Switch,
-  Route,
   Link
 } from "react-router-dom";
+import PrivateRoute from './PrivateRoute';
 import Formulario from './Rutas/Formularios';
 import Principal from './Rutas/Principal';
 
@@ -27,12 +27,12 @@ function App() {
             </nav>
 
             <Switch>
-              <Route path="/Login">
+              <PrivateRoute path="/Login" logged={false}>
                 <Formulario />
-              </Route>
-              <Route path="/">
+              </PrivateRoute>
+              <PrivateRoute path="/" logged={true}>
                 <Principal />
-              </Route>
+              </PrivateRoute>
             </Switch>
           </div>
         </Router>
