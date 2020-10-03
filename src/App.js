@@ -1,10 +1,11 @@
 import React from 'react';
 import {
   BrowserRouter as Router,
-  Switch, Redirect, Route
+  Switch, Redirect
 } from "react-router-dom";
-import Library from './Rutas/Library';
+import PrivateRoute from './PrivateRoute';
 import Formulario from './Rutas/Formulario';
+import Library from './Rutas/Library';
 
 function App() {
   return (
@@ -12,12 +13,12 @@ function App() {
       <div>
         <Redirect to="/Login" />
         <Switch>
-          <Route path="/Library" logged={true}>
+          <PrivateRoute path="/Library" logged={true}>
             <Library />
-          </Route>
-          <Route path="/" logged={false}>
+          </PrivateRoute>
+          <PrivateRoute path="/" logged={false}>
             <Formulario />
-          </Route>
+          </PrivateRoute>
         </Switch>
       </div>
     </Router>
