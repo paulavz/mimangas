@@ -82,7 +82,8 @@ class Login extends Component {
         firebase
           .auth()
           .signInWithEmailAndPassword(name, password)
-          .then((r) => console.log(r))
+          .then((r) => console.log(r)
+          )
           .catch((error) => {
             let errorCode = error.code;
             if (errorCode === "auth/invalid-email") {
