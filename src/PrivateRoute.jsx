@@ -27,7 +27,7 @@ export default function PrivateRoute({ logged, children, ...otrasProps }) {
             return <Route {...otrasProps} > {children} </Route>
         } else {
             if (isLogged) {
-                return <Redirect to="/" />
+                return <Redirect to="/Library" />
             } else {
                 return <Redirect to="/Login" />
             }
