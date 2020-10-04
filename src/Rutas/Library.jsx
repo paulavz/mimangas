@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import firebase from "../Inicializer/firebase";
 import AppBar from '@material-ui/core/AppBar';
@@ -70,6 +70,10 @@ const useStyles = makeStyles((theme) => ({
 export default function Library(props) {
     const classes = useStyles();
 
+    const [isActive, setActive] = useState("Todos");
+    let states = ["Todos", "Siguiendo", "Completo", "Favoritos", "Pausados", "Pedientes", "Abandonados"]
+
+
     function cerrar() {
         firebase
             .auth()
@@ -117,15 +121,14 @@ export default function Library(props) {
                 <Divider className={classes.divider} variant="middle" />
                 <div className={classes.colbutton}>
                     <ButtonGroup size="large" color="primary" aria-label="large outlined primary button group">
-
-
-                        <Button>Todos</Button>
-                        <Button>Siguiendo</Button>
-                        <Button>Completos</Button>
-                        <Button>Favoritos</Button>
-                        <Button>Pausados</Button>
-                        <Button>Pedientes</Button>
-                        <Button>Abandonados</Button>
+                        {states.map((value) =>
+                            <Button
+                                key={value}
+                                className={`${isActive === value ? "active" : ""}`}
+                                onClick={() => setActive(value)}
+                            >
+                                {value}
+                            </Button>)}
                     </ButtonGroup>
                 </div>
 
