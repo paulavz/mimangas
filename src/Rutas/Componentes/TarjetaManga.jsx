@@ -58,22 +58,8 @@ class TarjetaManga extends Component{
         this.state = {
 
         };
-        this.colorBorde = this.colorBorde.bind(this);
+        this.shouldComponentUpdate = this.shouldComponentUpdate.bind(this);
 
-    }
-
-    /**
-     * Devuelve el color del borde según el estado del componente
-     * @param {string} estado 
-     */
-    colorBorde(estado){
-        switch(estado){
-            case "Leído":
-                return "red";
-            case "Siguiendo":
-                return "cyan";
-            default:
-        }
     }
 
     shouldComponentUpdate(nextProps, nextState){
@@ -83,20 +69,27 @@ class TarjetaManga extends Component{
     render(){
         const { manga, classes } = this.props;
 
-        const color = this.colorBorde(manga.estado);
+        const colors = {
+            "Siguiendo": "lightCyan",
+            "Completo": "lightGreen", 
+            "Favoritos": "gold",
+            "Pausados": "midnightBlue",
+            "Pedientes": "orange",
+            "Abandonados": "crimson",
+        };
 
         return <div className={classes.root} >
             <div className={classes.content}>
                 <div className={classes.puntos} >
                     <FavoriteIcon 
                         fontSize="large" 
-                        style={{color: color}} 
+                        style={{color: colors[manga.estado]}} 
                     />
                     <div className={classes.puntuacion} >{manga.puntuacion.toString()}</div>
                 </div>
                 <Card
                     className={classes.card} 
-                    style={{borderColor: color}} 
+                    style={{borderColor: colors[manga.estado]}} 
                 >
                     <div 
                         className={classes.container} 
