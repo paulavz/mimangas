@@ -65,6 +65,11 @@ const useStyles = makeStyles((theme) => ({
 
         },
     },
+    paginacion: {
+        '& .MuiTablePagination-spacer': {
+            flex: 0,
+        },
+    },
 }));
 
 
@@ -256,6 +261,9 @@ export default function Library(props) {
                     onChangeRowsPerPage={handleChangeRowsPerPage}
                     labelRowsPerPage="Mangas por pagina"
                     labelDisplayedRows={ ({from, to, count}) => `${from} - ${to} de ${count}` } 
+                    className={classes.paginacion}
+                    nextIconButtonText="Siguiente"
+                    backIconButtonText="Anterior"
                 />
 
             </div>
