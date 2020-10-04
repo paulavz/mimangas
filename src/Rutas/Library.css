@@ -1,0 +1,15 @@
+.buscar > .MuiButton-label{
+    height: 39px;
+}
+
+.MuiButton-root{
+    text-transform: none !important;
+}
+
+.active.MuiButton-outlinedPrimary{
+    background:aqua;
+}
+
+.active.MuiButton-outlinedPrimary:hover{
+    background:aqua;
+}
