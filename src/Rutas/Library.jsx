@@ -246,7 +246,7 @@ export default function Library(props) {
                     
                     {mangasMostrados.slice(rowsPerPage*page, (rowsPerPage*page)+rowsPerPage)
                     .map((value, index) =>
-                    <Grid item xs={3} key={value.nombre + index} >
+                    <Grid item md={3} sm={6} xs={12} key={value.nombre + index} >
                         <TarjetaManga manga={value} />
                     </Grid>)}
                     
