@@ -70,8 +70,14 @@ class TarjetaManga extends Component{
         switch(estado){
             case "Leído":
                 return "red";
+            case "Siguiendo":
+                return "cyan";
             default:
         }
+    }
+
+    shouldComponentUpdate(nextProps, nextState){
+        return this.props.manga !== nextProps.manga;
     }
 
     render(){
