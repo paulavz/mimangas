@@ -12,6 +12,7 @@ import Add from './Add';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import Divider from '@material-ui/core/Divider';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
+import TarjetaManga from './Componentes/TarjetaManga';
 import "./Library.css";
 require("firebase/auth");
 
@@ -74,6 +75,34 @@ export default function Library(props) {
     const [isActive, setActive] = useState("Todos");
     let states = ["Todos", "Siguiendo", "Completo", "Favoritos", "Pausados", "Pedientes", "Abandonados"]
 
+    const mangasPrueba = [
+        {
+            nombre: "Naruto",
+            puntuacion: 96,
+            estado: "Favoritos",
+            imagen: "",
+        },
+        {
+            nombre: "xxxHolic",
+            puntuacion: 100,
+            estado: "Completo",
+            imagen: "",
+        },
+        {
+            nombre: "Detroit Metal City",
+            puntuacion: 91,
+            estado: "Siguiendo",
+            imagen: "",
+        },
+        {
+            nombre: "Kaguya-sama",
+            puntuacion: 10,
+            estado: "Abandonados",
+            imagen: "",
+        }
+    ]
+    const mangasFiltrados = isActive==="Todos" ? mangasPrueba 
+    : mangasPrueba.filter((value) => value.estado === isActive) ;
 
     function cerrar() {
         firebase
@@ -110,11 +139,12 @@ export default function Library(props) {
                             variant="outlined"
                             id="outlined-search"
                             type="search"
-                        />                    </Grid>
+                        />                   
+                    </Grid>
                     <Grid item xs={3}>
                         <Button size="large" className="buscar" fullWidth variant="contained" color="secondary">
                             Búsqueda Avanzada
-</Button>
+                        </Button>
                     </Grid>
 
                 </Grid>
@@ -133,6 +163,17 @@ export default function Library(props) {
                     </ButtonGroup>
                     <Add />
                 </div>
+
+                <Grid container spacing={2} >
+                    
+                    {mangasFiltrados.map((value) =>
+                    <Grid item xs={3} >
+                        <TarjetaManga manga={value} />
+                    </Grid>)}
+
+                    <Grid item xs={12} ></Grid>
+                    
+                </Grid>
 
             </div>
         </div>
