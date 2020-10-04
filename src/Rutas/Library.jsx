@@ -157,6 +157,10 @@ export default function Library(props) {
     const mangasFiltrados = isActive==="Todos" ? mangasPrueba 
     : mangasPrueba.filter((value) => value.estado === isActive) ;
 
+    const mangasMostrados = mangasFiltrados.filter(
+        (value) => new RegExp(buscador.toLowerCase()).test(value.nombre.toLowerCase())
+    );
+
     function cerrar() {
         firebase
             .auth()
@@ -178,6 +182,10 @@ export default function Library(props) {
         setPage(0);
     };
 
+    const handleChangeBuscador = (event) => {
+        setBuscador(event.target.value);
+    }
+
     return (
         <div className={classes.root}>
             <AppBar position="static">
@@ -198,6 +206,8 @@ export default function Library(props) {
                     <Grid item xs={9}>
                         <CssTextField
                             fullWidth
+                            onChange={handleChangeBuscador}
+                            value={buscador}
                             label="Buscar Manga"
                             variant="outlined"
                             id="outlined-search"
@@ -229,9 +239,9 @@ export default function Library(props) {
 
                 <Grid container spacing={2} >
                     
-                    {mangasFiltrados.slice(rowsPerPage*page, (rowsPerPage*page)+rowsPerPage)
-                    .map((value) =>
-                    <Grid item xs={3} >
+                    {mangasMostrados.slice(rowsPerPage*page, (rowsPerPage*page)+rowsPerPage)
+                    .map((value, index) =>
+                    <Grid item xs={3} key={value.nombre + index} >
                         <TarjetaManga manga={value} />
                     </Grid>)}
                     
@@ -239,7 +249,7 @@ export default function Library(props) {
 
                 <TablePagination
                     component="div"
-                    count={mangasFiltrados.length}
+                    count={mangasMostrados.length}
                     page={page}
                     onChangePage={handleChangePage}
                     rowsPerPage={rowsPerPage}
