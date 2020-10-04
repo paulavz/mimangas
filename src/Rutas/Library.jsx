@@ -69,6 +69,9 @@ const useStyles = makeStyles((theme) => ({
         '& .MuiTablePagination-spacer': {
             flex: 0,
         },
+        '& .MuiTablePagination-toolbar': {
+            width: "max-content",
+        },
     },
 }));
 
@@ -166,6 +169,10 @@ export default function Library(props) {
         (value) => new RegExp(buscador.toLowerCase()).test(value.nombre.toLowerCase())
     );
 
+    if(page > mangasMostrados.length / rowsPerPage){
+        setPage(Math.round(mangasMostrados.length / rowsPerPage));
+    }
+
     function cerrar() {
         firebase
             .auth()
@@ -252,7 +259,7 @@ export default function Library(props) {
                     
                 </Grid>
 
-                <TablePagination
+                {mangasMostrados.length > 0 && <TablePagination
                     component="div"
                     count={mangasMostrados.length}
                     page={page}
@@ -264,7 +271,7 @@ export default function Library(props) {
                     className={classes.paginacion}
                     nextIconButtonText="Siguiente"
                     backIconButtonText="Anterior"
-                />
+                />}
 
             </div>
         </div>
