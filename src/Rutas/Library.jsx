@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import firebase from "../Inicializer/firebase";
 import AppBar from '@material-ui/core/AppBar';
@@ -86,6 +86,12 @@ export default function Library(props) {
     const [rowsPerPage, setRowsPerPage] = useState(10);
     const [buscador, setBuscador] = useState("");
 
+    useEffect( () => {
+        if(page > mangasFiltrados.length / rowsPerPage){
+            setPage(Math.round(mangasFiltrados.length / rowsPerPage));
+        }
+    } , [page, rowsPerPage, mangasFiltrados]);
+
     const states = ["Todos", "Siguiendo", "Completo", "Favoritos", "Pausados", "Pedientes", "Abandonados"]
 
     const mangasPrueba = [
@@ -168,10 +174,6 @@ export default function Library(props) {
         (value) => new RegExp(buscador.toLowerCase()).test(value.nombre.toLowerCase())
     );
 
-    if(page > mangasFiltrados.length / rowsPerPage){
-        setPage(Math.round(mangasFiltrados.length / rowsPerPage));
-    }
-
     function cerrar() {
         firebase
             .auth()
@@ -211,6 +213,7 @@ export default function Library(props) {
                 </Toolbar>
 
             </AppBar>
+            <Add />
 
             <div className={classes.gridd}>
                 <Grid container spacing={2}>
@@ -245,7 +248,6 @@ export default function Library(props) {
                                 {value}
                             </Button>)}
                     </ButtonGroup>
-                    <Add />
                 </div>
 
                 <Grid container spacing={2} >
