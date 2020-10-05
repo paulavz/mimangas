@@ -100,11 +100,11 @@ export default function Library(props) {
     const handleChange = (event) => {
         setActive(event.target.value);
     };
-    useEffect( () => {
-        if(page > mangasFiltrados.length / rowsPerPage){
+    useEffect(() => {
+        if (page > mangasFiltrados.length / rowsPerPage) {
             setPage(Math.round(mangasFiltrados.length / rowsPerPage));
         }
-    } , [page, rowsPerPage, mangasFiltrados]);
+    }, [page, rowsPerPage, mangasFiltrados]);
 
     const states = ["Todos", "Siguiendo", "Completo", "Favoritos", "Pausados", "Pedientes", "Abandonados"]
 
@@ -227,8 +227,6 @@ export default function Library(props) {
                 </Toolbar>
 
             </AppBar>
-            <Add />
-
             <div className={classes.gridd}>
                 <Grid container spacing={2}>
                     <Grid item xs={9}>
@@ -306,6 +304,9 @@ export default function Library(props) {
                             </Grid>)}
 
                 </Grid>
+
+                <Add />
+
 
                 {mangasFiltrados.length > 0 && <TablePagination
                     component="div"
