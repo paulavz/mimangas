@@ -29,6 +29,14 @@ const useStyles = makeStyles((theme) => ({
     root: {
         flexGrow: 1,
     },
+    selector: {
+        flexGrow: 1,
+        display: 'none',
+        [theme.breakpoints.down("sm")]: {
+            display: 'block',
+        },
+
+    },
     title: {
         flexGrow: 1,
     },
@@ -57,6 +65,9 @@ const useStyles = makeStyles((theme) => ({
         flexDirection: 'column',
         alignItems: 'center',
         textTransform: 'none',
+        [theme.breakpoints.down("sm")]: {
+            display: 'none',
+        },
 
         '& > *': {
             margin: theme.spacing(1),
@@ -73,6 +84,10 @@ export default function Library(props) {
 
     const [isActive, setActive] = useState("Todos");
     let states = ["Todos", "Siguiendo", "Completo", "Favoritos", "Pausados", "Pedientes", "Abandonados"]
+
+    const handleChange = (event) => {
+        setActive(event.target.value);
+    };
 
 
     function cerrar() {
@@ -120,6 +135,7 @@ export default function Library(props) {
                 </Grid>
 
                 <Divider className={classes.divider} variant="middle" />
+
                 <div className={classes.colbutton}>
                     <ButtonGroup size="large" color="primary" aria-label="large outlined primary button group">
                         {states.map((value) =>
@@ -131,7 +147,39 @@ export default function Library(props) {
                                 {value}
                             </Button>)}
                     </ButtonGroup>
+
+
                     <Add />
+                </div>
+
+                <div className={classes.selector}>
+                    <Grid container spacing={3}>
+                        <Grid item xs={12}>
+
+                            <TextField
+                                id="outlined-select-currency-native"
+                                select
+                                fullWidth
+                                value={isActive}
+                                onChange={handleChange}
+                                SelectProps={{
+                                    native: true,
+                                }}
+                                variant="outlined"
+                            >
+
+
+                                {states.map((value) =>
+                                    <option
+                                        key={value}
+                                        value={value}
+                                    >
+                                        {value}
+                                    </option>)}
+                            </TextField>
+
+                        </Grid>
+                    </Grid>
                 </div>
 
             </div>
