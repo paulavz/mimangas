@@ -25,7 +25,7 @@ const useStyles = (theme) => ({
         position: "relative",
     },
     card: {
-        height: 300,
+        height: 350,
         borderColor: "black",
         borderWidth: 3,
         borderStyle: "solid",

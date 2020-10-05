@@ -12,6 +12,8 @@ import Add from './Add';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import Divider from '@material-ui/core/Divider';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
+import TablePagination from '@material-ui/core/TablePagination';
+import TarjetaManga from './Componentes/TarjetaManga';
 import "./Library.css";
 require("firebase/auth");
 
@@ -74,6 +76,14 @@ const useStyles = makeStyles((theme) => ({
 
         },
     },
+    paginacion: {
+        '& .MuiTablePagination-spacer': {
+            flex: 0,
+        },
+        '& .MuiTablePagination-toolbar': {
+            width: "max-content",
+        },
+    },
 }));
 
 
@@ -83,12 +93,99 @@ export default function Library(props) {
     const classes = useStyles();
 
     const [isActive, setActive] = useState("Todos");
-    let states = ["Todos", "Siguiendo", "Completo", "Favoritos", "Pausados", "Pedientes", "Abandonados"]
+    const [page, setPage] = useState(0);
+    const [rowsPerPage, setRowsPerPage] = useState(10);
+    const [buscador, setBuscador] = useState("");
 
     const handleChange = (event) => {
         setActive(event.target.value);
     };
 
+    const states = ["Todos", "Siguiendo", "Completo", "Favoritos", "Pausados", "Pedientes", "Abandonados"]
+
+    const mangasPrueba = [
+        {
+            nombre: "Naruto",
+            puntuacion: 96,
+            estado: "Favoritos",
+            imagen: "",
+        },
+        {
+            nombre: "xxxHolic",
+            puntuacion: 100,
+            estado: "Completo",
+            imagen: "",
+        },
+        {
+            nombre: "Detroit Metal City",
+            puntuacion: 91,
+            estado: "Siguiendo",
+            imagen: "",
+        },
+        {
+            nombre: "Kaguya-sama",
+            puntuacion: 10,
+            estado: "Abandonados",
+            imagen: "",
+        },
+        {
+            nombre: "Naruto",
+            puntuacion: 96,
+            estado: "Favoritos",
+            imagen: "",
+        },
+        {
+            nombre: "xxxHolic",
+            puntuacion: 100,
+            estado: "Completo",
+            imagen: "",
+        },
+        {
+            nombre: "Detroit Metal City",
+            puntuacion: 91,
+            estado: "Siguiendo",
+            imagen: "",
+        },
+        {
+            nombre: "Kaguya-sama",
+            puntuacion: 10,
+            estado: "Abandonados",
+            imagen: "",
+        },
+        {
+            nombre: "Naruto",
+            puntuacion: 96,
+            estado: "Favoritos",
+            imagen: "",
+        },
+        {
+            nombre: "xxxHolic",
+            puntuacion: 100,
+            estado: "Completo",
+            imagen: "",
+        },
+        {
+            nombre: "Detroit Metal City",
+            puntuacion: 91,
+            estado: "Siguiendo",
+            imagen: "",
+        },
+        {
+            nombre: "Kaguya-sama",
+            puntuacion: 10,
+            estado: "Abandonados",
+            imagen: "",
+        },
+    ];
+    const mangasFiltrados = mangasPrueba.filter(
+        (value) => isActive === "Todos" || value.estado === isActive
+    ).filter(
+        (value) => new RegExp(buscador.toLowerCase()).test(value.nombre.toLowerCase())
+    );
+
+    if (page > mangasFiltrados.length / rowsPerPage) {
+        setPage(Math.round(mangasFiltrados.length / rowsPerPage));
+    }
 
     function cerrar() {
         firebase
@@ -101,6 +198,20 @@ export default function Library(props) {
                 console.log("No se ha cerrado sección ", error);
             });
     }
+
+    const handleChangePage = (event, newPage) => {
+        setPage(newPage);
+    };
+
+    const handleChangeRowsPerPage = (event) => {
+        setRowsPerPage(parseInt(event.target.value, 10));
+        setPage(0);
+    };
+
+    const handleChangeBuscador = (event) => {
+        setBuscador(event.target.value);
+    }
+
     return (
         <div className={classes.root}>
             <AppBar position="static">
@@ -121,15 +232,18 @@ export default function Library(props) {
                     <Grid item xs={9}>
                         <CssTextField
                             fullWidth
+                            onChange={handleChangeBuscador}
+                            value={buscador}
                             label="Buscar Manga"
                             variant="outlined"
                             id="outlined-search"
                             type="search"
-                        />                    </Grid>
+                        />
+                    </Grid>
                     <Grid item xs={3}>
                         <Button size="large" className="buscar" fullWidth variant="contained" color="secondary">
                             Búsqueda Avanzada
-</Button>
+                        </Button>
                     </Grid>
 
                 </Grid>
@@ -181,6 +295,29 @@ export default function Library(props) {
                         </Grid>
                     </Grid>
                 </div>
+                <Grid container spacing={2} >
+
+                    {mangasFiltrados.slice(rowsPerPage * page, (rowsPerPage * page) + rowsPerPage)
+                        .map((value, index) =>
+                            <Grid item md={3} sm={6} xs={12} key={value.nombre + index} >
+                                <TarjetaManga manga={value} />
+                            </Grid>)}
+
+                </Grid>
+
+                {mangasFiltrados.length > 0 && <TablePagination
+                    component="div"
+                    count={mangasFiltrados.length}
+                    page={page}
+                    onChangePage={handleChangePage}
+                    rowsPerPage={rowsPerPage}
+                    onChangeRowsPerPage={handleChangeRowsPerPage}
+                    labelRowsPerPage="Mangas por pagina"
+                    labelDisplayedRows={({ from, to, count }) => `${from} - ${to} de ${count}`}
+                    className={classes.paginacion}
+                    nextIconButtonText="Siguiente"
+                    backIconButtonText="Anterior"
+                />}
 
             </div>
         </div>
