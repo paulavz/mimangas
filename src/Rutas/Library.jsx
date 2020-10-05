@@ -100,11 +100,6 @@ export default function Library(props) {
     const handleChange = (event) => {
         setActive(event.target.value);
     };
-    useEffect(() => {
-        if (page > mangasFiltrados.length / rowsPerPage) {
-            setPage(Math.round(mangasFiltrados.length / rowsPerPage));
-        }
-    }, [page, rowsPerPage, mangasFiltrados]);
 
     const states = ["Todos", "Siguiendo", "Completo", "Favoritos", "Pausados", "Pedientes", "Abandonados"]
 
@@ -187,6 +182,12 @@ export default function Library(props) {
     ).filter(
         (value) => new RegExp(buscador.toLowerCase()).test(value.nombre.toLowerCase())
     );
+
+    useEffect(() => {
+        if (page > mangasFiltrados.length / rowsPerPage) {
+            setPage(Math.round(mangasFiltrados.length / rowsPerPage));
+        }
+    }, [page, rowsPerPage, mangasFiltrados]);
 
     function cerrar() {
         firebase
