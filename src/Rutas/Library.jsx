@@ -162,15 +162,14 @@ export default function Library(props) {
             imagen: "",
         },
     ];
-    const mangasFiltrados = isActive==="Todos" ? mangasPrueba 
-    : mangasPrueba.filter((value) => value.estado === isActive) ;
-
-    const mangasMostrados = mangasFiltrados.filter(
+    const mangasFiltrados = mangasPrueba.filter(
+        (value) => isActive==="Todos" || value.estado === isActive
+    ).filter(
         (value) => new RegExp(buscador.toLowerCase()).test(value.nombre.toLowerCase())
     );
 
-    if(page > mangasMostrados.length / rowsPerPage){
-        setPage(Math.round(mangasMostrados.length / rowsPerPage));
+    if(page > mangasFiltrados.length / rowsPerPage){
+        setPage(Math.round(mangasFiltrados.length / rowsPerPage));
     }
 
     function cerrar() {
@@ -251,7 +250,7 @@ export default function Library(props) {
 
                 <Grid container spacing={2} >
                     
-                    {mangasMostrados.slice(rowsPerPage*page, (rowsPerPage*page)+rowsPerPage)
+                    {mangasFiltrados.slice(rowsPerPage*page, (rowsPerPage*page)+rowsPerPage)
                     .map((value, index) =>
                     <Grid item md={3} sm={6} xs={12} key={value.nombre + index} >
                         <TarjetaManga manga={value} />
@@ -259,9 +258,9 @@ export default function Library(props) {
                     
                 </Grid>
 
-                {mangasMostrados.length > 0 && <TablePagination
+                {mangasFiltrados.length > 0 && <TablePagination
                     component="div"
-                    count={mangasMostrados.length}
+                    count={mangasFiltrados.length}
                     page={page}
                     onChangePage={handleChangePage}
                     rowsPerPage={rowsPerPage}
