@@ -63,7 +63,7 @@ export default function SimpleLibrary({busqueda, mangas, states}){
             setPage(Math.floor(filtrados.length / rowsPerPage));
         }
         setMangasFiltrados(filtrados);
-    }, [page, rowsPerPage, busqueda, active]);
+    }, [page, rowsPerPage, busqueda, active, mangas]);
 
     const handleChange = (event) => {
         setActive(event.target.value);
