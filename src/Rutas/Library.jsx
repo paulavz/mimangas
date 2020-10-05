@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import firebase from "../Inicializer/firebase";
 import AppBar from '@material-ui/core/AppBar';
@@ -8,12 +8,9 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
-import Add from './Add';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import Divider from '@material-ui/core/Divider';
-import ButtonGroup from '@material-ui/core/ButtonGroup';
-import TablePagination from '@material-ui/core/TablePagination';
-import TarjetaManga from './Componentes/TarjetaManga';
+import SimpleLibrary from './SimpleLibrary';
 import "./Library.css";
 require("firebase/auth");
 
@@ -92,15 +89,7 @@ const useStyles = makeStyles((theme) => ({
 export default function Library(props) {
     const classes = useStyles();
 
-    const [isActive, setActive] = useState("Todos");
-    const [page, setPage] = useState(0);
-    const [rowsPerPage, setRowsPerPage] = useState(10);
     const [buscador, setBuscador] = useState("");
-    const [mangasFiltrados, setMangasFiltrados] = useState([]);
-
-    const handleChange = (event) => {
-        setActive(event.target.value);
-    };
 
     const states = ["Todos", "Siguiendo", "Completo", "Favoritos", "Pausados", "Pedientes", "Abandonados"]
 
@@ -179,18 +168,6 @@ export default function Library(props) {
         },
     ];
 
-    useEffect(() => {
-        const filtrados = mangasPrueba.filter(
-            (value) => isActive === "Todos" || value.estado === isActive
-        ).filter(
-            (value) => new RegExp(buscador.toLowerCase()).test(value.nombre.toLowerCase())
-        );
-        if (page > filtrados.length / rowsPerPage) {
-            setPage(Math.floor(filtrados.length / rowsPerPage));
-        }
-        setMangasFiltrados(filtrados);
-    }, [page, rowsPerPage, buscador, isActive]);
-
     function cerrar() {
         firebase
             .auth()
@@ -202,15 +179,6 @@ export default function Library(props) {
                 console.log("No se ha cerrado sección ", error);
             });
     }
-
-    const handleChangePage = (event, newPage) => {
-        setPage(newPage);
-    };
-
-    const handleChangeRowsPerPage = (event) => {
-        setRowsPerPage(parseInt(event.target.value, 10));
-        setPage(0);
-    };
 
     const handleChangeBuscador = (event) => {
         setBuscador(event.target.value);
@@ -253,77 +221,11 @@ export default function Library(props) {
 
                 <Divider className={classes.divider} variant="middle" />
 
-                <div className={classes.colbutton}>
-                    <ButtonGroup size="large" color="primary" aria-label="large outlined primary button group">
-                        {states.map((value) =>
-                            <Button
-                                key={value}
-                                className={`${isActive === value ? "active" : ""}`}
-                                onClick={() => setActive(value)}
-                            >
-                                {value}
-                            </Button>)}
-                    </ButtonGroup>
-
-
-                    <Add />
-                </div>
-
-                <div className={classes.selector}>
-                    <Grid container spacing={3}>
-                        <Grid item xs={12}>
-
-                            <TextField
-                                id="outlined-select-currency-native"
-                                select
-                                fullWidth
-                                value={isActive}
-                                onChange={handleChange}
-                                SelectProps={{
-                                    native: true,
-                                }}
-                                variant="outlined"
-                            >
-
-
-                                {states.map((value) =>
-                                    <option
-                                        key={value}
-                                        value={value}
-                                    >
-                                        {value}
-                                    </option>)}
-                            </TextField>
-
-                        </Grid>
-                    </Grid>
-                </div>
-                <Grid container spacing={2} >
-
-                    {mangasFiltrados.slice(rowsPerPage * page, (rowsPerPage * page) + rowsPerPage)
-                        .map((value, index) =>
-                            <Grid item md={3} sm={6} xs={12} key={value.nombre + index} >
-                                <TarjetaManga manga={value} />
-                            </Grid>)}
-
-                </Grid>
-
-                <Add />
-
-
-                {mangasFiltrados.length > 0 && <TablePagination
-                    component="div"
-                    count={mangasFiltrados.length}
-                    page={page}
-                    onChangePage={handleChangePage}
-                    rowsPerPage={rowsPerPage}
-                    onChangeRowsPerPage={handleChangeRowsPerPage}
-                    labelRowsPerPage="Mangas por pagina"
-                    labelDisplayedRows={({ from, to, count }) => `${from} - ${to} de ${count}`}
-                    className={classes.paginacion}
-                    nextIconButtonText="Siguiente"
-                    backIconButtonText="Anterior"
-                />}
+                <SimpleLibrary 
+                    busqueda={buscador} 
+                    mangas={mangasPrueba} 
+                    states={states}
+                />
 
             </div>
         </div>
