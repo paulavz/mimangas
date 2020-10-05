@@ -96,6 +96,7 @@ export default function Library(props) {
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
     const [buscador, setBuscador] = useState("");
+    const [mangasFiltrados, setMangasFiltrados] = useState([]);
 
     const handleChange = (event) => {
         setActive(event.target.value);
@@ -177,17 +178,18 @@ export default function Library(props) {
             imagen: "",
         },
     ];
-    const mangasFiltrados = mangasPrueba.filter(
-        (value) => isActive === "Todos" || value.estado === isActive
-    ).filter(
-        (value) => new RegExp(buscador.toLowerCase()).test(value.nombre.toLowerCase())
-    );
 
     useEffect(() => {
-        if (page > mangasFiltrados.length / rowsPerPage) {
-            setPage(Math.round(mangasFiltrados.length / rowsPerPage));
+        const filtrados = mangasPrueba.filter(
+            (value) => isActive === "Todos" || value.estado === isActive
+        ).filter(
+            (value) => new RegExp(buscador.toLowerCase()).test(value.nombre.toLowerCase())
+        );
+        if (page > filtrados.length / rowsPerPage) {
+            setPage(Math.floor(filtrados.length / rowsPerPage));
         }
-    }, [page, rowsPerPage, mangasFiltrados]);
+        setMangasFiltrados(filtrados);
+    }, [page, rowsPerPage, buscador, isActive]);
 
     function cerrar() {
         firebase
