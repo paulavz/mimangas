@@ -28,14 +28,6 @@ const useStyles = makeStyles((theme) => ({
     root: {
         flexGrow: 1,
     },
-    selector: {
-        flexGrow: 1,
-        display: 'none',
-        [theme.breakpoints.down("sm")]: {
-            display: 'block',
-        },
-
-    },
     title: {
         flexGrow: 1,
     },
@@ -57,29 +49,6 @@ const useStyles = makeStyles((theme) => ({
     },
     divider: {
         marginTop: theme.spacing(2),
-    },
-    colbutton: {
-        marginTop: theme.spacing(1),
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        textTransform: 'none',
-        [theme.breakpoints.down("sm")]: {
-            display: 'none',
-        },
-
-        '& > *': {
-            margin: theme.spacing(1),
-
-        },
-    },
-    paginacion: {
-        '& .MuiTablePagination-spacer': {
-            flex: 0,
-        },
-        '& .MuiTablePagination-toolbar': {
-            width: "max-content",
-        },
     },
 }));
 
