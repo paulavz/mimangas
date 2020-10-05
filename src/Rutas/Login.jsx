@@ -12,7 +12,6 @@ import { ValidatorForm, TextValidator } from "react-material-ui-form-validator";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import "./Formulario.css";
 require("firebase/auth");
-require("firebase/database");
 
 const useStyles = (theme) => ({
   root: {
@@ -66,6 +65,23 @@ class Login extends Component {
           .signInWithPopup(new firebase.auth.GoogleAuthProvider())
           .then((res) => {
             console.log(res);
+            if (res.additionalUserInfo.isNewUser) {
+              console.log("escrito");
+              let db = firebase.firestore();
+              db.collection("users")
+                .doc(res.user.uid)
+                .set({
+                  name: res.user.displayName,
+                  email: res.user.email,
+                  uid: res.user.uid,
+                })
+                .then(function () {
+                  console.log("Document successfully written!");
+                })
+                .catch(function (error) {
+                  console.error("Error writing document: ", error);
+                });
+            }
           });
       });
   }
