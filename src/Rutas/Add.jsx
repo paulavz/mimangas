@@ -5,18 +5,17 @@ import AddIcon from '@material-ui/icons/Add';
 import { pink } from '@material-ui/core/colors';
 import Grid from "@material-ui/core/Grid";
 import Avatar from '@material-ui/core/Avatar';
-import OutlinedInput from '@material-ui/core/OutlinedInput';
-import InputLabel from '@material-ui/core/InputLabel';
 import TextField from '@material-ui/core/TextField';
+import Typography from '@material-ui/core/Typography';
+import Slider from '@material-ui/core/Slider';
 import Checkbox from '@material-ui/core/Checkbox';
-import Select from '@material-ui/core/Select';
+import ChipInput from "material-ui-chip-input";
 import Dialog from '@material-ui/core/Dialog';
 import Chip from '@material-ui/core/Chip';
 import firebase from '../Inicializer/firebase';
 import DialogActions from '@material-ui/core/DialogActions';
 import Button from '@material-ui/core/Button';
 import MenuItem from '@material-ui/core/MenuItem';
-import FormControl from '@material-ui/core/FormControl';
 import ListItemText from '@material-ui/core/ListItemText';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
@@ -64,23 +63,23 @@ class Add extends Component {
         super(props);
         this.state = {
             open: false,
-            title: '',
-            state: 'Siguiendo',
+            titleName: '',
+            status: 'Siguiendo',
             type: 'Manga',
-            link: '',
+            lecture: '',
             artist: '',
             src: '',
             englishtitle: '',
             spanishtitle: '',
             author: '',
-            sinopsis: '',
+            synopsis: '',
             lastchapter: '',
             demo: '',
             category: [],
-            target: '',
+            tags: [],
             ubication: '',
             otherlink: '',
-            puntuation: '',
+            punctuation: 0,
             fansub: ''
         };
 
@@ -88,6 +87,7 @@ class Add extends Component {
         this.handleClose = this.handleClose.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleChangeSlider = this.handleChangeSlider.bind(this);
 
     }
 
@@ -102,27 +102,54 @@ class Add extends Component {
     handleChange = (e) => {
         const { name, value } = e.target;
         this.setState({ [name]: value });
-        console.log(this.state)
     };
+
+    handleAdd(chip) {
+        this.setState({
+            tags: [...this.state.tags, chip]
+        })
+    }
+    onBeforeAdd(chip) {
+        return chip.length >= 3
+    }
+    handleDelete(deletedChip) {
+        this.setState({
+            tags: this.state.tags.filter((c) => c !== deletedChip)
+        })
+    }
+
+
+
 
     handleSubmit = (e) => {
         e.preventDefault();
         this.handleClose();
         console.log("submit")
         let data = {
-            title: this.state.title,
-            state: this.state.state,
+            titleName: this.state.titleName,
+            status: this.state.status,
             type: this.state.type,
-            link: this.state.link
+            lecture: this.state.lecture,
+            tags: this.state.tags
         }
-        this.saveData(data)
+        console.log(this.state);
+        /*
+        this.saveData(data);
         this.setState({
-            title: '',
-            state: 'Siguiendo',
+            titleName: '',
+            status: 'Siguiendo',
             type: 'Manga',
-            link: ''
-        })
+            lecture: '',
+            tags: [],
+        });*/
+
     };
+
+    handleChangeSlider(event, newValue) {
+        this.setState({
+            punctuation: newValue
+        })
+    }
 
     saveData(data) {
         console.log("Enviar data...");
@@ -140,21 +167,11 @@ class Add extends Component {
 
     render() {
         const { classes } = this.props;
-        const ITEM_HEIGHT = 48;
-        const ITEM_PADDING_TOP = 8;
-        const MenuProps = {
-            PaperProps: {
-                style: {
-                    maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-                    width: 250,
-                },
-            },
-        };
         const estado = ['Siguiendo', 'Pendientes', 'Abandonados', 'Completos', 'Favoritos', 'Pausados'];
         const demografia = ['Shounen', 'Shoujo', 'Josei', 'Seinen', 'Kodomo'];
         const types = ['Manga', 'Manhwa', 'Manhua', 'Cómic', 'Original'];
         const categorias = ['Romance', 'Misterio', 'Acción', 'Comedia'];
-        const { title, link, category, src, artist, englishtitle, spanishtitle, author, sinopsis, lastchapter, ubication, puntuation, fansub } = this.state;
+        const { titleName, tags, punctuation, lecture, category, src, artist, englishtitle, spanishtitle, author, synopsis, lastchapter, ubication, fansub } = this.state;
         return <div>
             <div className="add">
                 <IconButton size="small" onClick={this.handleClickOpen}>
@@ -176,9 +193,9 @@ class Add extends Component {
                                 className={classes.select}
                                 variant="outlined"
                                 required
-                                name="title"
+                                name="titleName"
                                 size="small"
-                                value={title}
+                                value={titleName}
                             />
                         </Grid>
                         <Grid item xs={12} sm={12}>
@@ -190,7 +207,7 @@ class Add extends Component {
                                 required
                                 fullWidth
                                 onChange={this.handleChange}
-                                name="state"
+                                name="status"
                                 SelectProps={{
                                     native: true,
                                 }}
@@ -233,9 +250,9 @@ class Add extends Component {
                                 variant="outlined"
                                 size="small"
                                 required
-                                name="link"
+                                name="lecture"
                                 onChange={this.handleChange}
-                                value={link}
+                                value={lecture}
                             />
                         </Grid>
                         <Grid item xs={12} sm={12}>
@@ -315,11 +332,11 @@ class Add extends Component {
                                 className={classes.select}
                                 variant="outlined"
                                 size="small"
-                                name="sinopsis"
+                                name="synopsis"
                                 multiline
                                 rows={4}
                                 onChange={this.handleChange}
-                                value={sinopsis}
+                                value={synopsis}
                             />
                         </Grid>
                         <Grid item xs={12} sm={12}>
@@ -371,6 +388,42 @@ class Add extends Component {
                                 ))}
                             </TextField>
                         </Grid>
+
+                        <Grid item xs={12} sm={12}>
+                            <ChipInput
+                                value={tags}
+                                onBeforeAdd={(chip) => this.onBeforeAdd(chip)}
+                                onAdd={(chip) => this.handleAdd(chip)}
+                                onDelete={(deletedChip) => this.handleDelete(deletedChip)}
+                                fullWidth
+                                size="small"
+                                className={classes.select}
+
+                                variant="outlined"
+                                label='Etiquetas'
+                            />
+                        </Grid>
+
+
+                        <Grid item xs={12} sm={12}>
+
+                            <div className="margin">
+                                <Typography id="non-linear-slider" gutterBottom>
+                                    Puntuación
+      </Typography>
+                                <Slider
+                                    value={punctuation}
+                                    min={0}
+                                    step={1}
+                                    max={100}
+                                    name="punctuation"
+                                    onChange={this.handleChangeSlider}
+                                    valueLabelDisplay="auto"
+                                    aria-labelledby="non-linear-slider"
+                                />
+                            </div>
+                        </Grid>
+
                     </Grid>
                 </DialogContent>
                 <DialogActions>

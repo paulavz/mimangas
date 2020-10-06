@@ -4,3 +4,17 @@
     right: 10px;
     z-index:9999999;
 }
+
+.WAMuiChipInput-outlined-34 input{
+    margin-top:0px !important;
+}
+
+.margin{
+    margin-left:1.5em;
+    margin-top:1em;
+    margin-right:1em;
+}
+
+.MuiTypography-gutterBottom {
+    margin-left: -12px;
+}
