@@ -26,6 +26,10 @@ const useStyles = makeStyles((theme) => ({
     input: {
         minWidth: 120,
         marginBottom: theme.spacing(1),
+        maxWidth: "100%",
+    },
+    formControl : {
+        width: "100%",
     },
     opciones: {
     },
@@ -45,7 +49,7 @@ const useStyles = makeStyles((theme) => ({
 const tipos = ["Manga", "Manwha", "Manhua", "Cómic", "Original"];
 const dermografias = ["Seinen", "Shounen", "Shoujo", "Josei", "Kodomo"];
 const tagsPrueba = ["isekai", "4-koma", "musica", "buen dibujo", "lentes"];
-const categorias = ["Horror", "Acción"];
+const categorias = ["Horror", "Acción", "Comedia", "Romance", "Ecchi", "Slice of Life"];
 
 export default function Avanced({estados}){
     const classes = useStyles();
@@ -97,7 +101,7 @@ export default function Avanced({estados}){
             <Grid container spacing={0} >
                 <Grid item xs={6} md={3} className={classes.gridOpciones} >
                     <Typography align="center" variant="h5" color="primary">Filtros</Typography>
-                    <FormControl component="fieldset">
+                    <FormControl component="fieldset" className={classes.formControl}>
                         <InputLabel id="type-field">Tipo</InputLabel>
                         <Select
                             labelId="type-field"
@@ -112,7 +116,7 @@ export default function Avanced({estados}){
                         </Select>
                     </FormControl>
                     <br/>
-                    <FormControl component="fieldset">
+                    <FormControl component="fieldset" className={classes.formControl}>
                         <InputLabel id="dermography-field">Dermografía</InputLabel>
                         <Select
                             labelId="dermography-field"
@@ -127,7 +131,7 @@ export default function Avanced({estados}){
                         </Select>
                     </FormControl>
                     <br/>
-                    <FormControl component="fieldset">
+                    <FormControl component="fieldset" className={classes.formControl}>
                         <InputLabel id="state-field">Estado</InputLabel>
                         <Select
                             labelId="state-field"
@@ -144,7 +148,7 @@ export default function Avanced({estados}){
                 </Grid>
                 <Grid item xs={6} md={3} className={classes.gridOpciones} >
                     <Typography align="center" variant="h5" color="primary">Etiquetas</Typography>
-                    <FormControl component="fieldset">
+                    <FormControl component="fieldset" className={classes.formControl}>
                         <InputLabel htmlFor="tags-field">Añadir</InputLabel>
                         <Input
                             id="tags-field"
@@ -184,7 +188,7 @@ export default function Avanced({estados}){
                 
                 <Grid item xs={6} md={3} className={classes.gridOpciones} >
                     <Typography align="center" variant="h5" color="primary">Categorias</Typography>
-                    <FormControl component="fieldset">
+                    <FormControl component="fieldset" className={classes.formControl} >
                         <InputLabel id="category-field">Generos</InputLabel>
                         <Select
                             labelId="category-field"
