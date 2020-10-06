@@ -27,7 +27,7 @@ const useStyles = (theme) => ({
         position: "relative",
     },
     card: {
-        height: 350,
+        height: 300,
         borderColor: "black",
         borderWidth: 3,
         borderStyle: "solid",
@@ -92,7 +92,7 @@ class TarjetaManga extends Component{
                         fontSize="large" 
                         style={{color: colors[manga.status]}} 
                     />
-                    <div className={classes.puntuacion} >{/*Puntuación*/}</div>
+                    <div className={classes.puntuacion} >{manga.punctuation}</div>
                 </div>
                 <Card
                     className={classes.card} 
