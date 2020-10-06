@@ -12,6 +12,12 @@ import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import Typography from '@material-ui/core/Typography';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import Checkbox from '@material-ui/core/Checkbox';
+import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -39,6 +45,7 @@ const useStyles = makeStyles((theme) => ({
 const tipos = ["Manga", "Manwha", "Manhua", "Cómic", "Original"];
 const dermografias = ["Seinen", "Shounen", "Shoujo", "Josei", "Kodomo"];
 const tagsPrueba = ["isekai", "4-koma", "musica", "buen dibujo", "lentes"];
+const categorias = ["Horror", "Acción"];
 
 export default function Avanced({estados}){
     const classes = useStyles();
@@ -50,6 +57,7 @@ export default function Avanced({estados}){
         tag: "",
     });
     const [tagArray, setTagArray] = useState([]);
+    const [categories, setCategories] = useState([]);
 
     const handleChangeSelected = (event) => {
         let name = event.target.name;
@@ -57,8 +65,8 @@ export default function Avanced({estados}){
         setSelected({
             ...selected,
             [name]: value,
-        })
-    }
+        });
+    };
 
     const eraseSelected = (name) => {
         setSelected({
@@ -135,11 +143,12 @@ export default function Avanced({estados}){
                     </FormControl>
                 </Grid>
                 <Grid item xs={6} md={3} className={classes.gridOpciones} >
-                <Typography align="center" variant="h5" color="primary">Etiquetas</Typography>
+                    <Typography align="center" variant="h5" color="primary">Etiquetas</Typography>
                     <FormControl component="fieldset">
                         <InputLabel htmlFor="tags-field">Añadir</InputLabel>
                         <Input
                             id="tags-field"
+                            fullWidth
                             inputProps={{
                                 list: "tags",
                             }}
@@ -171,6 +180,35 @@ export default function Avanced({estados}){
                             className={classes.chip}
                         />
                     )}                    
+                </Grid>
+                
+                <Grid item xs={6} md={3} className={classes.gridOpciones} >
+                    <Typography align="center" variant="h5" color="primary">Categorias</Typography>
+                    <FormControl component="fieldset">
+                        <InputLabel id="category-field">Generos</InputLabel>
+                        <Select
+                            labelId="category-field"
+                            id="category-field-select"
+                            multiple
+                            value={categories}
+                            name="category"
+                            onChange={(event)=> setCategories(event.target.value)}
+                            input={<Input />}
+                            renderValue={(selected) => selected.join(', ')}
+                            className={classes.input}
+                        >
+                            {categorias.map((tipo) => <MenuItem key={tipo} value={tipo}>
+                                <Checkbox checked={categories.indexOf(tipo) > -1} />
+                                <ListItemText primary={tipo} />
+                            </MenuItem>)}
+                        </Select>
+                    </FormControl>
+                    <List dense >
+                        {categories.map((value) => <ListItem key={value}>
+                            <ListItemIcon><CheckCircleIcon/></ListItemIcon>
+                            <ListItemText primary={value} />
+                        </ListItem>)}
+                    </List>
                 </Grid>
             </Grid>
         </Paper>
