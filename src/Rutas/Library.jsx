@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import firebase from "../Inicializer/firebase";
 import AppBar from '@material-ui/core/AppBar';
@@ -52,90 +52,31 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-
-
+const states = ["Todos", "Siguiendo", "Completo", "Favoritos", "Pausados", "Pedientes", "Abandonados"]
 
 export default function Library(props) {
     const classes = useStyles();
 
     const [buscador, setBuscador] = useState("");
+    const [mangas, setMangas] = useState([]);
 
-    const states = ["Todos", "Siguiendo", "Completo", "Favoritos", "Pausados", "Pedientes", "Abandonados"]
+    useEffect(()=> {
+        let user = firebase.auth().currentUser;
 
-    const mangasPrueba = [
-        {
-            nombre: "Naruto",
-            puntuacion: 96,
-            estado: "Favoritos",
-            imagen: "",
-        },
-        {
-            nombre: "xxxHolic",
-            puntuacion: 100,
-            estado: "Completo",
-            imagen: "",
-        },
-        {
-            nombre: "Detroit Metal City",
-            puntuacion: 91,
-            estado: "Siguiendo",
-            imagen: "",
-        },
-        {
-            nombre: "Kaguya-sama",
-            puntuacion: 10,
-            estado: "Abandonados",
-            imagen: "",
-        },
-        {
-            nombre: "Naruto",
-            puntuacion: 96,
-            estado: "Favoritos",
-            imagen: "",
-        },
-        {
-            nombre: "xxxHolic",
-            puntuacion: 100,
-            estado: "Completo",
-            imagen: "",
-        },
-        {
-            nombre: "Detroit Metal City",
-            puntuacion: 91,
-            estado: "Siguiendo",
-            imagen: "",
-        },
-        {
-            nombre: "Kaguya-sama",
-            puntuacion: 10,
-            estado: "Abandonados",
-            imagen: "",
-        },
-        {
-            nombre: "Naruto",
-            puntuacion: 96,
-            estado: "Favoritos",
-            imagen: "",
-        },
-        {
-            nombre: "xxxHolic",
-            puntuacion: 100,
-            estado: "Completo",
-            imagen: "",
-        },
-        {
-            nombre: "Detroit Metal City",
-            puntuacion: 91,
-            estado: "Siguiendo",
-            imagen: "",
-        },
-        {
-            nombre: "Kaguya-sama",
-            puntuacion: 10,
-            estado: "Abandonados",
-            imagen: "",
-        },
-    ];
+        let coleccion = firebase.firestore().collection("users").doc(user.uid).collection("mangas");
+
+        
+        coleccion.onSnapshot(
+            function(snap) {
+                let mangasArray = [];
+                snap.forEach((doc)=> mangasArray.push(doc.data()))
+                setMangas(mangasArray);
+                console.log(mangasArray.toString());
+            },
+            (error) => console.log(error.message)
+        );
+        
+    }, []);
 
     function cerrar() {
         firebase
@@ -192,7 +133,7 @@ export default function Library(props) {
 
                 <SimpleLibrary 
                     busqueda={buscador} 
-                    mangas={mangasPrueba} 
+                    mangas={mangas} 
                     states={states}
                 />
 

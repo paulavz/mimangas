@@ -55,9 +55,9 @@ export default function SimpleLibrary({busqueda, mangas, states}){
 
     useEffect(() => {
         const filtrados = mangas.filter(
-            (value) => active === "Todos" || value.estado === active
+            (value) => active === "Todos" || value.status === active
         ).filter(
-            (value) => new RegExp(busqueda.toLowerCase()).test(value.nombre.toLowerCase())
+            (value) => new RegExp(busqueda.toLowerCase()).test(value.titleName.toLowerCase())
         );
         if (page > filtrados.length / rowsPerPage) {
             setPage(Math.floor(filtrados.length / rowsPerPage));
@@ -128,7 +128,7 @@ export default function SimpleLibrary({busqueda, mangas, states}){
 
             {mangasFiltrados.slice(rowsPerPage * page, (rowsPerPage * page) + rowsPerPage)
                 .map((value, index) =>
-                    <Grid item md={3} sm={6} xs={12} key={value.nombre + index} >
+                    <Grid item md={3} sm={6} xs={12} key={value.titleName + index} >
                         <TarjetaManga manga={value} />
                     </Grid>)}
 

@@ -83,20 +83,20 @@ class TarjetaManga extends Component{
                 <div className={classes.puntos} >
                     <FavoriteIcon 
                         fontSize="large" 
-                        style={{color: colors[manga.estado]}} 
+                        style={{color: colors[manga.status]}} 
                     />
-                    <div className={classes.puntuacion} >{manga.puntuacion.toString()}</div>
+                    <div className={classes.puntuacion} >{/*Puntuación*/}</div>
                 </div>
                 <Card
                     className={classes.card} 
-                    style={{borderColor: colors[manga.estado]}} 
+                    style={{borderColor: colors[manga.status]}} 
                 >
                     <div 
                         className={classes.container} 
-                        style={{backgroundImage: `url(${manga.imagen})`}}                     
+                        style={{backgroundImage: `url(${manga.cover})`}}                     
                     >
                         <div className={classes.textSpace} >
-                            {manga.nombre}
+                            {manga.titleName}
                         </div>
                     </div>
                 </Card>
