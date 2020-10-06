@@ -133,7 +133,6 @@ class Add extends Component {
             tags: this.state.tags
         }
         console.log(this.state);
-        /*
         this.saveData(data);
         this.setState({
             titleName: '',
@@ -141,7 +140,7 @@ class Add extends Component {
             type: 'Manga',
             lecture: '',
             tags: [],
-        });*/
+        });
 
     };
 

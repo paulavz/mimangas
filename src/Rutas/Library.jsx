@@ -60,22 +60,21 @@ export default function Library(props) {
     const [buscador, setBuscador] = useState("");
     const [mangas, setMangas] = useState([]);
 
-    useEffect(()=> {
+    useEffect(() => {
         let user = firebase.auth().currentUser;
 
         let coleccion = firebase.firestore().collection("users").doc(user.uid).collection("mangas");
 
-        
+
         coleccion.onSnapshot(
-            function(snap) {
+            function (snap) {
                 let mangasArray = [];
-                snap.forEach((doc)=> mangasArray.push(doc.data()))
+                snap.forEach((doc) => mangasArray.push(doc.data()))
                 setMangas(mangasArray);
-                console.log(mangasArray.toString());
             },
             (error) => console.log(error.message)
         );
-        
+
     }, []);
 
     function cerrar() {
@@ -131,9 +130,9 @@ export default function Library(props) {
 
                 <Divider className={classes.divider} variant="middle" />
 
-                <SimpleLibrary 
-                    busqueda={buscador} 
-                    mangas={mangas} 
+                <SimpleLibrary
+                    busqueda={buscador}
+                    mangas={mangas}
                     states={states}
                 />
 
