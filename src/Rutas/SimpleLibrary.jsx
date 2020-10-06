@@ -35,6 +35,9 @@ const useStyles = makeStyles((theme) => ({
 
         },
     },
+    gridManga: {
+        textAlign: "center",
+    },
     paginacion: {
         '& .MuiTablePagination-spacer': {
             flex: 0,
@@ -128,7 +131,7 @@ export default function SimpleLibrary({busqueda, mangas, states}){
 
             {mangasFiltrados.slice(rowsPerPage * page, (rowsPerPage * page) + rowsPerPage)
                 .map((value, index) =>
-                    <Grid item md={3} sm={6} xs={12} key={value.titleName + index} >
+                    <Grid item md={3} sm={6} xs={12} key={value.titleName + index} className={classes.gridManga} >
                         <TarjetaManga manga={value} />
                     </Grid>)}
 

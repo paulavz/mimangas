@@ -2,11 +2,13 @@ import React, { Component } from 'react';
 import { withStyles } from "@material-ui/core/styles";
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import Card from '@material-ui/core/Card';
-//import Grid from '@material-ui/core/Grid';
+import ButtonBase from '@material-ui/core/ButtonBase';
 
 const useStyles = (theme) => ({
     root: {
       width: "100%",
+      maxWidth: 300,
+      display: "inline-block",
     },
     puntos: {
         position: "absolute",
@@ -30,6 +32,11 @@ const useStyles = (theme) => ({
         borderWidth: 3,
         borderStyle: "solid",
     },
+    options: {},
+    button: {
+        width: "100%",
+        height: "100%",
+    },
     textSpace: {
         height: 50,
         width: "100%",
@@ -47,7 +54,7 @@ const useStyles = (theme) => ({
         position: "relative",
         width: "100%",
         height: "100%",
-        backgroundSize: "cover",
+        backgroundSize: "100% 100%",
     },
 });
 
@@ -95,6 +102,11 @@ class TarjetaManga extends Component{
                         className={classes.container} 
                         style={{backgroundImage: `url(${manga.cover})`}}                     
                     >
+                        <ButtonBase 
+                            focusRipple
+                            className={classes.button}
+                            onClick={()=>console.log("Se hizo click xD")}
+                        />
                         <div className={classes.textSpace} >
                             {manga.titleName}
                         </div>
