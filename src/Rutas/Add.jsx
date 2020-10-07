@@ -80,7 +80,7 @@ class Add extends Component {
             ubication: '',
             otherlink: '',
             punctuation: 0,
-            fansub: ''
+            fansub: []
         };
 
         this.handleClickOpen = this.handleClickOpen.bind(this);
@@ -118,9 +118,6 @@ class Add extends Component {
         })
     }
 
-
-
-
     handleSubmit = (e) => {
         e.preventDefault();
         this.handleClose();
@@ -130,7 +127,20 @@ class Add extends Component {
             status: this.state.status,
             type: this.state.type,
             lecture: this.state.lecture,
-            tags: this.state.tags
+            tags: this.state.tags,
+            punctuation: this.state.punctuation,
+            englishtitle: this.state.englishtitle,
+            spanishtitle: this.state.spanishtitle,
+            artist: this.state.artist,
+            src: this.state.src,
+            author: this.state.author,
+            synopsis: this.state.synopsis,
+            lastchapter: this.state.lastchapter,
+            ubication: this.state.ubication,
+            otherlink: this.state.otherlink,
+            fansub: this.state.fansub,
+            category: this.state.category,
+            createAt: firebase.firestore.FieldValue.serverTimestamp()
         }
         console.log(this.state);
         this.saveData(data);
@@ -140,6 +150,18 @@ class Add extends Component {
             type: 'Manga',
             lecture: '',
             tags: [],
+            punctuation: 0,
+            englishtitle: '',
+            spanishtitle: '',
+            artist: '',
+            src: '',
+            author: '',
+            synopsis: '',
+            lastchapter: '',
+            ubication: '',
+            otherlink: [],
+            fansub: [],
+            category: []
         });
 
     };
@@ -170,7 +192,10 @@ class Add extends Component {
         const demografia = ['Shounen', 'Shoujo', 'Josei', 'Seinen', 'Kodomo'];
         const types = ['Manga', 'Manhwa', 'Manhua', 'Cómic', 'Original'];
         const categorias = ['Romance', 'Misterio', 'Acción', 'Comedia'];
-        const { titleName, tags, punctuation, lecture, category, src, artist, englishtitle, spanishtitle, author, synopsis, lastchapter, ubication, fansub } = this.state;
+        const { titleName, tags, punctuation, category, src, synopsis, lastchapter, ubication, fansub } = this.state;
+        const inputs = ["lecture", "englishtitle", "spanishtitle", "author", "artist"];
+        const labels = ["Link de Lectura", "Título en Inglés", "Título en Español", "Autor", "Artista"]
+
         return <div>
             <div className="add">
                 <IconButton size="small" onClick={this.handleClickOpen}>
@@ -243,67 +268,6 @@ class Add extends Component {
                         </Grid>
                         <Grid item xs={12} sm={12}>
                             <TextField
-                                label="Link de Lectura"
-                                fullWidth
-                                className={classes.select}
-                                variant="outlined"
-                                size="small"
-                                required
-                                name="lecture"
-                                onChange={this.handleChange}
-                                value={lecture}
-                            />
-                        </Grid>
-                        <Grid item xs={12} sm={12}>
-                            <TextField
-                                label="Titulo en Inglés"
-                                fullWidth
-                                className={classes.select}
-                                variant="outlined"
-                                size="small"
-                                name="englishtitle"
-                                onChange={this.handleChange}
-                                value={englishtitle}
-                            />
-                        </Grid>
-                        <Grid item xs={12} sm={12}>
-                            <TextField
-                                label="Titulo en Español"
-                                fullWidth
-                                className={classes.select}
-                                size="small"
-                                variant="outlined"
-                                name="spanishtitle"
-                                onChange={this.handleChange}
-                                value={spanishtitle}
-                            />
-                        </Grid>
-                        <Grid item xs={12} sm={12}>
-                            <TextField
-                                label="Autor"
-                                fullWidth
-                                className={classes.select}
-                                variant="outlined"
-                                size="small"
-                                name="author"
-                                onChange={this.handleChange}
-                                value={author}
-                            />
-                        </Grid>
-                        <Grid item xs={12} sm={12}>
-                            <TextField
-                                label="Artista"
-                                fullWidth
-                                className={classes.select}
-                                variant="outlined"
-                                size="small"
-                                name="artist"
-                                onChange={this.handleChange}
-                                value={artist}
-                            />
-                        </Grid>
-                        <Grid item xs={12} sm={12}>
-                            <TextField
                                 label="Demografía"
                                 className={classes.select}
                                 select
@@ -323,33 +287,6 @@ class Add extends Component {
                                     </option>
                                 )}
                             </TextField>
-                        </Grid>
-                        <Grid item xs={12} sm={12}>
-                            <TextField
-                                label="Sinopsis"
-                                fullWidth
-                                className={classes.select}
-                                variant="outlined"
-                                size="small"
-                                name="synopsis"
-                                multiline
-                                rows={4}
-                                onChange={this.handleChange}
-                                value={synopsis}
-                            />
-                        </Grid>
-                        <Grid item xs={12} sm={12}>
-                            <TextField
-                                label="Último capitulo leído"
-                                fullWidth
-                                className={classes.select}
-                                variant="outlined"
-                                size="small"
-                                name="lastchapter"
-                                type="number"
-                                onChange={this.handleChange}
-                                value={lastchapter}
-                            />
                         </Grid>
                         <Grid item xs={12} sm={12}>
                             <TextField
@@ -387,6 +324,64 @@ class Add extends Component {
                                 ))}
                             </TextField>
                         </Grid>
+                        <Grid item xs={12} sm={12}>
+                            <TextField
+                                label="Último capitulo leído"
+                                fullWidth
+                                className={classes.select}
+                                variant="outlined"
+                                size="small"
+                                name="lastchapter"
+                                type="number"
+                                onChange={this.handleChange}
+                                value={lastchapter}
+                            />
+                        </Grid>
+                        {
+                            inputs.map((value, index) => <Grid item xs={12} sm={12}>
+                                <TextField
+                                    label={labels[index]}
+                                    fullWidth
+                                    className={classes.select}
+                                    variant="outlined"
+                                    size="small"
+                                    name={value}
+                                    onChange={this.handleChange}
+                                    value={this.state[value]}
+                                />
+                            </Grid>
+                            )
+                        }
+
+                        <Grid item xs={12} sm={12}>
+                            <TextField
+                                label="Sinopsis"
+                                fullWidth
+                                className={classes.select}
+                                variant="outlined"
+                                size="small"
+                                name="synopsis"
+                                multiline
+                                rows={4}
+                                onChange={this.handleChange}
+                                value={synopsis}
+                            />
+                        </Grid>
+                        <Grid item xs={12} sm={12}>
+                            <TextField
+                                label="Ubicación"
+                                fullWidth
+                                className={classes.select}
+                                variant="outlined"
+                                size="small"
+                                name="ubication"
+                                onChange={this.handleChange}
+                                value={ubication}
+                            />
+                        </Grid>
+
+
+
 
                         <Grid item xs={12} sm={12}>
                             <ChipInput
