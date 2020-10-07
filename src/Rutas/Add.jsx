@@ -126,7 +126,6 @@ class Add extends Component {
             if(this.state[i] instanceof Array && this.state[i].length<1)
             continue;
             if(this.state[i] && i!=="open"){
-                console.log(this.state[i]);
                 data={
                     ...data,
                     [i]: this.state[i],
@@ -167,7 +166,6 @@ class Add extends Component {
     }
 
     saveData(data) {
-        console.log("Enviar data...");
         let user = firebase.auth().currentUser;
         let db = firebase.firestore();
         db.collection("users")

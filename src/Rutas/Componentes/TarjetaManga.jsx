@@ -105,7 +105,6 @@ class TarjetaManga extends Component{
                         <ButtonBase 
                             focusRipple
                             className={classes.button}
-                            onClick={()=>console.log("Se hizo click xD")}
                         />
                         <div className={classes.textSpace} >
                             {manga.titleName}
