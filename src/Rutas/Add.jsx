@@ -80,7 +80,7 @@ class Add extends Component {
             ubication: '',
             otherlink: '',
             punctuation: 0,
-            fansub: ''
+            fansub: []
         };
 
         this.handleClickOpen = this.handleClickOpen.bind(this);
@@ -118,9 +118,6 @@ class Add extends Component {
         })
     }
 
-
-
-
     handleSubmit = (e) => {
         e.preventDefault();
         this.handleClose();
@@ -130,7 +127,20 @@ class Add extends Component {
             status: this.state.status,
             type: this.state.type,
             lecture: this.state.lecture,
-            tags: this.state.tags
+            tags: this.state.tags,
+            punctuation: this.state.punctuation,
+            englishtitle: this.state.englishtitle,
+            spanishtitle: this.state.spanishtitle,
+            artist: this.state.artist,
+            src: this.state.src,
+            author: this.state.author,
+            synopsis: this.state.synopsis,
+            lastchapter: this.state.lastchapter,
+            ubication: this.state.ubication,
+            otherlink: this.state.otherlink,
+            fansub: this.state.fansub,
+            category: this.state.category,
+            createAt: firebase.firestore.FieldValue.serverTimestamp()
         }
         console.log(this.state);
         this.saveData(data);
@@ -140,6 +150,18 @@ class Add extends Component {
             type: 'Manga',
             lecture: '',
             tags: [],
+            punctuation: 0,
+            englishtitle: '',
+            spanishtitle: '',
+            artist: '',
+            src: '',
+            author: '',
+            synopsis: '',
+            lastchapter: '',
+            ubication: '',
+            otherlink: [],
+            fansub: [],
+            category: []
         });
 
     };
@@ -349,6 +371,18 @@ class Add extends Component {
                                 type="number"
                                 onChange={this.handleChange}
                                 value={lastchapter}
+                            />
+                        </Grid>
+                        <Grid item xs={12} sm={12}>
+                            <TextField
+                                label="Ubicación"
+                                fullWidth
+                                className={classes.select}
+                                variant="outlined"
+                                size="small"
+                                name="ubication"
+                                onChange={this.handleChange}
+                                value={ubication}
                             />
                         </Grid>
                         <Grid item xs={12} sm={12}>
