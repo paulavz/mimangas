@@ -11,6 +11,7 @@ import IconButton from '@material-ui/core/IconButton';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import Divider from '@material-ui/core/Divider';
 import SimpleLibrary from './SimpleLibrary';
+import Avanced from './Avanced';
 import "./Library.css";
 require("firebase/auth");
 
@@ -59,6 +60,7 @@ export default function Library(props) {
 
     const [buscador, setBuscador] = useState("");
     const [mangas, setMangas] = useState([]);
+    const [avanced, setAvanced] = useState(false);
 
     useEffect(() => {
         let user = firebase.auth().currentUser;
@@ -67,7 +69,7 @@ export default function Library(props) {
             .collection("mangas").orderBy("createAt", "desc");
 
 
-        coleccion.onSnapshot(
+        let unsubscribe = coleccion.onSnapshot(
             function (snap) {
                 let mangasArray = [];
                 snap.forEach((doc) => mangasArray.push(doc.data()))
@@ -75,6 +77,8 @@ export default function Library(props) {
             },
             (error) => console.log(error.message)
         );
+
+        return ()=>unsubscribe();
 
     }, []);
 
@@ -92,6 +96,13 @@ export default function Library(props) {
 
     const handleChangeBuscador = (event) => {
         setBuscador(event.target.value);
+    }
+
+    /**
+     * Alterna entre busqueda normal y avanzada
+     */
+    const cambiarModoBusqueda = () => {
+        setAvanced(!avanced);
     }
 
     return (
@@ -122,7 +133,14 @@ export default function Library(props) {
                         />
                     </Grid>
                     <Grid item xs={3}>
-                        <Button size="large" className="buscar" fullWidth variant="contained" color="secondary">
+                        <Button
+                            size="large" 
+                            className="buscar" 
+                            fullWidth 
+                            variant="contained" 
+                            color="secondary"
+                            onClick={cambiarModoBusqueda}
+                        >
                             Búsqueda Avanzada
                         </Button>
                     </Grid>
@@ -131,11 +149,13 @@ export default function Library(props) {
 
                 <Divider className={classes.divider} variant="middle" />
 
+                {avanced ?
+                <Avanced estados={states} /> :
                 <SimpleLibrary
                     busqueda={buscador}
                     mangas={mangas}
                     states={states}
-                />
+                />}
 
             </div>
         </div>
