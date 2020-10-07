@@ -121,28 +121,22 @@ class Add extends Component {
     handleSubmit = (e) => {
         e.preventDefault();
         this.handleClose();
-        console.log("submit")
-        let data = {
-            titleName: this.state.titleName,
-            status: this.state.status,
-            type: this.state.type,
-            lecture: this.state.lecture,
-            tags: this.state.tags,
-            punctuation: this.state.punctuation,
-            englishtitle: this.state.englishtitle,
-            spanishtitle: this.state.spanishtitle,
-            artist: this.state.artist,
-            src: this.state.src,
-            author: this.state.author,
-            synopsis: this.state.synopsis,
-            lastchapter: this.state.lastchapter,
-            ubication: this.state.ubication,
-            otherlink: this.state.otherlink,
-            fansub: this.state.fansub,
-            category: this.state.category,
-            createAt: firebase.firestore.FieldValue.serverTimestamp()
+        let data = {};
+        for(let i in this.state){
+            if(this.state[i] instanceof Array && this.state[i].length<1)
+            continue;
+            if(this.state[i] && i!=="open"){
+                console.log(this.state[i]);
+                data={
+                    ...data,
+                    [i]: this.state[i],
+                }
+            }
         }
-        console.log(this.state);
+        data = {
+            ...data,
+            createAt: firebase.firestore.FieldValue.serverTimestamp(),
+        }
         this.saveData(data);
         this.setState({
             titleName: '',
