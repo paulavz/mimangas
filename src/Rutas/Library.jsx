@@ -52,7 +52,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const states = ["Todos", "Siguiendo", "Completo", "Favoritos", "Pausados", "Pedientes", "Abandonados"]
+const states = ["Todos", "Siguiendo", "Completos", "Favoritos", "Pausados", "Pendientes", "Abandonados"]
 
 export default function Library(props) {
     const classes = useStyles();
@@ -63,7 +63,8 @@ export default function Library(props) {
     useEffect(() => {
         let user = firebase.auth().currentUser;
 
-        let coleccion = firebase.firestore().collection("users").doc(user.uid).collection("mangas");
+        let coleccion = firebase.firestore().collection("users").doc(user.uid)
+            .collection("mangas").orderBy("createAt", "desc");
 
 
         coleccion.onSnapshot(

@@ -78,10 +78,10 @@ class TarjetaManga extends Component{
 
         const colors = {
             "Siguiendo": "lightCyan",
-            "Completo": "lightGreen", 
+            "Completos": "lightGreen", 
             "Favoritos": "gold",
             "Pausados": "midnightBlue",
-            "Pedientes": "orange",
+            "Pendientes": "orange",
             "Abandonados": "crimson",
         };
 
@@ -100,7 +100,7 @@ class TarjetaManga extends Component{
                 >
                     <div 
                         className={classes.container} 
-                        style={{backgroundImage: `url(${manga.cover})`}}                     
+                        style={{backgroundImage: `url(${manga.cover || "https://firebasestorage.googleapis.com/v0/b/mismangas-7e620.appspot.com/o/uploads%2F3oesb3tldzt?alt=media&token=e006a18c-b59d-4a74-b2c7-d3849a0d49ba"})`}}                     
                     >
                         <ButtonBase 
                             focusRipple
