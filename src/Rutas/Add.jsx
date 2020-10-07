@@ -48,12 +48,20 @@ const useStyles = (theme) => ({
         display: 'flex',
         flexWrap: 'wrap',
     },
+    input: {
+        display: 'none',
+    },
     chip: {
         margin: 2,
     },
     noLabel: {
         marginTop: theme.spacing(3),
     },
+    upload: {
+        textAlign: 'center',
+        marginTop: theme.spacing(1),
+        marginBottom: theme.spacing(1)
+    }
 
 });
 
@@ -62,6 +70,7 @@ class Add extends Component {
     constructor(props) {
         super(props);
         this.state = {
+
             open: false,
             titleName: '',
             status: 'Siguiendo',
@@ -80,7 +89,9 @@ class Add extends Component {
             ubication: '',
             otherlink: '',
             punctuation: 0,
-            fansub: []
+            fansub: [],
+            uploadValue: 0,
+            uid: ""
         };
 
         this.handleClickOpen = this.handleClickOpen.bind(this);
@@ -88,7 +99,7 @@ class Add extends Component {
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleChangeSlider = this.handleChangeSlider.bind(this);
-
+        this.handleUpload = this.handleUpload.bind(this);
     }
 
     handleClickOpen() {
@@ -154,7 +165,7 @@ class Add extends Component {
             ubication: '',
             otherlink: [],
             fansub: [],
-            category: []
+            category: [],
         });
 
     };
@@ -163,6 +174,19 @@ class Add extends Component {
         this.setState({
             punctuation: newValue
         })
+    }
+
+    handleUpload(event) {
+        const user = firebase.auth().currentUser;
+        const file = event.target.files[0];
+        /*   const storageRef = firebase
+             .storage()
+             .ref(`/cover/${this.state.uid}/${file.name}`);
+           const task = storageRef.put(file);*/
+        this.setState({
+            src: URL.createObjectURL(file)
+        })
+        console.log(file);
     }
 
     saveData(data) {
@@ -280,6 +304,7 @@ class Add extends Component {
                                 )}
                             </TextField>
                         </Grid>
+
                         <Grid item xs={12} sm={12}>
                             <TextField
                                 label="Categorías"
@@ -316,6 +341,25 @@ class Add extends Component {
                                 ))}
                             </TextField>
                         </Grid>
+                        {src && <div className="center">
+                            <img className="cover" alt="cover" src={src} />
+                        </div>}
+                        <Grid item xs={12} sm={12} className={classes.upload}>
+                            <input
+                                accept="image/*"
+                                className={classes.input}
+                                id="contained-button-file"
+                                onChange={this.handleUpload}
+                                multiple
+                                type="file"
+                            />
+                            <label htmlFor="contained-button-file">
+                                <Button variant="contained" color="primary" component="span">
+                                    Subir Portada
+                                </Button>
+                            </label>
+                        </Grid>
+
                         <Grid item xs={12} sm={12}>
                             <TextField
                                 label="Último capitulo leído"
@@ -330,7 +374,7 @@ class Add extends Component {
                             />
                         </Grid>
                         {
-                            inputs.map((value, index) => <Grid item xs={12} sm={12}>
+                            inputs.map((value, index) => <Grid key={value} item xs={12} sm={12}>
                                 <TextField
                                     label={labels[index]}
                                     fullWidth
