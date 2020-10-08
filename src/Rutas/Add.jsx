@@ -233,7 +233,8 @@ class Add extends Component {
             otherlink: [],
             fansub: [],
             category: [],
-            preview: ''
+            preview: '',
+            file: ''
         });
 
     }
