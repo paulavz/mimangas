@@ -32,7 +32,6 @@ const useStyles = (theme) => ({
         borderWidth: 3,
         borderStyle: "solid",
     },
-    options: {},
     button: {
         width: "100%",
         height: "100%",
@@ -61,11 +60,7 @@ class TarjetaManga extends Component{
 
     constructor(props){
         super(props);
-        this.state = {
-
-        };
         this.shouldComponentUpdate = this.shouldComponentUpdate.bind(this);
-
     }
 
     shouldComponentUpdate(nextProps, nextState){
