@@ -22,6 +22,8 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import './Add.css'
 require("firebase/auth");
 require("firebase/firestore");
+require("firebase/storage");
+
 
 
 
@@ -48,14 +50,24 @@ const useStyles = (theme) => ({
         display: 'flex',
         flexWrap: 'wrap',
     },
+    input: {
+        display: 'none',
+    },
     chip: {
         margin: 2,
     },
     noLabel: {
         marginTop: theme.spacing(3),
     },
+    upload: {
+        textAlign: 'center',
+        marginTop: theme.spacing(1),
+        marginBottom: theme.spacing(1)
+    }
 
 });
+
+const outStates = ["open", "uploadValue", "uid", "file", "preview"];
 
 class Add extends Component {
 
@@ -68,7 +80,7 @@ class Add extends Component {
             type: 'Manga',
             lecture: '',
             artist: '',
-            src: '',
+            cover: '',
             englishtitle: '',
             spanishtitle: '',
             author: '',
@@ -80,7 +92,11 @@ class Add extends Component {
             ubication: '',
             otherlink: '',
             punctuation: 0,
-            fansub: []
+            fansub: [],
+            uploadValue: 0,
+            uid: "",
+            file: "",
+            preview: ""
         };
 
         this.handleClickOpen = this.handleClickOpen.bind(this);
@@ -88,7 +104,7 @@ class Add extends Component {
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleChangeSlider = this.handleChangeSlider.bind(this);
-
+        this.handleUpload = this.handleUpload.bind(this);
     }
 
     handleClickOpen() {
@@ -118,15 +134,13 @@ class Add extends Component {
         })
     }
 
-    handleSubmit = (e) => {
-        e.preventDefault();
-        this.handleClose();
+    format() {
         let data = {};
-        for(let i in this.state){
-            if(this.state[i] instanceof Array && this.state[i].length<1)
-            continue;
-            if(this.state[i] && i!=="open"){
-                data={
+        for (let i in this.state) {
+            if (this.state[i] instanceof Array && this.state[i].length < 1)
+                continue;
+            if (this.state[i] && outStates.indexOf(i) === -1) {
+                data = {
                     ...data,
                     [i]: this.state[i],
                 }
@@ -137,31 +151,56 @@ class Add extends Component {
             createAt: firebase.firestore.FieldValue.serverTimestamp(),
         }
         this.saveData(data);
-        this.setState({
-            titleName: '',
-            status: 'Siguiendo',
-            type: 'Manga',
-            lecture: '',
-            tags: [],
-            punctuation: 0,
-            englishtitle: '',
-            spanishtitle: '',
-            artist: '',
-            src: '',
-            author: '',
-            synopsis: '',
-            lastchapter: '',
-            ubication: '',
-            otherlink: [],
-            fansub: [],
-            category: []
-        });
 
+    }
+
+    handleSubmit = (e) => {
+        e.preventDefault();
+        this.handleClose();
+        if (this.state.file) {
+            const user = firebase.auth().currentUser;
+            const storageRef = firebase
+                .storage()
+                .ref(`/cover/${user.uid}/${this.state.file.name}`);
+            const task = storageRef.put(this.state.file);
+            task.on(
+                "state_changed",
+                (snapshot) => {
+                    let porcentaje =
+                        (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                    this.setState({
+                        uploadValue: porcentaje,
+                    });
+                },
+                (error) => console.log(error),
+                () => {
+                    task.snapshot.ref.getDownloadURL().then((downloadUrl) => {
+                        this.setState({
+                            cover: downloadUrl
+                        })
+                        this.format();
+
+                        console.log(downloadUrl);
+                    })
+                })
+            console.log(this.state.file);
+        } else {
+            console.log("No se subio imagen");
+            this.format();
+
+        }
     };
 
     handleChangeSlider(event, newValue) {
         this.setState({
             punctuation: newValue
+        })
+    }
+
+    handleUpload(event) {
+        this.setState({
+            file: event.target.files[0],
+            preview: URL.createObjectURL(event.target.files[0])
         })
     }
 
@@ -176,6 +215,27 @@ class Add extends Component {
                 console.log("Data guardada")
             })
 
+        this.setState({
+            titleName: '',
+            status: 'Siguiendo',
+            type: 'Manga',
+            lecture: '',
+            tags: [],
+            punctuation: 0,
+            englishtitle: '',
+            spanishtitle: '',
+            artist: '',
+            cover: '',
+            author: '',
+            synopsis: '',
+            lastchapter: '',
+            ubication: '',
+            otherlink: [],
+            fansub: [],
+            category: [],
+            preview: ''
+        });
+
     }
 
     render() {
@@ -184,7 +244,7 @@ class Add extends Component {
         const demografia = ['Shounen', 'Shoujo', 'Josei', 'Seinen', 'Kodomo'];
         const types = ['Manga', 'Manhwa', 'Manhua', 'Cómic', 'Original'];
         const categorias = ['Romance', 'Misterio', 'Acción', 'Comedia'];
-        const { titleName, tags, punctuation, category, src, synopsis, lastchapter, ubication, fansub } = this.state;
+        const { titleName, tags, punctuation, category, synopsis, lastchapter, ubication, fansub } = this.state;
         const inputs = ["lecture", "englishtitle", "spanishtitle", "author", "artist"];
         const labels = ["Link de Lectura", "Título en Inglés", "Título en Español", "Autor", "Artista"]
 
@@ -280,6 +340,7 @@ class Add extends Component {
                                 )}
                             </TextField>
                         </Grid>
+
                         <Grid item xs={12} sm={12}>
                             <TextField
                                 label="Categorías"
@@ -316,6 +377,25 @@ class Add extends Component {
                                 ))}
                             </TextField>
                         </Grid>
+                        {this.state.preview && <div className="center">
+                            <img className="cover" alt="cover" src={this.state.preview} />
+                        </div>}
+                        <Grid item xs={12} sm={12} className={classes.upload}>
+                            <input
+                                accept="image/*"
+                                className={classes.input}
+                                id="contained-button-file"
+                                onChange={this.handleUpload}
+                                multiple
+                                type="file"
+                            />
+                            <label htmlFor="contained-button-file">
+                                <Button variant="contained" color="primary" component="span">
+                                    Subir Portada
+                                </Button>
+                            </label>
+                        </Grid>
+
                         <Grid item xs={12} sm={12}>
                             <TextField
                                 label="Último capitulo leído"
@@ -330,7 +410,7 @@ class Add extends Component {
                             />
                         </Grid>
                         {
-                            inputs.map((value, index) => <Grid item xs={12} sm={12}>
+                            inputs.map((value, index) => <Grid key={value} item xs={12} sm={12}>
                                 <TextField
                                     label={labels[index]}
                                     fullWidth
