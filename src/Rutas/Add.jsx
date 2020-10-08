@@ -158,10 +158,11 @@ class Add extends Component {
         e.preventDefault();
         this.handleClose();
         if (this.state.file) {
+            const id = Math.random().toString(36).substring(2);
             const user = firebase.auth().currentUser;
             const storageRef = firebase
                 .storage()
-                .ref(`/cover/${user.uid}/${this.state.file.name}`);
+                .ref(`/cover/${user.uid}/${id}`);
             const task = storageRef.put(this.state.file);
             task.on(
                 "state_changed",

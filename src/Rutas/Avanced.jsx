@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
         marginBottom: theme.spacing(1),
         maxWidth: "100%",
     },
-    formControl : {
+    formControl: {
         width: "100%",
     },
     opciones: {
@@ -43,16 +43,16 @@ const useStyles = makeStyles((theme) => ({
         padding: theme.spacing(1),
     },
     chip: {
-      margin: theme.spacing(0.5),
+        margin: theme.spacing(0.5),
     },
 }));
 
-const tipos = ["Manga", "Manwha", "Manhua", "Cómic", "Original"];
+const tipos = ["Manga", "Manhwa", "Manhua", "Cómic", "Original"];
 const dermografias = ["Seinen", "Shounen", "Shoujo", "Josei", "Kodomo"];
 const tagsPrueba = ["isekai", "4-koma", "musica", "buen dibujo", "lentes"];
 const categorias = ["Horror", "Acción", "Comedia", "Romance", "Ecchi", "Slice of Life"];
 
-export default function Avanced({estados, mangas, buscador, volver}){
+export default function Avanced({ estados, mangas, buscador, volver }) {
     const classes = useStyles();
 
     const [selected, setSelected] = useState({
@@ -69,31 +69,31 @@ export default function Avanced({estados, mangas, buscador, volver}){
      * Devuelve los mangas que coincidan con todos los states
      */
     function buscar() {
-        let buscadorRE = new RegExp( buscador.toLowerCase().trim() );
+        let buscadorRE = new RegExp(buscador.toLowerCase().trim());
 
         let nuevoMangas = (buscador) ? mangas.filter((value) => {
             let arrayNombres = [];
-            if(value.englishtitle) arrayNombres.push(value.englishtitle);
-            if(value.spanishtitle) arrayNombres.push(value.spanishtitle);
+            if (value.englishtitle) arrayNombres.push(value.englishtitle);
+            if (value.spanishtitle) arrayNombres.push(value.spanishtitle);
             arrayNombres.push(value.titleName);
             return arrayNombres.some((title) => buscadorRE.test(title.toLowerCase()));
         }) : mangas;
 
-        for(let i in selected){
-            if(selected[i] && i!=="tag"){
-                nuevoMangas = nuevoMangas.filter((value) => selected[i]===value[i]);
+        for (let i in selected) {
+            if (selected[i] && i !== "tag") {
+                nuevoMangas = nuevoMangas.filter((value) => selected[i] === value[i]);
             }
         }
 
-        if(tagArray.length>0)
-        nuevoMangas = nuevoMangas.filter(
-            (manga) => tagArray.every(
-                (etiqueta)=> manga.tags ? manga.tags.indexOf(etiqueta)>-1 : false));
+        if (tagArray.length > 0)
+            nuevoMangas = nuevoMangas.filter(
+                (manga) => tagArray.every(
+                    (etiqueta) => manga.tags ? manga.tags.indexOf(etiqueta) > -1 : false));
 
-        if(categories.length>0)
-        nuevoMangas = nuevoMangas.filter(
-            (value) => categories.every(
-                (categoria)=> value.category ? value.category.indexOf(categoria)>-1 : false));
+        if (categories.length > 0)
+            nuevoMangas = nuevoMangas.filter(
+                (value) => categories.every(
+                    (categoria) => value.category ? value.category.indexOf(categoria) > -1 : false));
 
         return nuevoMangas;
     }
@@ -117,7 +117,7 @@ export default function Avanced({estados, mangas, buscador, volver}){
     }
 
     const handleAddTag = () => {
-        if(!selected.tag || tagArray.indexOf(selected.tag)!==-1) return;
+        if (!selected.tag || tagArray.indexOf(selected.tag) !== -1) return;
         let newTags = [...tagArray];
         newTags.push(selected.tag);
         console.log(newTags);
@@ -152,7 +152,7 @@ export default function Avanced({estados, mangas, buscador, volver}){
                             {tipos.map((tipo) => <MenuItem key={tipo} value={tipo}>{tipo}</MenuItem>)}
                         </Select>
                     </FormControl>
-                    <br/>
+                    <br />
                     <FormControl component="fieldset" className={classes.formControl}>
                         <InputLabel id="demo-field">Dermografía</InputLabel>
                         <Select
@@ -167,7 +167,7 @@ export default function Avanced({estados, mangas, buscador, volver}){
                             {dermografias.map((tipo) => <MenuItem key={tipo} value={tipo}>{tipo}</MenuItem>)}
                         </Select>
                     </FormControl>
-                    <br/>
+                    <br />
                     <FormControl component="fieldset" className={classes.formControl}>
                         <InputLabel id="status-field">Estado</InputLabel>
                         <Select
@@ -198,31 +198,31 @@ export default function Avanced({estados, mangas, buscador, volver}){
                             onChange={handleChangeSelected}
                             endAdornment={
                                 <InputAdornment position="end">
-                                  <IconButton
-                                    aria-label="add-tags-button"
-                                    onClick={()=>handleAddTag()}
-                                    title="Añadir"
-                                  >
-                                    <AddIcon />
-                                  </IconButton>
+                                    <IconButton
+                                        aria-label="add-tags-button"
+                                        onClick={() => handleAddTag()}
+                                        title="Añadir"
+                                    >
+                                        <AddIcon />
+                                    </IconButton>
                                 </InputAdornment>
                             }
                         />
                         <datalist id="tags">
-                            {tagsPrueba.map((value, index)=> <option value={value} key={value+index} />)}
+                            {tagsPrueba.map((value, index) => <option value={value} key={value + index} />)}
                         </datalist>
                     </FormControl>
-                    <br/>
-                    {tagArray.map((tag, index)=> 
+                    <br />
+                    {tagArray.map((tag, index) =>
                         <Chip
                             label={tag}
-                            key={tag+index}
-                            onDelete={()=>handleDeleteTag(index)}
+                            key={tag + index}
+                            onDelete={() => handleDeleteTag(index)}
                             className={classes.chip}
                         />
-                    )}                    
+                    )}
                 </Grid>
-                
+
                 <Grid item xs={6} md={3} className={classes.gridOpciones} >
                     <Typography align="center" variant="h5" color="primary">Categorias</Typography>
                     <FormControl component="fieldset" className={classes.formControl} >
@@ -233,7 +233,7 @@ export default function Avanced({estados, mangas, buscador, volver}){
                             multiple
                             value={categories}
                             name="category"
-                            onChange={(event)=> setCategories(event.target.value)}
+                            onChange={(event) => setCategories(event.target.value)}
                             input={<Input />}
                             renderValue={(selected) => selected.join(', ')}
                             className={classes.input}
@@ -246,7 +246,7 @@ export default function Avanced({estados, mangas, buscador, volver}){
                     </FormControl>
                     <List dense >
                         {categories.map((value) => <ListItem key={value}>
-                            <ListItemIcon><CheckCircleIcon/></ListItemIcon>
+                            <ListItemIcon><CheckCircleIcon /></ListItemIcon>
                             <ListItemText primary={value} />
                         </ListItem>)}
                     </List>
@@ -255,6 +255,6 @@ export default function Avanced({estados, mangas, buscador, volver}){
             <Button onClick={filtrar}>Buscar</Button>
             <Button onClick={volver}>Volver</Button>
         </Paper>
-        {mangasFiltrados.map((value)=><p key={value.titleName}>{value.titleName}</p>)}
+        {mangasFiltrados.map((value) => <p key={value.titleName}>{value.titleName}</p>)}
     </div>
 }
