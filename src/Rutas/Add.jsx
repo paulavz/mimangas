@@ -63,7 +63,14 @@ const useStyles = (theme) => ({
         textAlign: 'center',
         marginTop: theme.spacing(1),
         marginBottom: theme.spacing(1)
-    }
+    },
+    inputChip: {
+        paddingBottom: '0 !important',
+        '&:focus': {
+            paddingBottom: '12px !important',
+        },
+        transition: "padding 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms",
+    },
 
 });
 
@@ -466,7 +473,11 @@ class Add extends Component {
                                 fullWidth
                                 size="small"
                                 className={classes.select}
-
+                                InputProps={{
+                                    inputProps: {
+                                        className: classes.inputChip,
+                                    }
+                                }}
                                 variant="outlined"
                                 label='Etiquetas'
                             />
