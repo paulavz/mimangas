@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
@@ -17,6 +17,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import Checkbox from '@material-ui/core/Checkbox';
+import Button from '@material-ui/core/Button';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 
 const useStyles = makeStyles((theme) => ({
@@ -51,17 +52,57 @@ const dermografias = ["Seinen", "Shounen", "Shoujo", "Josei", "Kodomo"];
 const tagsPrueba = ["isekai", "4-koma", "musica", "buen dibujo", "lentes"];
 const categorias = ["Horror", "Acción", "Comedia", "Romance", "Ecchi", "Slice of Life"];
 
-export default function Avanced({estados}){
+export default function Avanced({estados, mangas, buscador, volver}){
     const classes = useStyles();
 
     const [selected, setSelected] = useState({
-        dermography: "",
+        demo: "",
         type: "",
-        state: "",
+        status: "",
         tag: "",
     });
     const [tagArray, setTagArray] = useState([]);
     const [categories, setCategories] = useState([]);
+    const [mangasFiltrados, setMangasFiltrados] = useState([]);
+
+    /**
+     * Devuelve los mangas que coincidan con todos los states
+     */
+    function buscar() {
+        let buscadorRE = new RegExp( buscador.toLowerCase().trim() );
+
+        let nuevoMangas = (buscador) ? mangas.filter((value) => {
+            let arrayNombres = [];
+            if(value.englishtitle) arrayNombres.push(value.englishtitle);
+            if(value.spanishtitle) arrayNombres.push(value.spanishtitle);
+            arrayNombres.push(value.titleName);
+            return arrayNombres.some((title) => buscadorRE.test(title.toLowerCase()));
+        }) : mangas;
+
+        for(let i in selected){
+            if(selected[i] && i!=="tag"){
+                nuevoMangas = nuevoMangas.filter((value) => selected[i]===value[i]);
+            }
+        }
+
+        if(tagArray.length>0)
+        nuevoMangas = nuevoMangas.filter(
+            (manga) => tagArray.every(
+                (etiqueta)=> manga.tags ? manga.tags.indexOf(etiqueta)>-1 : false));
+
+        if(categories.length>0)
+        nuevoMangas = nuevoMangas.filter(
+            (value) => categories.every(
+                (categoria)=> value.category ? value.category.indexOf(categoria)>-1 : false));
+
+        return nuevoMangas;
+    }
+
+    const filtrar = () => setMangasFiltrados(buscar());
+
+    useEffect(()=>{
+        filtrar();
+    },[]);
 
     const handleChangeSelected = (event) => {
         let name = event.target.name;
@@ -117,12 +158,12 @@ export default function Avanced({estados}){
                     </FormControl>
                     <br/>
                     <FormControl component="fieldset" className={classes.formControl}>
-                        <InputLabel id="dermography-field">Dermografía</InputLabel>
+                        <InputLabel id="demo-field">Dermografía</InputLabel>
                         <Select
-                            labelId="dermography-field"
+                            labelId="demo-field"
                             id="dermo-select"
-                            value={selected.dermography}
-                            name="dermography"
+                            value={selected.demo}
+                            name="demo"
                             onChange={handleChangeSelected}
                             className={classes.input}
                         >
@@ -132,17 +173,17 @@ export default function Avanced({estados}){
                     </FormControl>
                     <br/>
                     <FormControl component="fieldset" className={classes.formControl}>
-                        <InputLabel id="state-field">Estado</InputLabel>
+                        <InputLabel id="status-field">Estado</InputLabel>
                         <Select
-                            labelId="state-field"
-                            id="state-select"
-                            value={selected.state}
-                            name="state"
+                            labelId="status-field"
+                            id="status-select"
+                            value={selected.status}
+                            name="status"
                             onChange={handleChangeSelected}
                             className={classes.input}
                         >
                             <MenuItem value={""} >Cualquiera</MenuItem>
-                            {estados.map((tipo) => <MenuItem key={tipo} value={tipo}>{tipo}</MenuItem>)}
+                            {estados.slice(1).map((tipo) => <MenuItem key={tipo} value={tipo}>{tipo}</MenuItem>)}
                         </Select>
                     </FormControl>
                 </Grid>
@@ -215,6 +256,9 @@ export default function Avanced({estados}){
                     </List>
                 </Grid>
             </Grid>
+            <Button onClick={filtrar}>Buscar</Button>
+            <Button onClick={volver}>Volver</Button>
         </Paper>
+        {mangasFiltrados.map((value)=><p key={value.titleName}>{value.titleName}</p>)}
     </div>
 }
