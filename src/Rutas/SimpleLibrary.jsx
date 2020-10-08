@@ -66,7 +66,7 @@ export default function SimpleLibrary({busqueda, mangas, states}){
         const filtrados = mangas.filter(
             (value) => active === "Todos" || value.status === active
         ).filter(
-            (value) => new RegExp(busqueda.toLowerCase()).test(value.titleName.toLowerCase())
+            (value) => value.titleName.toLowerCase().includes(busqueda.toLowerCase())
         );
         if (page > filtrados.length / rowsPerPage) {
             setPage(Math.floor(filtrados.length / rowsPerPage));

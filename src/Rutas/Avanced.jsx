@@ -69,14 +69,14 @@ export default function Avanced({ estados, mangas, buscador, volver }) {
      * Devuelve los mangas que coincidan con todos los states
      */
     function buscar() {
-        let buscadorRE = new RegExp(buscador.toLowerCase().trim());
+        let buscadorRE = buscador.toLowerCase().trim();
 
         let nuevoMangas = (buscador) ? mangas.filter((value) => {
             let arrayNombres = [];
             if (value.englishtitle) arrayNombres.push(value.englishtitle);
             if (value.spanishtitle) arrayNombres.push(value.spanishtitle);
             arrayNombres.push(value.titleName);
-            return arrayNombres.some((title) => buscadorRE.test(title.toLowerCase()));
+            return arrayNombres.some((title) => title.toLowerCase().includes(buscadorRE));
         }) : mangas;
 
         for (let i in selected) {
