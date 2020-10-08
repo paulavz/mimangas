@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
@@ -99,10 +99,6 @@ export default function Avanced({estados, mangas, buscador, volver}){
     }
 
     const filtrar = () => setMangasFiltrados(buscar());
-
-    useEffect(()=>{
-        filtrar();
-    },[]);
 
     const handleChangeSelected = (event) => {
         let name = event.target.name;

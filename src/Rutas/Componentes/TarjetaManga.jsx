@@ -54,7 +54,6 @@ const useStyles = (theme) => ({
         position: "relative",
         width: "100%",
         height: "100%",
-        backgroundSize: "100% 100%",
     },
 });
 
@@ -100,8 +99,12 @@ class TarjetaManga extends Component{
                 >
                     <div 
                         className={classes.container} 
-                        style={{backgroundImage: `url(${manga.cover || "https://firebasestorage.googleapis.com/v0/b/mismangas-7e620.appspot.com/o/uploads%2F3oesb3tldzt?alt=media&token=e006a18c-b59d-4a74-b2c7-d3849a0d49ba"})`}}                     
                     >
+                        <img 
+                            src={manga.cover || "https://firebasestorage.googleapis.com/v0/b/mismangas-7e620.appspot.com/o/uploads%2F3oesb3tldzt?alt=media&token=e006a18c-b59d-4a74-b2c7-d3849a0d49ba"} 
+                            alt={manga.titleName} 
+                            style={{position:"absolute", width:"100%", height:"100%"}}
+                        />
                         <ButtonBase 
                             focusRipple
                             className={classes.button}
@@ -109,6 +112,7 @@ class TarjetaManga extends Component{
                         <div className={classes.textSpace} >
                             {manga.titleName}
                         </div>
+                        
                     </div>
                 </Card>
             </div>
