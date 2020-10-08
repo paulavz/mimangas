@@ -22,6 +22,8 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import './Add.css'
 require("firebase/auth");
 require("firebase/firestore");
+require("firebase/storage");
+
 
 
 
@@ -65,19 +67,20 @@ const useStyles = (theme) => ({
 
 });
 
+const outStates = ["open", "uploadValue", "uid", "file", "preview"];
+
 class Add extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-
             open: false,
             titleName: '',
             status: 'Siguiendo',
             type: 'Manga',
             lecture: '',
             artist: '',
-            src: '',
+            cover: '',
             englishtitle: '',
             spanishtitle: '',
             author: '',
@@ -91,7 +94,9 @@ class Add extends Component {
             punctuation: 0,
             fansub: [],
             uploadValue: 0,
-            uid: ""
+            uid: "",
+            file: "",
+            preview: ""
         };
 
         this.handleClickOpen = this.handleClickOpen.bind(this);
@@ -129,15 +134,13 @@ class Add extends Component {
         })
     }
 
-    handleSubmit = (e) => {
-        e.preventDefault();
-        this.handleClose();
+    format() {
         let data = {};
-        for(let i in this.state){
-            if(this.state[i] instanceof Array && this.state[i].length<1)
-            continue;
-            if(this.state[i] && i!=="open"){
-                data={
+        for (let i in this.state) {
+            if (this.state[i] instanceof Array && this.state[i].length < 1)
+                continue;
+            if (this.state[i] && outStates.indexOf(i) === -1) {
+                data = {
                     ...data,
                     [i]: this.state[i],
                 }
@@ -148,26 +151,44 @@ class Add extends Component {
             createAt: firebase.firestore.FieldValue.serverTimestamp(),
         }
         this.saveData(data);
-        this.setState({
-            titleName: '',
-            status: 'Siguiendo',
-            type: 'Manga',
-            lecture: '',
-            tags: [],
-            punctuation: 0,
-            englishtitle: '',
-            spanishtitle: '',
-            artist: '',
-            src: '',
-            author: '',
-            synopsis: '',
-            lastchapter: '',
-            ubication: '',
-            otherlink: [],
-            fansub: [],
-            category: [],
-        });
 
+    }
+
+    handleSubmit = (e) => {
+        e.preventDefault();
+        this.handleClose();
+        if (this.state.file) {
+            const user = firebase.auth().currentUser;
+            const storageRef = firebase
+                .storage()
+                .ref(`/cover/${user.uid}/${this.state.file.name}`);
+            const task = storageRef.put(this.state.file);
+            task.on(
+                "state_changed",
+                (snapshot) => {
+                    let porcentaje =
+                        (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                    this.setState({
+                        uploadValue: porcentaje,
+                    });
+                },
+                (error) => console.log(error),
+                () => {
+                    task.snapshot.ref.getDownloadURL().then((downloadUrl) => {
+                        this.setState({
+                            cover: downloadUrl
+                        })
+                        this.format();
+
+                        console.log(downloadUrl);
+                    })
+                })
+            console.log(this.state.file);
+        } else {
+            console.log("No se subio imagen");
+            this.format();
+
+        }
     };
 
     handleChangeSlider(event, newValue) {
@@ -177,16 +198,10 @@ class Add extends Component {
     }
 
     handleUpload(event) {
-        const user = firebase.auth().currentUser;
-        const file = event.target.files[0];
-        /*   const storageRef = firebase
-             .storage()
-             .ref(`/cover/${this.state.uid}/${file.name}`);
-           const task = storageRef.put(file);*/
         this.setState({
-            src: URL.createObjectURL(file)
+            file: event.target.files[0],
+            preview: URL.createObjectURL(event.target.files[0])
         })
-        console.log(file);
     }
 
     saveData(data) {
@@ -200,6 +215,27 @@ class Add extends Component {
                 console.log("Data guardada")
             })
 
+        this.setState({
+            titleName: '',
+            status: 'Siguiendo',
+            type: 'Manga',
+            lecture: '',
+            tags: [],
+            punctuation: 0,
+            englishtitle: '',
+            spanishtitle: '',
+            artist: '',
+            cover: '',
+            author: '',
+            synopsis: '',
+            lastchapter: '',
+            ubication: '',
+            otherlink: [],
+            fansub: [],
+            category: [],
+            preview: ''
+        });
+
     }
 
     render() {
@@ -208,7 +244,7 @@ class Add extends Component {
         const demografia = ['Shounen', 'Shoujo', 'Josei', 'Seinen', 'Kodomo'];
         const types = ['Manga', 'Manhwa', 'Manhua', 'Cómic', 'Original'];
         const categorias = ['Romance', 'Misterio', 'Acción', 'Comedia'];
-        const { titleName, tags, punctuation, category, src, synopsis, lastchapter, ubication, fansub } = this.state;
+        const { titleName, tags, punctuation, category, synopsis, lastchapter, ubication, fansub } = this.state;
         const inputs = ["lecture", "englishtitle", "spanishtitle", "author", "artist"];
         const labels = ["Link de Lectura", "Título en Inglés", "Título en Español", "Autor", "Artista"]
 
@@ -341,8 +377,8 @@ class Add extends Component {
                                 ))}
                             </TextField>
                         </Grid>
-                        {src && <div className="center">
-                            <img className="cover" alt="cover" src={src} />
+                        {this.state.preview && <div className="center">
+                            <img className="cover" alt="cover" src={this.state.preview} />
                         </div>}
                         <Grid item xs={12} sm={12} className={classes.upload}>
                             <input
