@@ -90,7 +90,7 @@ const useStyles = (theme) => ({
 
 });
 
-const outStates = ["open", "uploadValue", "uid", "file", "preview", "selectedF", "selectedO", "selectedN"];
+const outStates = ["open", "uploadValue", "uid", "file", "preview", "selectedF", "selectedO", "selectedN", "alert"];
 class Add extends Component {
 
     constructor(props) {
