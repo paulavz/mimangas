@@ -25,6 +25,9 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import CancelIcon from '@material-ui/icons/Cancel';
 
+import Collapse from '@material-ui/core/Collapse';
+import CloseIcon from '@material-ui/icons/Close';
+import Alert from '@material-ui/lab/Alert';
 
 import './Add.css'
 require("firebase/auth");
@@ -88,13 +91,13 @@ const useStyles = (theme) => ({
 });
 
 const outStates = ["open", "uploadValue", "uid", "file", "preview", "selectedF", "selectedO", "selectedN"];
-
 class Add extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
             open: false,
+            alert: false,
             selectedF: '',
             selectedO: '',
             selectedN: '',
@@ -203,40 +206,52 @@ class Add extends Component {
 
     handleSubmit = (e) => {
         e.preventDefault();
-        this.handleClose();
-        if (this.state.file) {
-            const id = Math.random().toString(36).substring(2);
-            const user = firebase.auth().currentUser;
-            const storageRef = firebase
-                .storage()
-                .ref(`/cover/${user.uid}/${id}`);
-            const task = storageRef.put(this.state.file);
-            task.on(
-                "state_changed",
-                (snapshot) => {
-                    let porcentaje =
-                        (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                    this.setState({
-                        uploadValue: porcentaje,
-                    });
-                },
-                (error) => console.log(error),
-                () => {
-                    task.snapshot.ref.getDownloadURL().then((downloadUrl) => {
+
+        if (this.state.titleName !== '') {
+            this.handleClose();
+            if (this.state.file) {
+                const id = Math.random().toString(36).substring(2);
+                const user = firebase.auth().currentUser;
+                const storageRef = firebase
+                    .storage()
+                    .ref(`/cover/${user.uid}/${id}`);
+                const task = storageRef.put(this.state.file);
+                task.on(
+                    "state_changed",
+                    (snapshot) => {
+                        let porcentaje =
+                            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
                         this.setState({
-                            cover: downloadUrl
+                            uploadValue: porcentaje,
+                        });
+                    },
+                    (error) => console.log(error),
+                    () => {
+                        task.snapshot.ref.getDownloadURL().then((downloadUrl) => {
+                            this.setState({
+                                cover: downloadUrl
+                            })
+                            this.format();
+
+                            console.log(downloadUrl);
                         })
-                        this.format();
-
-                        console.log(downloadUrl);
                     })
-                })
-            console.log(this.state.file);
+                console.log(this.state.file);
+            } else {
+                console.log("No se subio imagen");
+                this.format();
+            }
         } else {
-            console.log("No se subio imagen");
-            this.format();
-
+            this.setState({
+                alert: true
+            })
+            setTimeout(() => {
+                this.setState({
+                    alert: false
+                })
+            }, 3000);
         }
+
     };
 
     handleChangeSlider(event, newValue) {
@@ -293,7 +308,7 @@ class Add extends Component {
         const demografia = ['Shounen', 'Shoujo', 'Josei', 'Seinen', 'Kodomo'];
         const types = ['Manga', 'Manhwa', 'Manhua', 'Cómic', 'Original'];
         const categorias = ['Romance', 'Misterio', 'Acción', 'Comedia'];
-        const { titleName, tags, punctuation, category, synopsis, lastchapter, ubication } = this.state;
+        const { titleName, tags, punctuation, category, synopsis, alert, lastchapter, ubication } = this.state;
         const inputs = ["lecture", "englishtitle", "spanishtitle", "author", "artist"];
         const labels = ["Link de Lectura", "Título en Inglés", "Título en Español", "Autor", "Artista"]
         const Inputs = ["otherNames", "fansub", "otherlink"];
@@ -312,6 +327,30 @@ class Add extends Component {
                 <DialogTitle id="form-dialog-title">Añadir Cómic</DialogTitle>
                 <DialogContent>
                     <Grid container>
+                        <Grid item xs={12} sm={12}>
+
+                            <div className={classes.select}>
+                                <Collapse in={alert}>
+                                    <Alert
+                                        severity="error"
+                                        action={
+                                            <IconButton
+                                                size="small"
+                                                onClick={() => {
+                                                    this.setState({
+                                                        alert: false
+                                                    })
+                                                }}
+                                            >
+                                                <CloseIcon fontSize="inherit" />
+                                            </IconButton>
+                                        }
+                                    >
+                                        Escribe un titulo.
+        </Alert>
+                                </Collapse>
+                            </div>
+                        </Grid>
                         <Grid item xs={12} sm={12}>
                             <TextField
                                 autoFocus
@@ -596,6 +635,7 @@ class Add extends Component {
           </Button>
                 </DialogActions>
             </Dialog>
+
         </div >
     }
 }
