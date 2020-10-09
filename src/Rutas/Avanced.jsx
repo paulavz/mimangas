@@ -75,6 +75,7 @@ export default function Avanced({ estados, mangas, buscador, volver }) {
             let arrayNombres = [];
             if (value.englishtitle) arrayNombres.push(value.englishtitle);
             if (value.spanishtitle) arrayNombres.push(value.spanishtitle);
+            if (value.otherNames) arrayNombres.push(...value.otherNames);
             arrayNombres.push(value.titleName);
             return arrayNombres.some((title) => title.toLowerCase().includes(buscadorRE));
         }) : mangas;
