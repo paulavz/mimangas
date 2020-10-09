@@ -19,6 +19,13 @@ import MenuItem from '@material-ui/core/MenuItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
+
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import CancelIcon from '@material-ui/icons/Cancel';
+
+
 import './Add.css'
 require("firebase/auth");
 require("firebase/firestore");
@@ -37,6 +44,9 @@ const useStyles = (theme) => ({
     select: {
         marginTop: theme.spacing(1),
         marginBottom: theme.spacing(1)
+    },
+    demo: {
+        'width': '100%'
     },
     top: {
         marginBottom: theme.spacing(1)
@@ -71,10 +81,13 @@ const useStyles = (theme) => ({
         },
         transition: "padding 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms",
     },
+    warning: {
+        color: theme.palette.error.main
+    }
 
 });
 
-const outStates = ["open", "uploadValue", "uid", "file", "preview"];
+const outStates = ["open", "uploadValue", "uid", "file", "preview", "selectedF", "selectedO", "selectedN"];
 
 class Add extends Component {
 
@@ -82,6 +95,9 @@ class Add extends Component {
         super(props);
         this.state = {
             open: false,
+            selectedF: '',
+            selectedO: '',
+            selectedN: '',
             titleName: '',
             status: 'Siguiendo',
             type: 'Manga',
@@ -103,7 +119,8 @@ class Add extends Component {
             uploadValue: 0,
             uid: "",
             file: "",
-            preview: ""
+            preview: "",
+            otherNames: ""
         };
 
         this.handleClickOpen = this.handleClickOpen.bind(this);
@@ -132,12 +149,35 @@ class Add extends Component {
             tags: [...this.state.tags, chip]
         })
     }
+
+
     onBeforeAdd(chip) {
         return chip.length >= 3
     }
+
+    handleAddFansub(fan) {
+        this.setState({
+            fansub: [...this.state.fansub, fan]
+        })
+    }
+
+    addHandler(name, selected) {
+        this.setState({
+            [name]: [...this.state[name], this.state[selected]],
+            [selected]: ''
+        })
+        console.log("Name ", name, " selected ", selected);
+    }
+
     handleDelete(deletedChip) {
         this.setState({
             tags: this.state.tags.filter((c) => c !== deletedChip)
+        })
+    }
+
+    handleDelete2(deleted, name) {
+        this.setState({
+            [name]: this.state[name].filter((c) => c !== deleted)
         })
     }
 
@@ -253,9 +293,12 @@ class Add extends Component {
         const demografia = ['Shounen', 'Shoujo', 'Josei', 'Seinen', 'Kodomo'];
         const types = ['Manga', 'Manhwa', 'Manhua', 'Cómic', 'Original'];
         const categorias = ['Romance', 'Misterio', 'Acción', 'Comedia'];
-        const { titleName, tags, punctuation, category, synopsis, lastchapter, ubication, fansub } = this.state;
+        const { titleName, tags, punctuation, category, synopsis, lastchapter, ubication } = this.state;
         const inputs = ["lecture", "englishtitle", "spanishtitle", "author", "artist"];
         const labels = ["Link de Lectura", "Título en Inglés", "Título en Español", "Autor", "Artista"]
+        const Inputs = ["otherNames", "fansub", "otherlink"];
+        const Labels = ["Otros Nombres", "Fansubs", "Otros Links"];
+        const Selectors = ["selectedN", "selectedF", "selectedO"];
 
         return <div>
             <div className="add">
@@ -460,10 +503,49 @@ class Add extends Component {
                                 value={ubication}
                             />
                         </Grid>
-
-
-
-
+                        {
+                            Inputs.map((value, index) =>
+                                <Grid item xs={12} sm={12} key={value}>
+                                    <TextField
+                                        label={Labels[index]}
+                                        fullWidth
+                                        className={classes.select}
+                                        variant="outlined"
+                                        size="small"
+                                        name={Selectors[index]}
+                                        onChange={this.handleChange}
+                                        value={this.state[Selectors[index]]}
+                                        onKeyPress={(ev) => {
+                                            if (ev.key === 'Enter') {
+                                                this.addHandler(value, Selectors[index]) // here was the mistake
+                                            }
+                                        }}
+                                    />
+                                    {this.state[value].length > 0 &&
+                                        <div className={classes.demo}>
+                                            <List dense className={classes.demo}>
+                                                {
+                                                    this.state[value].map((values) => {
+                                                        return <ListItem key={values}>
+                                                            <ListItemText
+                                                                primary={values}
+                                                            />
+                                                            <ListItemSecondaryAction>
+                                                                <IconButton edge="end" aria-label="delete" onClick={() => {
+                                                                    this.handleDelete2(values, value);
+                                                                }}>
+                                                                    <CancelIcon className={classes.warning} />
+                                                                </IconButton>
+                                                            </ListItemSecondaryAction>
+                                                        </ListItem>
+                                                    })
+                                                }
+                                            </List>
+                                        </div>
+                                    }
+                                </Grid>
+                            )
+                        }
                         <Grid item xs={12} sm={12}>
                             <ChipInput
                                 value={tags}
@@ -485,7 +567,6 @@ class Add extends Component {
 
 
                         <Grid item xs={12} sm={12}>
-
                             <div className="margin">
                                 <Typography id="non-linear-slider" gutterBottom>
                                     Puntuación
@@ -515,7 +596,7 @@ class Add extends Component {
           </Button>
                 </DialogActions>
             </Dialog>
-        </div>
+        </div >
     }
 }
 

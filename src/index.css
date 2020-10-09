@@ -12,7 +12,7 @@ code {
     monospace;
 }
 
-
-.WAMuiChipInput-inputRoot-34{
-  padding-top: 9px !important;
+.MuiTypography-displayBlock{
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
