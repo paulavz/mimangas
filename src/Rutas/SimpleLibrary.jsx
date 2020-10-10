@@ -147,7 +147,8 @@ export default function SimpleLibrary({busqueda, mangas, states}){
             spacing={2} 
             mangas={mangasFiltrados}
             paginationProps={{
-                className: classes.paginacion
+                className: classes.paginacion,
+                rowsPerPageOptions: [10,20,50,100]
             }}
             itemsPorFila={large ? 5: null}
         />

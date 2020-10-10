@@ -118,7 +118,7 @@ export default function Avanced({ estados, mangas, buscador }) {
                 (value) => categories.every(
                     (categoria) => value.category ? value.category.indexOf(categoria) > -1 : false));
 
-        if(punctuation!==[0,100]){
+        if(punctuation[0]!==0 && punctuation[1]!==100){
             let minim = (acc,act)=>Math.min(acc,act);
             let maxim = (acc,act)=>Math.max(acc,act);
             nuevoMangas = nuevoMangas.filter((manga)=> manga.punctuation &&
@@ -313,7 +313,7 @@ export default function Avanced({ estados, mangas, buscador }) {
                 mangas={mangasFiltrados}
                 style={{ minHeight: "90%" }}
                 paginationProps={{
-                    rowsPerPageOptions: [10, 20, 40]
+                    rowsPerPageOptions: [12, 24, 40]
                 }}
             />
         </Grid>
