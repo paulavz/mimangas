@@ -57,7 +57,7 @@ const tipos = ["Manga", "Manhwa", "Manhua", "Cómic", "Original"];
 const dermografias = ["Seinen", "Shounen", "Shoujo", "Josei", "Kodomo"];
 const tagsPrueba = ["isekai", "4-koma", "musica", "buen dibujo", "lentes"];
 const categorias = ["Horror", "Acción", "Comedia", "Romance", "Ecchi", "Slice of Life"];
-export default function Avanced({ estados, mangas, buscador, volver }) {
+export default function Avanced({ estados, mangas, buscador }) {
     const classes = useStyles();
 
     const [selected, setSelected] = useState({

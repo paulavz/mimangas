@@ -165,7 +165,6 @@ export default function Library(props) {
                     estados={states} 
                     mangas={mangas}
                     buscador={buscador}
-                    volver={()=>setAvanced(false)}
                 /> :
                 <SimpleLibrary
                     busqueda={buscador}
