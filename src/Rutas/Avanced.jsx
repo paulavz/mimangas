@@ -118,8 +118,13 @@ export default function Avanced({ estados, mangas, buscador }) {
                 (value) => categories.every(
                     (categoria) => value.category ? value.category.indexOf(categoria) > -1 : false));
 
-        if(punctuation!==[0,100])
-        nuevoMangas = nuevoMangas.filter((manga)=> true);
+        if(punctuation!==[0,100]){
+            let minim = (acc,act)=>Math.min(acc,act);
+            let maxim = (acc,act)=>Math.max(acc,act);
+            nuevoMangas = nuevoMangas.filter((manga)=> manga.punctuation &&
+                manga.punctuation >= punctuation.reduce(minim) &&
+                manga.punctuation <= punctuation.reduce(maxim) );
+        }
 
         return nuevoMangas;
     }
