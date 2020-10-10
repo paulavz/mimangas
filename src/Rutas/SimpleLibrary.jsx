@@ -165,27 +165,5 @@ export default function SimpleLibrary({busqueda, mangas, states}){
             </Grid>
         }
 
-            {/*mangasFiltrados.slice(rowsPerPage * page, (rowsPerPage * page) + rowsPerPage)
-                .map((value, index) =>
-                    <Grid item md={3} sm={6} xs={6} key={value.titleName + index} className={classes.gridManga} >
-                        <TarjetaManga manga={value} />
-                    </Grid>)}
-
-
-
-        {mangasFiltrados.length > 0 && <TablePagination
-            component="div"
-            count={mangasFiltrados.length}
-            page={page}
-            onChangePage={handleChangePage}
-            rowsPerPage={rowsPerPage}
-            onChangeRowsPerPage={handleChangeRowsPerPage}
-            labelRowsPerPage="Mangas por pagina"
-            labelDisplayedRows={({ from, to, count }) => `${from} - ${to} de ${count}`}
-            className={classes.paginacion}
-            nextIconButtonText="Siguiente"
-            backIconButtonText="Anterior"
-        />*/}
-
     </div>
 }
