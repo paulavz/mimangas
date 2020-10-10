@@ -44,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
         padding: theme.spacing(1),
         position: 'sticky',
         top: 0,
-        maxHeight: '677px'
+        maxHeight: '657px'
     },
     chip: {
         margin: theme.spacing(0.5),
@@ -308,7 +308,7 @@ export default function Avanced({ estados, mangas, buscador }) {
                 mangas={mangasFiltrados}
                 style={{ minHeight: "90%" }}
                 paginationProps={{
-                    rowsPerPageOptions: [10,20,40]
+                    rowsPerPageOptions: [10, 20, 40]
                 }}
             />
         </Grid>
