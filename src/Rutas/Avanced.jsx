@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
 import FormControl from '@material-ui/core/FormControl';
-
 import Chip from '@material-ui/core/Chip';
 import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
@@ -11,10 +9,10 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import ChipInput from "material-ui-chip-input";
-
 import ListItemText from '@material-ui/core/ListItemText';
 import Checkbox from '@material-ui/core/Checkbox';
 import Button from '@material-ui/core/Button';
+import MostradorMangas from './Componentes/MostradorMangas';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -88,8 +86,14 @@ export default function Avanced({ estados, mangas, buscador, volver }) {
         }) : mangas;
 
         for (let i in selected) {
-            if (selected[i] && i !== "tag") {
+            if(!selected[i]) continue;
+            if (["demo", "type", "status"].includes(i)) {
                 nuevoMangas = nuevoMangas.filter((value) => selected[i] === value[i]);
+            }else if(["author_artist", "fansub"].includes(i)){
+                let campos = i.split('_');
+                nuevoMangas = nuevoMangas.filter((manga)=> campos.some(
+                    (campo)=> manga[campo] && manga[campo].toLowerCase().includes(selected[i].toLowerCase())
+                ));
             }
         }
 
@@ -131,7 +135,6 @@ export default function Avanced({ estados, mangas, buscador, volver }) {
     }
 
     return <div>
-        <Paper square elevation={1}>
             <Grid container spacing={0} >
                 <Grid item xs={3} md={3} className={classes.gridOpciones} >
                     <div className={classes.titulo}>
@@ -279,11 +282,11 @@ export default function Avanced({ estados, mangas, buscador, volver }) {
 
                 </Grid>
                 <Grid item xs={9} md={9}>
-                    {mangasFiltrados.map((value) => <p key={value.titleName}>{value.titleName}</p>)}
-
+                    <MostradorMangas
+                        mangas={mangasFiltrados}
+                    />
                 </Grid>
 
             </Grid>
-        </Paper>
     </div>
 }

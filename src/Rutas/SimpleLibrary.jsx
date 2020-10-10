@@ -5,11 +5,11 @@ import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid';
 import Add from './Add';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
-import TablePagination from '@material-ui/core/TablePagination';
 import Card from '@material-ui/core/Card';
 import Typography from '@material-ui/core/Typography';
 import AddIcon from '@material-ui/icons/Add';
-import TarjetaManga from './Componentes/TarjetaManga';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
+import MostradorMangas from './Componentes/MostradorMangas';
 import "./Library.css";
 
 const useStyles = makeStyles((theme) => ({
@@ -79,10 +79,10 @@ export default function SimpleLibrary({busqueda, mangas, states}){
     const classes = useStyles();
 
     const [active, setActive] = useState("Todos");
-    const [page, setPage] = useState(0);
-    const [rowsPerPage, setRowsPerPage] = useState(10);
     const [mangasFiltrados, setMangasFiltrados] = useState([]);
     const [openAdd, setOpenAdd] = useState(false);
+
+    const large = useMediaQuery('(min-width:800px)');
 
     useEffect(() => {
         const filtrados = mangas.filter(
@@ -90,23 +90,11 @@ export default function SimpleLibrary({busqueda, mangas, states}){
         ).filter(
             (value) => value.titleName.toLowerCase().includes(busqueda.toLowerCase())
         );
-        if (page > filtrados.length / rowsPerPage) {
-            setPage(Math.floor(filtrados.length / rowsPerPage));
-        }
         setMangasFiltrados(filtrados);
-    }, [page, rowsPerPage, busqueda, active, mangas]);
+    }, [busqueda, active, mangas]);
 
     const handleChange = (event) => {
         setActive(event.target.value);
-    };
-    
-    const handleChangePage = (event, newPage) => {
-        setPage(newPage);
-    };
-
-    const handleChangeRowsPerPage = (event) => {
-        setRowsPerPage(parseInt(event.target.value, 10));
-        setPage(0);
     };
 
     return <div className={classes.root} >
@@ -155,9 +143,17 @@ export default function SimpleLibrary({busqueda, mangas, states}){
                 </Grid>
             </Grid>
         </div>
-        <Grid container spacing={2} >
+        <MostradorMangas 
+            spacing={2} 
+            mangas={mangasFiltrados}
+            paginationProps={{
+                className: classes.paginacion
+            }}
+            itemsPorFila={large ? 5: null}
+        />
 
-            {mangas.length===0 && 
+        {mangas.length===0 && 
+            <Grid container spacing={2} >
                 <Grid item md={3} sm={6} xs={6} className={classes.gridManga} >
                     <Card className={classes.cardNew} onClick={()=>setOpenAdd(!openAdd)} >
                         <div className={classes.cardNewIcon}>
@@ -166,15 +162,15 @@ export default function SimpleLibrary({busqueda, mangas, states}){
                         </div>
                     </Card>
                 </Grid>
-            }
+            </Grid>
+        }
 
-            {mangasFiltrados.slice(rowsPerPage * page, (rowsPerPage * page) + rowsPerPage)
+            {/*mangasFiltrados.slice(rowsPerPage * page, (rowsPerPage * page) + rowsPerPage)
                 .map((value, index) =>
                     <Grid item md={3} sm={6} xs={6} key={value.titleName + index} className={classes.gridManga} >
                         <TarjetaManga manga={value} />
                     </Grid>)}
 
-        </Grid>
 
 
         {mangasFiltrados.length > 0 && <TablePagination
@@ -189,7 +185,7 @@ export default function SimpleLibrary({busqueda, mangas, states}){
             className={classes.paginacion}
             nextIconButtonText="Siguiente"
             backIconButtonText="Anterior"
-        />}
+        />*/}
 
     </div>
 }
