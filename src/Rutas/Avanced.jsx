@@ -3,37 +3,35 @@ import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import FormControl from '@material-ui/core/FormControl';
-import Input from '@material-ui/core/Input';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import IconButton from '@material-ui/core/IconButton';
-import AddIcon from '@material-ui/icons/Add';
+
 import Chip from '@material-ui/core/Chip';
 import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import Typography from '@material-ui/core/Typography';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
+import TextField from '@material-ui/core/TextField';
+import ChipInput from "material-ui-chip-input";
+
 import ListItemText from '@material-ui/core/ListItemText';
 import Checkbox from '@material-ui/core/Checkbox';
 import Button from '@material-ui/core/Button';
-import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 
 const useStyles = makeStyles((theme) => ({
     root: {
         marginTop: theme.spacing(2),
     },
     input: {
-        minWidth: 120,
-        marginBottom: theme.spacing(1),
+        marginBottom: theme.spacing(2),
         maxWidth: "100%",
+    },
+    titulo: {
+        marginBottom: theme.spacing(1),
     },
     formControl: {
         width: "100%",
+
     },
-    opciones: {
-    },
+
     gridOpciones: {
         textAlign: "left",
         borderRight: "solid 1px",
@@ -44,6 +42,13 @@ const useStyles = makeStyles((theme) => ({
     },
     chip: {
         margin: theme.spacing(0.5),
+    },
+    inputChip: {
+        paddingBottom: '0 !important',
+        '&:focus': {
+            paddingBottom: '12px !important',
+        },
+        transition: "padding 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms",
     },
 }));
 
@@ -60,6 +65,8 @@ export default function Avanced({ estados, mangas, buscador, volver }) {
         type: "",
         status: "",
         tag: "",
+        author_artist: "",
+        fansub: ""
     });
     const [tagArray, setTagArray] = useState([]);
     const [categories, setCategories] = useState([]);
@@ -110,40 +117,43 @@ export default function Avanced({ estados, mangas, buscador, volver }) {
         });
     };
 
-    const eraseSelected = (name) => {
-        setSelected({
-            ...selected,
-            [name]: "",
-        });
+    const handleAdd = (chip) => {
+        setTagArray([...tagArray, chip])
+    }
+    const onBeforeAdd = (chip) => {
+        return chip.length >= 3
     }
 
-    const handleAddTag = () => {
-        if (!selected.tag || tagArray.indexOf(selected.tag) !== -1) return;
-        let newTags = [...tagArray];
-        newTags.push(selected.tag);
-        console.log(newTags);
+    const handleDelete = (deletedChip) => {
+        let newChip = tagArray.filter((c) => c !== deletedChip)
 
-        eraseSelected("tag");
-        setTagArray(newTags);
+        setTagArray(newChip)
     }
 
-    const handleDeleteTag = (indice) => {
-        let newTags = [...tagArray];
-        newTags.splice(indice, 1);
-
-        setTagArray(newTags);
-    }
-
-    return <div className={classes.root} >
-        <Paper square elevation={1} className={classes.opciones} >
+    return <div>
+        <Paper square elevation={1}>
             <Grid container spacing={0} >
-                <Grid item xs={6} md={3} className={classes.gridOpciones} >
-                    <Typography align="center" variant="h5" color="primary">Filtros</Typography>
-                    <FormControl component="fieldset" className={classes.formControl}>
-                        <InputLabel id="type-field">Tipo</InputLabel>
+                <Grid item xs={3} md={3} className={classes.gridOpciones} >
+                    <div className={classes.titulo}>
+                        <Typography variant="h6" color="primary">Filtros</Typography>
+                    </div>
+                    <TextField
+                        label="Autor/Artista"
+                        onChange={handleChangeSelected}
+                        fullWidth
+                        className={classes.input}
+                        variant="outlined"
+                        name="author_artist"
+                        size="small"
+                        value={selected.author_artist}
+                    />
+                    <FormControl variant="outlined"
+                        size="small" component="fieldset" className={classes.formControl}>
+                        <InputLabel id="ddemo-simple-select-outlined-label">Tipos</InputLabel>
                         <Select
-                            labelId="type-field"
-                            id="type-select"
+                            labelId="demo-field"
+                            id="dermo-select"
+                            label="Tipos"
                             value={selected.type}
                             name="type"
                             onChange={handleChangeSelected}
@@ -154,11 +164,13 @@ export default function Avanced({ estados, mangas, buscador, volver }) {
                         </Select>
                     </FormControl>
                     <br />
-                    <FormControl component="fieldset" className={classes.formControl}>
-                        <InputLabel id="demo-field">Dermografía</InputLabel>
+                    <FormControl variant="outlined"
+                        size="small" component="fieldset" className={classes.formControl}>
+                        <InputLabel id="demo-field">Demografía</InputLabel>
                         <Select
                             labelId="demo-field"
                             id="dermo-select"
+                            label="Demografía"
                             value={selected.demo}
                             name="demo"
                             onChange={handleChangeSelected}
@@ -169,11 +181,13 @@ export default function Avanced({ estados, mangas, buscador, volver }) {
                         </Select>
                     </FormControl>
                     <br />
-                    <FormControl component="fieldset" className={classes.formControl}>
-                        <InputLabel id="status-field">Estado</InputLabel>
+                    <FormControl variant="outlined"
+                        size="small" component="fieldset" className={classes.formControl}>
+                        <InputLabel id="demo-field">Estado</InputLabel>
                         <Select
-                            labelId="status-field"
-                            id="status-select"
+                            labelId="demo-field"
+                            id="dermo-select"
+                            label="Estado"
                             value={selected.status}
                             name="status"
                             onChange={handleChangeSelected}
@@ -183,79 +197,93 @@ export default function Avanced({ estados, mangas, buscador, volver }) {
                             {estados.slice(1).map((tipo) => <MenuItem key={tipo} value={tipo}>{tipo}</MenuItem>)}
                         </Select>
                     </FormControl>
-                </Grid>
-                <Grid item xs={6} md={3} className={classes.gridOpciones} >
-                    <Typography align="center" variant="h5" color="primary">Etiquetas</Typography>
-                    <FormControl component="fieldset" className={classes.formControl}>
-                        <InputLabel htmlFor="tags-field">Añadir</InputLabel>
-                        <Input
-                            id="tags-field"
-                            fullWidth
-                            inputProps={{
+                    <div className={classes.titulo}>
+                        <Typography variant="h6" color="primary">Etiquetas</Typography>
+                    </div>
+                    <ChipInput
+                        value={tagArray}
+                        onBeforeAdd={(chip) => onBeforeAdd(chip)}
+                        onAdd={(chip) => handleAdd(chip)}
+                        onDelete={(deletedChip) => handleDelete(deletedChip)}
+                        fullWidth
+                        size="small"
+                        className={classes.input}
+                        InputProps={{
+                            inputProps: {
+                                className: classes.inputChip,
                                 list: "tags",
-                            }}
-                            value={selected.tag}
-                            name="tag"
-                            onChange={handleChangeSelected}
-                            endAdornment={
-                                <InputAdornment position="end">
-                                    <IconButton
-                                        aria-label="add-tags-button"
-                                        onClick={() => handleAddTag()}
-                                        title="Añadir"
-                                    >
-                                        <AddIcon />
-                                    </IconButton>
-                                </InputAdornment>
                             }
-                        />
-                        <datalist id="tags">
-                            {tagsPrueba.map((value, index) => <option value={value} key={value + index} />)}
-                        </datalist>
-                    </FormControl>
-                    <br />
-                    {tagArray.map((tag, index) =>
-                        <Chip
-                            label={tag}
-                            key={tag + index}
-                            onDelete={() => handleDeleteTag(index)}
-                            className={classes.chip}
-                        />
-                    )}
+                        }}
+                        variant="outlined"
+                        label='Etiquetas'
+                    />
+                    <datalist id="tags">
+                        {tagsPrueba.map((value, index) => <option value={value} key={value + index} />)}
+                    </datalist>
+
+
+                    <div className={classes.titulo}>
+                        <Typography variant="h6" color="primary">Categorias</Typography>
+                    </div>
+                    <TextField
+                        label="Categorías"
+                        variant="outlined"
+                        name="category"
+                        className={classes.input}
+                        fullWidth
+                        value={categories}
+                        select
+                        onChange={(event) => setCategories(event.target.value)}
+                        size="small"
+                        SelectProps={{
+                            multiple: true,
+                            renderValue: selected => (
+                                <div style={{ display: "flex", flexWrap: "wrap" }}>
+                                    {selected.map(value => (
+                                        <Chip
+                                            key={value}
+                                            label={value}
+                                            size="small"
+                                            style={{ margin: 2 }}
+                                        />
+                                    ))}
+                                </div>
+                            )
+                        }}
+                    >
+
+                        {categorias.map((name) => (
+                            <MenuItem key={name} value={name}>
+                                <Checkbox checked={categories.indexOf(name) > -1} />
+                                <ListItemText primary={name} />
+                            </MenuItem>
+                        ))}
+                    </TextField>
+
+                    <div className={classes.titulo}>
+                        <Typography variant="h6" color="primary">Fansub</Typography>
+                    </div>
+
+                    <TextField
+                        label="Fansub"
+                        onChange={handleChangeSelected}
+                        fullWidth
+                        className={classes.input}
+                        variant="outlined"
+                        name="fansub"
+                        size="small"
+                        value={selected.fansub}
+                    />
+                    <Button variant="contained" color="primary" fullWidth onClick={filtrar}>Buscar</Button>
+
+
+                </Grid>
+                <Grid item xs={9} md={9}>
+                    {mangasFiltrados.map((value) => <p key={value.titleName}>{value.titleName}</p>)}
+
                 </Grid>
 
-                <Grid item xs={6} md={3} className={classes.gridOpciones} >
-                    <Typography align="center" variant="h5" color="primary">Categorias</Typography>
-                    <FormControl component="fieldset" className={classes.formControl} >
-                        <InputLabel id="category-field">Generos</InputLabel>
-                        <Select
-                            labelId="category-field"
-                            id="category-field-select"
-                            multiple
-                            value={categories}
-                            name="category"
-                            onChange={(event) => setCategories(event.target.value)}
-                            input={<Input />}
-                            renderValue={(selected) => selected.join(', ')}
-                            className={classes.input}
-                        >
-                            {categorias.map((tipo) => <MenuItem key={tipo} value={tipo}>
-                                <Checkbox checked={categories.indexOf(tipo) > -1} />
-                                <ListItemText primary={tipo} />
-                            </MenuItem>)}
-                        </Select>
-                    </FormControl>
-                    <List dense >
-                        {categories.map((value) => <ListItem key={value}>
-                            <ListItemIcon><CheckCircleIcon /></ListItemIcon>
-                            <ListItemText primary={value} />
-                        </ListItem>)}
-                    </List>
-                </Grid>
             </Grid>
-            <Button onClick={filtrar}>Buscar</Button>
-            <Button onClick={volver}>Volver</Button>
         </Paper>
-        {mangasFiltrados.map((value) => <p key={value.titleName}>{value.titleName}</p>)}
     </div>
 }
