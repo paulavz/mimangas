@@ -284,6 +284,9 @@ export default function Avanced({ estados, mangas, buscador, volver }) {
             <MostradorMangas
                 mangas={mangasFiltrados}
                 style={{ minHeight: "90%" }}
+                paginationProps={{
+                    rowsPerPageOptions: [10,20,40]
+                }}
             />
         </Grid>
     </Grid>
