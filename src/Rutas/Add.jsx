@@ -90,7 +90,7 @@ const useStyles = (theme) => ({
 
 });
 
-const outStates = ["open", "uploadValue", "uid", "file", "preview", "selectedF", "selectedO", "selectedN"];
+const outStates = ["open", "uploadValue", "uid", "file", "preview", "selectedF", "selectedO", "selectedN", "alert"];
 class Add extends Component {
 
     constructor(props) {
@@ -132,6 +132,12 @@ class Add extends Component {
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleChangeSlider = this.handleChangeSlider.bind(this);
         this.handleUpload = this.handleUpload.bind(this);
+    }
+
+    componentDidUpdate(nextProps,nextState){
+        if(this.props.openAdd !== nextProps.openAdd){
+            this.setState({open: true});
+        }
     }
 
     handleClickOpen() {

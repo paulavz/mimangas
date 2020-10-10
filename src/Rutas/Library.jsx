@@ -10,6 +10,7 @@ import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import Divider from '@material-ui/core/Divider';
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import SimpleLibrary from './SimpleLibrary';
 import Avanced from './Avanced';
 import "./Library.css";
@@ -109,10 +110,20 @@ export default function Library(props) {
         <div className={classes.root}>
             <AppBar position="static">
                 <Toolbar>
+                    {avanced && 
+                    <IconButton 
+                        edge="start" 
+                        onClick={cambiarModoBusqueda} 
+                        color="inherit"
+                        aria-label="lib"
+                        title="Volver"
+                    >
+                        <ArrowBackIcon />
+                    </IconButton>}
                     <Typography variant="h6" className={classes.title}>
                         Mis Mangas
-          </Typography>
-                    <IconButton edge="start" onClick={cerrar} className={classes.menuButton} color="inherit" aria-label="menu">
+                    </Typography>
+                    <IconButton edge="start" onClick={cerrar} color="inherit" aria-label="menu">
                         <ExitToAppIcon />
                     </IconButton>
 
