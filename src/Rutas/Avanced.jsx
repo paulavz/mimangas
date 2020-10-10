@@ -118,6 +118,9 @@ export default function Avanced({ estados, mangas, buscador }) {
                 (value) => categories.every(
                     (categoria) => value.category ? value.category.indexOf(categoria) > -1 : false));
 
+        if(punctuation!==[0,100])
+        nuevoMangas = nuevoMangas.filter((manga)=> true);
+
         return nuevoMangas;
     }
 
