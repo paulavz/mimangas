@@ -10,6 +10,8 @@ import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import ChipInput from "material-ui-chip-input";
 import ListItemText from '@material-ui/core/ListItemText';
+import Slider from '@material-ui/core/Slider';
+
 import Checkbox from '@material-ui/core/Checkbox';
 import Button from '@material-ui/core/Button';
 import MostradorMangas from './Componentes/MostradorMangas';
@@ -29,7 +31,10 @@ const useStyles = makeStyles((theme) => ({
         width: "100%",
 
     },
-
+    margins: {
+        marginLeft: theme.spacing(1),
+        marginRight: theme.spacing(1)
+    },
     gridOpciones: {
         textAlign: "left",
         borderRight: "solid 1px",
@@ -39,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
         padding: theme.spacing(1),
         position: 'sticky',
         top: 0,
-        maxHeight: '577px'
+        maxHeight: '677px'
     },
     chip: {
         margin: theme.spacing(0.5),
@@ -66,12 +71,16 @@ export default function Avanced({ estados, mangas, buscador }) {
         status: "",
         tag: "",
         author_artist: "",
-        fansub: ""
+        fansub: "",
     });
     const [tagArray, setTagArray] = useState([]);
     const [categories, setCategories] = useState([]);
     const [mangasFiltrados, setMangasFiltrados] = useState([]);
+    const [punctuation, setPunctuation] = React.useState([0, 100]);
 
+    const handleChange = (event, newValue) => {
+        setPunctuation(newValue);
+    };
     /**
      * Devuelve los mangas que coincidan con todos los states
      */
@@ -277,6 +286,17 @@ export default function Avanced({ estados, mangas, buscador }) {
                 size="small"
                 value={selected.fansub}
             />
+            <div className={classes.titulo}>
+                <Typography variant="h6" color="primary">Puntuación</Typography>
+            </div>
+            <div className={classes.margins}>
+                <Slider
+                    value={punctuation}
+                    onChange={handleChange}
+                    valueLabelDisplay="auto"
+                    aria-labelledby="range-slider"
+                />
+            </div>
             <Button variant="contained" color="primary" fullWidth onClick={filtrar}>Buscar</Button>
 
         </Grid>
