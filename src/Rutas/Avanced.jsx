@@ -54,7 +54,6 @@ const tipos = ["Manga", "Manhwa", "Manhua", "Cómic", "Original"];
 const dermografias = ["Seinen", "Shounen", "Shoujo", "Josei", "Kodomo"];
 const tagsPrueba = ["isekai", "4-koma", "musica", "buen dibujo", "lentes"];
 const categorias = ["Horror", "Acción", "Comedia", "Romance", "Ecchi", "Slice of Life"];
-
 export default function Avanced({ estados, mangas, buscador, volver }) {
     const classes = useStyles();
 
@@ -86,13 +85,13 @@ export default function Avanced({ estados, mangas, buscador, volver }) {
         }) : mangas;
 
         for (let i in selected) {
-            if(!selected[i]) continue;
+            if (!selected[i]) continue;
             if (["demo", "type", "status"].includes(i)) {
                 nuevoMangas = nuevoMangas.filter((value) => selected[i] === value[i]);
-            }else if(["author_artist", "fansub"].includes(i)){
+            } else if (["author_artist", "fansub"].includes(i)) {
                 let campos = i.split('_');
-                nuevoMangas = nuevoMangas.filter((manga)=> campos.some(
-                    (campo)=> manga[campo] && manga[campo].toLowerCase().includes(selected[i].toLowerCase())
+                nuevoMangas = nuevoMangas.filter((manga) => campos.some(
+                    (campo) => manga[campo] && manga[campo].toLowerCase().includes(selected[i].toLowerCase())
                 ));
             }
         }
@@ -135,158 +134,157 @@ export default function Avanced({ estados, mangas, buscador, volver }) {
     }
 
     return <div>
-            <Grid container spacing={0} >
-                <Grid item xs={3} md={3} className={classes.gridOpciones} >
-                    <div className={classes.titulo}>
-                        <Typography variant="h6" color="primary">Filtros</Typography>
-                    </div>
-                    <TextField
-                        label="Autor/Artista"
+        <Grid item xs={3} md={3} className={classes.gridOpciones} >
+            <Grid item xs={12} md={12}>
+                <div className={classes.titulo}>
+                    <Typography variant="h6" color="primary">Filtros</Typography>
+                </div>
+                <TextField
+                    label="Autor/Artista"
+                    onChange={handleChangeSelected}
+                    fullWidth
+                    className={classes.input}
+                    variant="outlined"
+                    name="author_artist"
+                    size="small"
+                    value={selected.author_artist}
+                />
+                <FormControl variant="outlined"
+                    size="small" component="fieldset" className={classes.formControl}>
+                    <InputLabel id="ddemo-simple-select-outlined-label">Tipos</InputLabel>
+                    <Select
+                        labelId="demo-field"
+                        id="dermo-select"
+                        label="Tipos"
+                        value={selected.type}
+                        name="type"
                         onChange={handleChangeSelected}
-                        fullWidth
                         className={classes.input}
-                        variant="outlined"
-                        name="author_artist"
-                        size="small"
-                        value={selected.author_artist}
-                    />
-                    <FormControl variant="outlined"
-                        size="small" component="fieldset" className={classes.formControl}>
-                        <InputLabel id="ddemo-simple-select-outlined-label">Tipos</InputLabel>
-                        <Select
-                            labelId="demo-field"
-                            id="dermo-select"
-                            label="Tipos"
-                            value={selected.type}
-                            name="type"
-                            onChange={handleChangeSelected}
-                            className={classes.input}
-                        >
-                            <MenuItem value={""} >Cualquiera</MenuItem>
-                            {tipos.map((tipo) => <MenuItem key={tipo} value={tipo}>{tipo}</MenuItem>)}
-                        </Select>
-                    </FormControl>
-                    <br />
-                    <FormControl variant="outlined"
-                        size="small" component="fieldset" className={classes.formControl}>
-                        <InputLabel id="demo-field">Demografía</InputLabel>
-                        <Select
-                            labelId="demo-field"
-                            id="dermo-select"
-                            label="Demografía"
-                            value={selected.demo}
-                            name="demo"
-                            onChange={handleChangeSelected}
-                            className={classes.input}
-                        >
-                            <MenuItem value={""} >Cualquiera</MenuItem>
-                            {dermografias.map((tipo) => <MenuItem key={tipo} value={tipo}>{tipo}</MenuItem>)}
-                        </Select>
-                    </FormControl>
-                    <br />
-                    <FormControl variant="outlined"
-                        size="small" component="fieldset" className={classes.formControl}>
-                        <InputLabel id="demo-field">Estado</InputLabel>
-                        <Select
-                            labelId="demo-field"
-                            id="dermo-select"
-                            label="Estado"
-                            value={selected.status}
-                            name="status"
-                            onChange={handleChangeSelected}
-                            className={classes.input}
-                        >
-                            <MenuItem value={""} >Cualquiera</MenuItem>
-                            {estados.slice(1).map((tipo) => <MenuItem key={tipo} value={tipo}>{tipo}</MenuItem>)}
-                        </Select>
-                    </FormControl>
-                    <div className={classes.titulo}>
-                        <Typography variant="h6" color="primary">Etiquetas</Typography>
-                    </div>
-                    <ChipInput
-                        value={tagArray}
-                        onBeforeAdd={(chip) => onBeforeAdd(chip)}
-                        onAdd={(chip) => handleAdd(chip)}
-                        onDelete={(deletedChip) => handleDelete(deletedChip)}
-                        fullWidth
-                        size="small"
-                        className={classes.input}
-                        InputProps={{
-                            inputProps: {
-                                className: classes.inputChip,
-                                list: "tags",
-                            }
-                        }}
-                        variant="outlined"
-                        label='Etiquetas'
-                    />
-                    <datalist id="tags">
-                        {tagsPrueba.map((value, index) => <option value={value} key={value + index} />)}
-                    </datalist>
-
-
-                    <div className={classes.titulo}>
-                        <Typography variant="h6" color="primary">Categorias</Typography>
-                    </div>
-                    <TextField
-                        label="Categorías"
-                        variant="outlined"
-                        name="category"
-                        className={classes.input}
-                        fullWidth
-                        value={categories}
-                        select
-                        onChange={(event) => setCategories(event.target.value)}
-                        size="small"
-                        SelectProps={{
-                            multiple: true,
-                            renderValue: selected => (
-                                <div style={{ display: "flex", flexWrap: "wrap" }}>
-                                    {selected.map(value => (
-                                        <Chip
-                                            key={value}
-                                            label={value}
-                                            size="small"
-                                            style={{ margin: 2 }}
-                                        />
-                                    ))}
-                                </div>
-                            )
-                        }}
                     >
-
-                        {categorias.map((name) => (
-                            <MenuItem key={name} value={name}>
-                                <Checkbox checked={categories.indexOf(name) > -1} />
-                                <ListItemText primary={name} />
-                            </MenuItem>
-                        ))}
-                    </TextField>
-
-                    <div className={classes.titulo}>
-                        <Typography variant="h6" color="primary">Fansub</Typography>
-                    </div>
-
-                    <TextField
-                        label="Fansub"
+                        <MenuItem value={""} >Cualquiera</MenuItem>
+                        {tipos.map((tipo) => <MenuItem key={tipo} value={tipo}>{tipo}</MenuItem>)}
+                    </Select>
+                </FormControl>
+                <br />
+                <FormControl variant="outlined"
+                    size="small" component="fieldset" className={classes.formControl}>
+                    <InputLabel id="demo-field">Demografía</InputLabel>
+                    <Select
+                        labelId="demo-field"
+                        id="dermo-select"
+                        label="Demografía"
+                        value={selected.demo}
+                        name="demo"
                         onChange={handleChangeSelected}
-                        fullWidth
                         className={classes.input}
-                        variant="outlined"
-                        name="fansub"
-                        size="small"
-                        value={selected.fansub}
-                    />
-                    <Button variant="contained" color="primary" fullWidth onClick={filtrar}>Buscar</Button>
+                    >
+                        <MenuItem value={""} >Cualquiera</MenuItem>
+                        {dermografias.map((tipo) => <MenuItem key={tipo} value={tipo}>{tipo}</MenuItem>)}
+                    </Select>
+                </FormControl>
+                <br />
+                <FormControl variant="outlined"
+                    size="small" component="fieldset" className={classes.formControl}>
+                    <InputLabel id="demo-field">Estado</InputLabel>
+                    <Select
+                        labelId="demo-field"
+                        id="dermo-select"
+                        label="Estado"
+                        value={selected.status}
+                        name="status"
+                        onChange={handleChangeSelected}
+                        className={classes.input}
+                    >
+                        <MenuItem value={""} >Cualquiera</MenuItem>
+                        {estados.slice(1).map((tipo) => <MenuItem key={tipo} value={tipo}>{tipo}</MenuItem>)}
+                    </Select>
+                </FormControl>
+                <div className={classes.titulo}>
+                    <Typography variant="h6" color="primary">Etiquetas</Typography>
+                </div>
+                <ChipInput
+                    value={tagArray}
+                    onBeforeAdd={(chip) => onBeforeAdd(chip)}
+                    onAdd={(chip) => handleAdd(chip)}
+                    onDelete={(deletedChip) => handleDelete(deletedChip)}
+                    fullWidth
+                    size="small"
+                    className={classes.input}
+                    InputProps={{
+                        inputProps: {
+                            className: classes.inputChip,
+                            list: "tags",
+                        }
+                    }}
+                    variant="outlined"
+                    label='Etiquetas'
+                />
+                <datalist id="tags">
+                    {tagsPrueba.map((value, index) => <option value={value} key={value + index} />)}
+                </datalist>
 
 
-                </Grid>
-                <Grid item xs={9} md={9}>
-                    <MostradorMangas
-                        mangas={mangasFiltrados}
-                    />
-                </Grid>
+                <div className={classes.titulo}>
+                    <Typography variant="h6" color="primary">Categorias</Typography>
+                </div>
+                <TextField
+                    label="Categorías"
+                    variant="outlined"
+                    name="category"
+                    className={classes.input}
+                    fullWidth
+                    value={categories}
+                    select
+                    onChange={(event) => setCategories(event.target.value)}
+                    size="small"
+                    SelectProps={{
+                        multiple: true,
+                        renderValue: selected => (
+                            <div style={{ display: "flex", flexWrap: "wrap" }}>
+                                {selected.map(value => (
+                                    <Chip
+                                        key={value}
+                                        label={value}
+                                        size="small"
+                                        style={{ margin: 2 }}
+                                    />
+                                ))}
+                            </div>
+                        )
+                    }}
+                >
+
+                    {categorias.map((name) => (
+                        <MenuItem key={name} value={name}>
+                            <Checkbox checked={categories.indexOf(name) > -1} />
+                            <ListItemText primary={name} />
+                        </MenuItem>
+                    ))}
+                </TextField>
+
+                <div className={classes.titulo}>
+                    <Typography variant="h6" color="primary">Fansub</Typography>
+                </div>
+                <TextField
+                    label="Fansub"
+                    onChange={handleChangeSelected}
+                    fullWidth
+                    className={classes.input}
+                    variant="outlined"
+                    name="fansub"
+                    size="small"
+                    value={selected.fansub}
+                />
+                <Button variant="contained" color="primary" fullWidth onClick={filtrar}>Buscar</Button>
 
             </Grid>
+        </Grid>
+        <Grid item xs={9} md={9}>
+            <MostradorMangas
+                mangas={mangasFiltrados}
+            />
+        </Grid>
+
+
     </div>
 }
