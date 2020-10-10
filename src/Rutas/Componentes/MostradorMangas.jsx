@@ -3,7 +3,7 @@ import TarjetaManga from './TarjetaManga';
 import Grid from '@material-ui/core/Grid';
 import TablePagination from '@material-ui/core/TablePagination';
 
-export default function({mangas, itemsPorFila, paginationProps, ...otrasProps}){
+export default function ({ mangas, itemsPorFila, paginationProps, ...otrasProps }) {
 
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -13,7 +13,7 @@ export default function({mangas, itemsPorFila, paginationProps, ...otrasProps}){
             setPage(Math.floor(mangas.length / rowsPerPage));
         }
     }, [page, rowsPerPage, mangas]);
-    
+
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
     };
@@ -23,20 +23,20 @@ export default function({mangas, itemsPorFila, paginationProps, ...otrasProps}){
         setPage(0);
     };
 
-    return <div>
+    return <div style={{ height: "100%", width: "100%" }}>
         <Grid container {...otrasProps} >
             {mangas.slice(rowsPerPage * page, (rowsPerPage * page) + rowsPerPage)
-                    .map((value, index) =>
-                        <Grid item md={3} sm={6} xs={6} 
-                            style={itemsPorFila ? {
-                                maxWidth: `${100/itemsPorFila}%`,
-                                textAlign: "center"
-                            } : {}} 
-                            key={value.titleName + index} 
-                        >
-                            <TarjetaManga manga={value} />
-                        </Grid>)
-            }            
+                .map((value, index) =>
+                    <Grid item md={3} sm={6} xs={6}
+                        style={itemsPorFila ? {
+                            maxWidth: `${100 / itemsPorFila}%`,
+                            textAlign: "center"
+                        } : {}}
+                        key={value.titleName + index}
+                    >
+                        <TarjetaManga manga={value} />
+                    </Grid>)
+            }
         </Grid>
 
         {mangas.length > 0 && <TablePagination
@@ -52,6 +52,6 @@ export default function({mangas, itemsPorFila, paginationProps, ...otrasProps}){
             backIconButtonText="Anterior"
             {...paginationProps}
         />}
-        
+
     </div>
 }
