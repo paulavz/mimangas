@@ -3,10 +3,16 @@ import TarjetaManga from './TarjetaManga';
 import Grid from '@material-ui/core/Grid';
 import TablePagination from '@material-ui/core/TablePagination';
 
-export default function ({ mangas, itemsPorFila, paginationProps, ...otrasProps }) {
+export default function ({ mangas, itemsPorFila, initialRPP, paginationProps, ...otrasProps }) {
 
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
+
+    useEffect(()=>{
+        if(initialRPP && initialRPP!==rowsPerPage){
+            setRowsPerPage(initialRPP);
+        }
+    }, [initialRPP])
 
     useEffect(() => {
         if (page > mangas.length / rowsPerPage) {

@@ -315,6 +315,7 @@ export default function Avanced({ estados, mangas, buscador }) {
                 paginationProps={{
                     rowsPerPageOptions: [12, 24, 40]
                 }}
+                initialRPP={12}
             />
         </Grid>
     </Grid>
