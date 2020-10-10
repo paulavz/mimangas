@@ -134,6 +134,12 @@ class Add extends Component {
         this.handleUpload = this.handleUpload.bind(this);
     }
 
+    componentDidUpdate(nextProps,nextState){
+        if(this.props.openAdd !== nextProps.openAdd){
+            this.setState({open: true});
+        }
+    }
+
     handleClickOpen() {
         this.setState({ open: true });
     };

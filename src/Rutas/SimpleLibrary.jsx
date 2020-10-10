@@ -6,6 +6,9 @@ import Grid from '@material-ui/core/Grid';
 import Add from './Add';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
 import TablePagination from '@material-ui/core/TablePagination';
+import Card from '@material-ui/core/Card';
+import Typography from '@material-ui/core/Typography';
+import AddIcon from '@material-ui/icons/Add';
 import TarjetaManga from './Componentes/TarjetaManga';
 import "./Library.css";
 
@@ -52,6 +55,24 @@ const useStyles = makeStyles((theme) => ({
             width: "max-content",
         },
     },
+    cardNew:{
+        height: 300,
+        border: "1px solid black",
+        '&:hover': {
+            borderWidth: 2,
+            cursor: "pointer",
+        },
+        '&:active': {
+            borderColor: "blue",
+            '& $cardNewIcon': {
+                color: "blue",
+            },
+        },
+    },
+    cardNewIcon: {
+        position: "relative",
+        top: 120,
+    },
 }));
 
 export default function SimpleLibrary({busqueda, mangas, states}){
@@ -61,6 +82,7 @@ export default function SimpleLibrary({busqueda, mangas, states}){
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
     const [mangasFiltrados, setMangasFiltrados] = useState([]);
+    const [openAdd, setOpenAdd] = useState(false);
 
     useEffect(() => {
         const filtrados = mangas.filter(
@@ -101,7 +123,7 @@ export default function SimpleLibrary({busqueda, mangas, states}){
             </ButtonGroup>
 
 
-            <Add />
+            <Add openAdd={openAdd} />
         </div>
 
         <div className={classes.selector}>
@@ -134,6 +156,17 @@ export default function SimpleLibrary({busqueda, mangas, states}){
             </Grid>
         </div>
         <Grid container spacing={2} >
+
+            {mangas.length===0 && 
+                <Grid item md={3} sm={6} xs={6} className={classes.gridManga} >
+                    <Card className={classes.cardNew} onClick={()=>setOpenAdd(!openAdd)} >
+                        <div className={classes.cardNewIcon}>
+                            <AddIcon style={{fontSize: 50}} />
+                            <Typography>Añadir primer manga</Typography>
+                        </div>
+                    </Card>
+                </Grid>
+            }
 
             {mangasFiltrados.slice(rowsPerPage * page, (rowsPerPage * page) + rowsPerPage)
                 .map((value, index) =>
