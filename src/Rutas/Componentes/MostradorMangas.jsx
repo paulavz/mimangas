@@ -39,7 +39,7 @@ export default function ({ mangas, itemsPorFila, paginationProps, ...otrasProps 
             }
         </Grid>
 
-        {mangas.length > 0 && <TablePagination
+        {mangas.length > rowsPerPage && <TablePagination
             component="div"
             count={mangas.length}
             page={page}
