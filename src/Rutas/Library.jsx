@@ -11,7 +11,6 @@ import IconButton from '@material-ui/core/IconButton';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import Divider from '@material-ui/core/Divider';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
-import InfoManga from './Componentes/InfoManga';
 import SimpleLibrary from './SimpleLibrary';
 import Avanced from './Avanced';
 import "./Library.css";
@@ -176,7 +175,6 @@ export default function Library(props) {
                     />}
 
             </div>
-            <InfoManga />
         </div>
     )
 

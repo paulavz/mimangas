@@ -3,6 +3,7 @@ import { withStyles } from "@material-ui/core/styles";
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import Card from '@material-ui/core/Card';
 import ButtonBase from '@material-ui/core/ButtonBase';
+import InfoManga from './InfoManga';
 
 const useStyles = (theme) => ({
     root: {
@@ -60,11 +61,24 @@ class TarjetaManga extends Component{
 
     constructor(props){
         super(props);
+        this.state = {
+            open: false,
+        };
         this.shouldComponentUpdate = this.shouldComponentUpdate.bind(this);
+        this.openDialog = this.openDialog.bind(this);
+        this.handleCloseDialog = this.handleCloseDialog.bind(this);
     }
 
     shouldComponentUpdate(nextProps, nextState){
-        return this.props.manga !== nextProps.manga;
+        return this.props.manga !== nextProps.manga || this.state.open !== nextState.open;
+    }
+
+    openDialog(){
+        this.setState({open: true});
+    }
+
+    handleCloseDialog(){
+        this.setState({open: false});
     }
 
     render(){
@@ -103,6 +117,7 @@ class TarjetaManga extends Component{
                         <ButtonBase 
                             focusRipple
                             className={classes.button}
+                            onClick={this.openDialog}
                         />
                         <div className={classes.textSpace} >
                             {manga.titleName}
@@ -111,6 +126,11 @@ class TarjetaManga extends Component{
                     </div>
                 </Card>
             </div>
+            <InfoManga 
+                open={this.state.open} 
+                onClose={this.handleCloseDialog}
+                manga={this.props.manga}
+            />
         </div>
     }
 
