@@ -4,6 +4,7 @@ import Grid from '@material-ui/core/Grid';
 import FormControl from '@material-ui/core/FormControl';
 import Chip from '@material-ui/core/Chip';
 import Select from '@material-ui/core/Select';
+import IconButton from '@material-ui/core/IconButton';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import Typography from '@material-ui/core/Typography';
@@ -12,6 +13,7 @@ import ChipInput from "material-ui-chip-input";
 import ListItemText from '@material-ui/core/ListItemText';
 import Slider from '@material-ui/core/Slider';
 import Divider from '@material-ui/core/Divider';
+import SearchIcon from '@material-ui/icons/Search';
 import Checkbox from '@material-ui/core/Checkbox';
 import Button from '@material-ui/core/Button';
 import MostradorMangas from './Componentes/MostradorMangas';
@@ -30,6 +32,9 @@ const useStyles = makeStyles((theme) => ({
     formControl: {
         width: "100%",
 
+    },
+    search: {
+        float: "right"
     },
     margins: {
         marginLeft: theme.spacing(1),
@@ -134,12 +139,12 @@ export default function Avanced({ estados, mangas }) {
                 (value) => categories.every(
                     (categoria) => value.category && value.category.indexOf(categoria) > -1));
 
-        if(punctuation[0]!==0 && punctuation[1]!==100){
-            let minim = (acc,act)=>Math.min(acc,act);
-            let maxim = (acc,act)=>Math.max(acc,act);
-            nuevoMangas = nuevoMangas.filter((manga)=> manga.punctuation &&
+        if (punctuation[0] !== 0 || punctuation[1] !== 100) {
+            let minim = (acc, act) => Math.min(acc, act);
+            let maxim = (acc, act) => Math.max(acc, act);
+            nuevoMangas = nuevoMangas.filter((manga) => manga.punctuation &&
                 manga.punctuation >= punctuation.reduce(minim) &&
-                manga.punctuation <= punctuation.reduce(maxim) );
+                manga.punctuation <= punctuation.reduce(maxim));
         }
 
         return nuevoMangas;
@@ -174,7 +179,7 @@ export default function Avanced({ estados, mangas }) {
     }
 
     return <Grid container >
-        
+
         <Grid item xs={12} >
             <CssTextField
                 fullWidth
@@ -191,7 +196,11 @@ export default function Avanced({ estados, mangas }) {
 
         <Grid item xs={3} md={3} className={classes.gridOpciones} >
             <div className={classes.titulo}>
-                <Typography variant="h6" color="primary">Filtros</Typography>
+                <Typography variant="h6" color="primary">Filtros
+                <IconButton onClick={filtrar} size="small" aria-label="search" className={classes.search}>
+                        <SearchIcon color="primary" fontSize="small" />
+                    </IconButton>
+                </Typography>
             </div>
             <TextField
                 label="Autor/Artista"

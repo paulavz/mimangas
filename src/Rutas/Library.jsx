@@ -11,6 +11,7 @@ import IconButton from '@material-ui/core/IconButton';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import Divider from '@material-ui/core/Divider';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import InfoManga from './Componentes/InfoManga';
 import SimpleLibrary from './SimpleLibrary';
 import Avanced from './Avanced';
 import "./Library.css";
@@ -79,7 +80,7 @@ export default function Library(props) {
             (error) => console.log(error.message)
         );
 
-        return ()=>unsubscribe();
+        return () => unsubscribe();
 
     }, []);
 
@@ -110,16 +111,16 @@ export default function Library(props) {
         <div className={classes.root}>
             <AppBar position="static">
                 <Toolbar>
-                    {avanced && 
-                    <IconButton 
-                        edge="start" 
-                        onClick={cambiarModoBusqueda} 
-                        color="inherit"
-                        aria-label="lib"
-                        title="Volver"
-                    >
-                        <ArrowBackIcon />
-                    </IconButton>}
+                    {avanced &&
+                        <IconButton
+                            edge="start"
+                            onClick={cambiarModoBusqueda}
+                            color="inherit"
+                            aria-label="lib"
+                            title="Volver"
+                        >
+                            <ArrowBackIcon />
+                        </IconButton>}
                     <Typography variant="h6" className={classes.title}>
                         Mis Mangas
                     </Typography>
@@ -132,49 +133,50 @@ export default function Library(props) {
             </AppBar>
             <div className={classes.gridd}>
                 {!avanced && <React.Fragment>
-                <Grid container spacing={2}>
-                    <Grid item xs={ 9}>
-                        <CssTextField
-                            fullWidth
-                            onChange={handleChangeBuscador}
-                            value={buscador}
-                            label="Buscar Manga"
-                            variant="outlined"
-                            id="outlined-search"
-                            type="search"
-                        />
-                    </Grid>
-                    <Grid item xs={3}>
-                        <Button
-                            size="large" 
-                            className="buscar" 
-                            fullWidth 
-                            variant="contained" 
-                            color="secondary"
-                            onClick={cambiarModoBusqueda}
-                        >
-                            Búsqueda Avanzada
+                    <Grid container spacing={2}>
+                        <Grid item xs={9}>
+                            <CssTextField
+                                fullWidth
+                                onChange={handleChangeBuscador}
+                                value={buscador}
+                                label="Buscar Manga"
+                                variant="outlined"
+                                id="outlined-search"
+                                type="search"
+                            />
+                        </Grid>
+                        <Grid item xs={3}>
+                            <Button
+                                size="large"
+                                className="buscar"
+                                fullWidth
+                                variant="contained"
+                                color="secondary"
+                                onClick={cambiarModoBusqueda}
+                            >
+                                Búsqueda Avanzada
                         </Button>
+                        </Grid>
+
                     </Grid>
 
-                </Grid>
-
-                <Divider className={classes.divider} variant="middle" />
+                    <Divider className={classes.divider} variant="middle" />
                 </React.Fragment>
                 }
 
                 {avanced ?
-                <Avanced 
-                    estados={states} 
-                    mangas={mangas}
-                /> :
-                <SimpleLibrary
-                    busqueda={buscador}
-                    mangas={mangas}
-                    states={states}
-                />}
+                    <Avanced
+                        estados={states}
+                        mangas={mangas}
+                    /> :
+                    <SimpleLibrary
+                        busqueda={buscador}
+                        mangas={mangas}
+                        states={states}
+                    />}
 
             </div>
+            <InfoManga />
         </div>
     )
 
