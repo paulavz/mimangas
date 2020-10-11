@@ -62,6 +62,7 @@ export default function Library(props) {
     const [buscador, setBuscador] = useState("");
     const [mangas, setMangas] = useState([]);
     const [avanced, setAvanced] = useState(false);
+    const [cargando, setCargando] = useState(true);
 
     useEffect(() => {
         let user = firebase.auth().currentUser;
@@ -75,6 +76,7 @@ export default function Library(props) {
                 let mangasArray = [];
                 snap.forEach((doc) => mangasArray.push(doc.data()))
                 setMangas(mangasArray);
+                setCargando(false);
             },
             (error) => console.log(error.message)
         );
@@ -163,7 +165,7 @@ export default function Library(props) {
                 </React.Fragment>
                 }
 
-                {avanced ?
+                {!cargando && (avanced ?
                     <Avanced
                         estados={states}
                         mangas={mangas}
@@ -172,7 +174,7 @@ export default function Library(props) {
                         busqueda={buscador}
                         mangas={mangas}
                         states={states}
-                    />}
+                    />)}
 
             </div>
         </div>
