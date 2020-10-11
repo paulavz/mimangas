@@ -131,8 +131,9 @@ export default function Library(props) {
 
             </AppBar>
             <div className={classes.gridd}>
+                {!avanced && <React.Fragment>
                 <Grid container spacing={2}>
-                    <Grid item xs={avanced ? 12 : 9}>
+                    <Grid item xs={ 9}>
                         <CssTextField
                             fullWidth
                             onChange={handleChangeBuscador}
@@ -143,7 +144,7 @@ export default function Library(props) {
                             type="search"
                         />
                     </Grid>
-                    {!avanced && <Grid item xs={3}>
+                    <Grid item xs={3}>
                         <Button
                             size="large" 
                             className="buscar" 
@@ -154,17 +155,18 @@ export default function Library(props) {
                         >
                             Búsqueda Avanzada
                         </Button>
-                    </Grid>}
+                    </Grid>
 
                 </Grid>
 
                 <Divider className={classes.divider} variant="middle" />
+                </React.Fragment>
+                }
 
                 {avanced ?
                 <Avanced 
                     estados={states} 
                     mangas={mangas}
-                    buscador={buscador}
                 /> :
                 <SimpleLibrary
                     busqueda={buscador}

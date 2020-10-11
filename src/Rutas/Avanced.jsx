@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import FormControl from '@material-ui/core/FormControl';
 import Chip from '@material-ui/core/Chip';
@@ -11,7 +11,7 @@ import TextField from '@material-ui/core/TextField';
 import ChipInput from "material-ui-chip-input";
 import ListItemText from '@material-ui/core/ListItemText';
 import Slider from '@material-ui/core/Slider';
-
+import Divider from '@material-ui/core/Divider';
 import Checkbox from '@material-ui/core/Checkbox';
 import Button from '@material-ui/core/Button';
 import MostradorMangas from './Componentes/MostradorMangas';
@@ -56,13 +56,28 @@ const useStyles = makeStyles((theme) => ({
         },
         transition: "padding 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms",
     },
+    divider: {
+        marginTop: theme.spacing(2),
+        marginBottom: theme.spacing(2),
+        width: `calc(100% - 32px)`,
+    },
 }));
+
+const CssTextField = withStyles({
+    root: {
+        '& .MuiOutlinedInput-root': {
+            '& fieldset': {
+                borderColor: 'blue',
+            },
+        },
+    },
+})(TextField);
 
 const tipos = ["Manga", "Manhwa", "Manhua", "Cómic", "Original"];
 const dermografias = ["Seinen", "Shounen", "Shoujo", "Josei", "Kodomo"];
 const tagsPrueba = ["isekai", "4-koma", "musica", "buen dibujo", "lentes"];
 const categorias = ["Horror", "Acción", "Comedia", "Romance", "Ecchi", "Slice of Life"];
-export default function Avanced({ estados, mangas, buscador }) {
+export default function Avanced({ estados, mangas }) {
     const classes = useStyles();
 
     const [selected, setSelected] = useState({
@@ -76,7 +91,8 @@ export default function Avanced({ estados, mangas, buscador }) {
     const [tagArray, setTagArray] = useState([]);
     const [categories, setCategories] = useState([]);
     const [mangasFiltrados, setMangasFiltrados] = useState([]);
-    const [punctuation, setPunctuation] = React.useState([0, 100]);
+    const [punctuation, setPunctuation] = useState([0, 100]);
+    const [buscador, setBuscador] = useState("");
 
     const handleChange = (event, newValue) => {
         setPunctuation(newValue);
@@ -97,7 +113,7 @@ export default function Avanced({ estados, mangas, buscador }) {
         }) : mangas;
 
         for (let i in selected) {
-            if (!selected[i]) continue;
+            if (!selected[i] || i === "tag") continue;
             if (["demo", "type", "status"].includes(i)) {
                 nuevoMangas = nuevoMangas.filter((value) => selected[i] === value[i]);
             } else if (["author_artist", "fansub"].includes(i)) {
@@ -111,12 +127,12 @@ export default function Avanced({ estados, mangas, buscador }) {
         if (tagArray.length > 0)
             nuevoMangas = nuevoMangas.filter(
                 (manga) => tagArray.every(
-                    (etiqueta) => manga.tags ? manga.tags.indexOf(etiqueta) > -1 : false));
+                    (etiqueta) => manga.tags && manga.tags.indexOf(etiqueta) > -1));
 
         if (categories.length > 0)
             nuevoMangas = nuevoMangas.filter(
                 (value) => categories.every(
-                    (categoria) => value.category ? value.category.indexOf(categoria) > -1 : false));
+                    (categoria) => value.category && value.category.indexOf(categoria) > -1));
 
         if(punctuation[0]!==0 && punctuation[1]!==100){
             let minim = (acc,act)=>Math.min(acc,act);
@@ -140,6 +156,10 @@ export default function Avanced({ estados, mangas, buscador }) {
         });
     };
 
+    const handleChangeBuscador = (event) => {
+        setBuscador(event.target.value);
+    }
+
     const handleAdd = (chip) => {
         setTagArray([...tagArray, chip])
     }
@@ -154,6 +174,21 @@ export default function Avanced({ estados, mangas, buscador }) {
     }
 
     return <Grid container >
+        
+        <Grid item xs={12} >
+            <CssTextField
+                fullWidth
+                onChange={handleChangeBuscador}
+                value={buscador}
+                label="Buscar Manga"
+                variant="outlined"
+                id="outlined-search"
+                type="search"
+            />
+        </Grid>
+
+        <Divider className={classes.divider} variant="middle" />
+
         <Grid item xs={3} md={3} className={classes.gridOpciones} >
             <div className={classes.titulo}>
                 <Typography variant="h6" color="primary">Filtros</Typography>
