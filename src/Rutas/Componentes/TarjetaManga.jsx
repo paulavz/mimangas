@@ -3,6 +3,7 @@ import { withStyles } from "@material-ui/core/styles";
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import Card from '@material-ui/core/Card';
 import ButtonBase from '@material-ui/core/ButtonBase';
+import Button from '@material-ui/core/Button';
 import InfoManga from './InfoManga';
 
 const useStyles = (theme) => ({
@@ -54,6 +55,22 @@ const useStyles = (theme) => ({
         position: "relative",
         width: "100%",
         height: "100%",
+    },
+    desplegableButton: {
+        position: "relative",
+        top: 100,
+        paddingLeft: theme.spacing(2),
+        paddingRight: theme.spacing(2),
+    },
+    botonLeer: {
+        backgroundColor: "yellow",
+        color: "white",
+        '& .MuiTouchRipple-root': {
+            color: "black",
+        },
+        '&:hover': {
+            backgroundColor: `#e6e600`,
+        },
     },
 });
 
@@ -120,7 +137,21 @@ class TarjetaManga extends Component{
                             onClick={this.openDialog}
                         />
                         <div className={classes.textSpace} >
-                            {manga.titleName}
+                            {manga.titleName}<br/>
+                            <div className={classes.desplegableButton}>
+                                <Button 
+                                    className={classes.botonLeer}
+                                    variant="contained" 
+                                    disabled={!manga.lecture}
+                                    href={manga.lecture}
+                                    target="_blank"
+                                >
+                                    Leer
+                                </Button>
+                            </div><br/>
+                            <Button color="secondary" variant="contained" className={classes.desplegableButton}>
+                                Eliminar
+                            </Button>
                         </div>
                         
                     </div>
