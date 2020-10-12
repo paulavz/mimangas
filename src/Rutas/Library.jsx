@@ -74,7 +74,7 @@ export default function Library(props) {
         let unsubscribe = coleccion.onSnapshot(
             function (snap) {
                 let mangasArray = [];
-                snap.forEach((doc) => mangasArray.push(doc.data()))
+                snap.forEach((doc) => mangasArray.push({...doc.data(), id: doc.id}));
                 setMangas(mangasArray);
                 setCargando(false);
             },

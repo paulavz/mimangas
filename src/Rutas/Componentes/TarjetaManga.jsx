@@ -4,7 +4,14 @@ import FavoriteIcon from '@material-ui/icons/Favorite';
 import Card from '@material-ui/core/Card';
 import ButtonBase from '@material-ui/core/ButtonBase';
 import Button from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
 import InfoManga from './InfoManga';
+import firebase from "../../Inicializer/firebase";
+require("firebase/auth");
 
 const useStyles = (theme) => ({
     root: {
@@ -80,14 +87,17 @@ class TarjetaManga extends Component{
         super(props);
         this.state = {
             open: false,
+            eliminar: false
         };
         this.shouldComponentUpdate = this.shouldComponentUpdate.bind(this);
         this.openDialog = this.openDialog.bind(this);
         this.handleCloseDialog = this.handleCloseDialog.bind(this);
+        this.borrarManga = this.borrarManga.bind(this);
     }
 
     shouldComponentUpdate(nextProps, nextState){
-        return this.props.manga !== nextProps.manga || this.state.open !== nextState.open;
+        return this.props.manga !== nextProps.manga || this.state.open !== nextState.open
+            || this.state.eliminar !== nextState.eliminar;
     }
 
     openDialog(){
@@ -96,6 +106,14 @@ class TarjetaManga extends Component{
 
     handleCloseDialog(){
         this.setState({open: false});
+    }
+
+    borrarManga(){
+        let user = firebase.auth().currentUser;
+        firebase.firestore().collection("users").doc(user.uid)
+            .collection("mangas").doc(this.props.manga.id).delete().then(()=>{
+                console.log("Eliminado Exitosamente");
+            }, (error)=>{console.log(error);});
     }
 
     render(){
@@ -149,7 +167,11 @@ class TarjetaManga extends Component{
                                     Leer
                                 </Button>
                             </div><br/>
-                            <Button color="secondary" variant="contained" className={classes.desplegableButton}>
+                            <Button color="secondary" 
+                                variant="contained" 
+                                onClick={()=> this.setState({eliminar: true})}
+                                className={classes.desplegableButton}
+                            >
                                 Eliminar
                             </Button>
                         </div>
@@ -162,6 +184,27 @@ class TarjetaManga extends Component{
                 onClose={this.handleCloseDialog}
                 manga={this.props.manga}
             />
+            <Dialog
+                open={this.state.eliminar}
+                onClose={()=> this.setState({eliminar: false})}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle id="alert-dialog-title">Eliminar cómic</DialogTitle>
+                <DialogContent>
+                <DialogContentText id="alert-dialog-description">
+                    ¿Está seguro de que desea eliminar este dato?
+                </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                <Button onClick={()=> this.setState({eliminar: false})} color="primary">
+                    Cancelar
+                </Button>
+                <Button onClick={this.borrarManga} color="primary" autoFocus>
+                    Aceptar
+                </Button>
+                </DialogActions>
+            </Dialog>
         </div>
     }
 
