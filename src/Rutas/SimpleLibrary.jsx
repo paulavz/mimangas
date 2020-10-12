@@ -131,7 +131,13 @@ export default function SimpleLibrary({ mangas, states }){
                 />
             </Grid>
             <Grid item xs={3}>
-                <Link to={"/AvancedSearch"} style={{textDecoration: "none"}} ><Button
+                <Link 
+                    to={{
+                        pathname: "/AvancedSearch",
+                        state: {
+                            buscador: buscador,
+                        },
+                    }} style={{textDecoration: "none"}} ><Button
                     size="large"
                     className="buscar"
                     fullWidth

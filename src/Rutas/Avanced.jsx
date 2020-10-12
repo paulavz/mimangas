@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import {useLocation} from 'react-router-dom';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import FormControl from '@material-ui/core/FormControl';
@@ -78,6 +79,60 @@ const CssTextField = withStyles({
     },
 })(TextField);
 
+/**
+ * Devuelve los mangas que coincidan con todos los states
+ */
+function buscar(filtros, mangas) {
+    const {selected, buscador, tagArray, categories, punctuation} = filtros;
+
+    let nuevoMangas = mangas;
+
+    if(buscador){
+        let buscadorRE = buscador.toLowerCase().trim();
+        nuevoMangas = nuevoMangas.filter((value) => {
+            let arrayNombres = [];
+            if (value.englishtitle) arrayNombres.push(value.englishtitle);
+            if (value.spanishtitle) arrayNombres.push(value.spanishtitle);
+            if (value.otherNames) arrayNombres.push(...value.otherNames);
+            arrayNombres.push(value.titleName);
+            return arrayNombres.some((title) => title.toLowerCase().includes(buscadorRE));
+        });
+    }
+
+    if(selected)
+    for (let i in selected) {
+        if (!selected[i] || i === "tag") continue;
+        if (["demo", "type", "status"].includes(i)) {
+            nuevoMangas = nuevoMangas.filter((value) => selected[i] === value[i]);
+        } else if (["author_artist", "fansub"].includes(i)) {
+            let campos = i.split('_');
+            nuevoMangas = nuevoMangas.filter((manga) => campos.some(
+                (campo) => manga[campo] && manga[campo].toLowerCase().includes(selected[i].toLowerCase())
+            ));
+        }
+    }
+
+    if (tagArray && tagArray.length > 0)
+        nuevoMangas = nuevoMangas.filter(
+            (manga) => tagArray.every(
+                (etiqueta) => manga.tags && manga.tags.indexOf(etiqueta) > -1));
+
+    if (categories && categories.length > 0)
+        nuevoMangas = nuevoMangas.filter(
+            (value) => categories.every(
+                (categoria) => value.category && value.category.indexOf(categoria) > -1));
+
+    if (punctuation && (punctuation[0] !== 0 || punctuation[1] !== 100)) {
+        let minim = (acc, act) => Math.min(acc, act);
+        let maxim = (acc, act) => Math.max(acc, act);
+        nuevoMangas = nuevoMangas.filter((manga) => manga.punctuation &&
+            manga.punctuation >= punctuation.reduce(minim) &&
+            manga.punctuation <= punctuation.reduce(maxim));
+    }
+
+    return nuevoMangas;
+}
+
 const tipos = ["Manga", "Manhwa", "Manhua", "Cómic", "Original"];
 const dermografias = ["Seinen", "Shounen", "Shoujo", "Josei", "Kodomo"];
 const tagsPrueba = ["isekai", "4-koma", "musica", "buen dibujo", "lentes"];
@@ -102,10 +157,11 @@ export default function Avanced({ estados, mangas }) {
     const handleChange = (event, newValue) => {
         setPunctuation(newValue);
     };
+
     /**
      * Devuelve los mangas que coincidan con todos los states
      */
-    function buscar() {
+    /*function buscar(filtros) {
         let buscadorRE = buscador.toLowerCase().trim();
 
         let nuevoMangas = (buscador) ? mangas.filter((value) => {
@@ -148,9 +204,28 @@ export default function Avanced({ estados, mangas }) {
         }
 
         return nuevoMangas;
-    }
+    }*/
 
-    const filtrar = () => setMangasFiltrados(buscar());
+    const filtrar = () => setMangasFiltrados(buscar(
+        {
+            buscador: buscador,
+            selected: selected,
+            categories: categories,
+            tagArray: tagArray,
+            punctuation: punctuation
+        }, mangas
+    ));
+
+    const location = useLocation();
+
+    useEffect(()=>{
+        if(location.state){
+            setBuscador(location.state.buscador);
+        }
+        setMangasFiltrados(buscar({
+            ...location.state
+        }, mangas));
+    },[location.state, mangas]);
 
     const handleChangeSelected = (event) => {
         let name = event.target.name;
