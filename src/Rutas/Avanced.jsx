@@ -187,6 +187,11 @@ export default function Avanced({ estados, mangas }) {
                 value={buscador}
                 label="Buscar Manga"
                 variant="outlined"
+                onKeyPress={(ev) => {
+                    if (ev.key === 'Enter') {
+                        filtrar() // here was the mistake
+                    }
+                }}
                 id="outlined-search"
                 type="search"
             />

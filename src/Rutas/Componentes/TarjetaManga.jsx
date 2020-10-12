@@ -15,9 +15,9 @@ require("firebase/auth");
 
 const useStyles = (theme) => ({
     root: {
-      width: "100%",
-      maxWidth: 300,
-      display: "inline-block",
+        width: "100%",
+        maxWidth: 300,
+        display: "inline-block",
     },
     puntos: {
         position: "absolute",
@@ -81,9 +81,9 @@ const useStyles = (theme) => ({
     },
 });
 
-class TarjetaManga extends Component{
+class TarjetaManga extends Component {
 
-    constructor(props){
+    constructor(props) {
         super(props);
         this.state = {
             open: false,
@@ -95,33 +95,33 @@ class TarjetaManga extends Component{
         this.borrarManga = this.borrarManga.bind(this);
     }
 
-    shouldComponentUpdate(nextProps, nextState){
+    shouldComponentUpdate(nextProps, nextState) {
         return this.props.manga !== nextProps.manga || this.state.open !== nextState.open
             || this.state.eliminar !== nextState.eliminar;
     }
 
-    openDialog(){
-        this.setState({open: true});
+    openDialog() {
+        this.setState({ open: true });
     }
 
-    handleCloseDialog(){
-        this.setState({open: false});
+    handleCloseDialog() {
+        this.setState({ open: false });
     }
 
-    borrarManga(){
+    borrarManga() {
         let user = firebase.auth().currentUser;
         firebase.firestore().collection("users").doc(user.uid)
-            .collection("mangas").doc(this.props.manga.id).delete().then(()=>{
+            .collection("mangas").doc(this.props.manga.id).delete().then(() => {
                 console.log("Eliminado Exitosamente");
-            }, (error)=>{console.log(error);});
+            }, (error) => { console.log(error); });
     }
 
-    render(){
+    render() {
         const { manga, classes } = this.props;
 
         const colors = {
             "Siguiendo": "lightCyan",
-            "Completos": "lightGreen", 
+            "Completos": "lightGreen",
             "Favoritos": "gold",
             "Pausados": "midnightBlue",
             "Pendientes": "orange",
@@ -131,25 +131,25 @@ class TarjetaManga extends Component{
         return <div className={classes.root} >
             <div className={classes.content}>
                 <div className={classes.puntos} >
-                    <FavoriteIcon 
-                        fontSize="large" 
-                        style={{color: colors[manga.status]}} 
+                    <FavoriteIcon
+                        fontSize="large"
+                        style={{ color: colors[manga.status] }}
                     />
                     <div className={classes.puntuacion} >{manga.punctuation}</div>
                 </div>
                 <Card
-                    className={classes.card} 
-                    style={{borderColor: colors[manga.status]}} 
+                    className={classes.card}
+                    style={{ borderColor: colors[manga.status] }}
                 >
-                    <div 
-                        className={classes.container} 
+                    <div
+                        className={classes.container}
                     >
-                        <img 
-                            src={manga.cover || "https://firebasestorage.googleapis.com/v0/b/mismangas-7e620.appspot.com/o/uploads%2F3oesb3tldzt?alt=media&token=e006a18c-b59d-4a74-b2c7-d3849a0d49ba"} 
-                            alt={manga.titleName} 
-                            style={{position:"absolute", width:"100%", height:"100%"}}
+                        <img
+                            src={manga.cover || "https://firebasestorage.googleapis.com/v0/b/mismangas-7e620.appspot.com/o/uploads%2F3oesb3tldzt?alt=media&token=e006a18c-b59d-4a74-b2c7-d3849a0d49ba"}
+                            alt={manga.titleName}
+                            style={{ position: "absolute", width: "100%", height: "100%" }}
                         />
-                        <ButtonBase 
+                        <ButtonBase
                             focusRipple
                             className={classes.button}
                             onClick={this.openDialog}
@@ -157,51 +157,51 @@ class TarjetaManga extends Component{
                         <div className={classes.textSpace} style={{height: this.state.eliminar ? "100%" : null}} >
                             {manga.titleName}<br/>
                             <div className={classes.desplegableButton}>
-                                <Button 
+                                <Button
                                     className={classes.botonLeer}
-                                    variant="contained" 
+                                    variant="contained"
                                     disabled={!manga.lecture}
                                     href={manga.lecture}
                                     target="_blank"
                                 >
                                     Leer
                                 </Button>
-                            </div><br/>
-                            <Button color="secondary" 
-                                variant="contained" 
-                                onClick={()=> this.setState({eliminar: true})}
+                            </div><br />
+                            <Button color="secondary"
+                                variant="contained"
+                                onClick={() => this.setState({ eliminar: true })}
                                 className={classes.desplegableButton}
                             >
                                 Eliminar
                             </Button>
                         </div>
-                        
+
                     </div>
                 </Card>
             </div>
-            <InfoManga 
-                open={this.state.open} 
+            <InfoManga
+                open={this.state.open}
                 onClose={this.handleCloseDialog}
                 manga={this.props.manga}
             />
             <Dialog
                 open={this.state.eliminar}
-                onClose={()=> this.setState({eliminar: false})}
+                onClose={() => this.setState({ eliminar: false })}
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
             >
                 <DialogTitle id="alert-dialog-title">Eliminar cómic</DialogTitle>
                 <DialogContent>
-                <DialogContentText id="alert-dialog-description">
-                    ¿Está seguro de que desea eliminar este dato?
+                    <DialogContentText id="alert-dialog-description">
+                        ¿Está seguro de que desea eliminar este dato?
                 </DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                <Button onClick={()=> this.setState({eliminar: false})} color="primary">
-                    Cancelar
+                    <Button onClick={() => this.setState({ eliminar: false })} color="primary">
+                        Cancelar
                 </Button>
-                <Button onClick={this.borrarManga} color="primary" autoFocus>
-                    Aceptar
+                    <Button onClick={this.borrarManga} color="primary" autoFocus>
+                        Aceptar
                 </Button>
                 </DialogActions>
             </Dialog>

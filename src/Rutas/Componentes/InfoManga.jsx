@@ -6,11 +6,16 @@ import { makeStyles, withStyles } from '@material-ui/core/styles';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Slide from '@material-ui/core/Slide';
+import Box from '@material-ui/core/Box';
 import Paper from '@material-ui/core/Paper';
+import BrushIcon from '@material-ui/icons/Brush';
+import PersonIcon from '@material-ui/icons/Person';
+import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 import AppBar from '@material-ui/core/AppBar';
 import Grid from '@material-ui/core/Grid';
 import Valoration from './Valoration';
+
 const useStyles = makeStyles((theme) => ({
     root: {
         flexGrow: 1,
@@ -41,6 +46,39 @@ const useStyles = makeStyles((theme) => ({
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
+
+function TabPanel(props) {
+    const { children, value, index, ...other } = props;
+
+    return (
+        <div
+            role="tabpanel"
+            hidden={value !== index}
+            id={`simple-tabpanel-${index}`}
+            aria-labelledby={`simple-tab-${index}`}
+            {...other}
+        >
+            {value === index && (
+                <Box p={3}>
+                    <Typography>{children}</Typography>
+                </Box>
+            )}
+        </div>
+    );
+}
+
+TabPanel.propTypes = {
+    children: PropTypes.node,
+    index: PropTypes.any.isRequired,
+    value: PropTypes.any.isRequired,
+};
+
+function a11yProps(index) {
+    return {
+        id: `simple-tab-${index}`,
+        'aria-controls': `simple-tabpanel-${index}`,
+    };
+}
 
 export default function InfoManga({ manga, open, onClose }) {
     const classes = useStyles();
@@ -118,12 +156,23 @@ export default function InfoManga({ manga, open, onClose }) {
                             </AppBar>
                             <div className={classes.demo1}>
                                 <AntTabs value={value} onChange={handleChange} aria-label="ant example">
-                                    <AntTab label="Tab 1" />
-                                    <AntTab label="Tab 2" />
-                                    <AntTab label="Tab 3" />
+                                    <AntTab label="Item One" {...a11yProps(0)} />
+                                    <AntTab label="Item Two" {...a11yProps(1)} />
+                                    <AntTab label="Item Three" {...a11yProps(2)} />
+
                                 </AntTabs>
                                 <Typography className={classes.padding} />
                             </div>
+                            <TabPanel value={value} index={0}>
+                                <PersonIcon />
+                                <BrushIcon />
+                            </TabPanel>
+                            <TabPanel value={value} index={1}>
+                                Item Two
+                            </TabPanel>
+                            <TabPanel value={value} index={2}>
+                                Item Three
+                            </TabPanel>
                         </Grid>
 
                     </Grid>
