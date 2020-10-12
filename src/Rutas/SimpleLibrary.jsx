@@ -1,16 +1,28 @@
 import React, { useState, useEffect } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import { Link } from 'react-router-dom';
+import { makeStyles, withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid';
 import Add from './Add';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
+import Divider from '@material-ui/core/Divider';
 import Card from '@material-ui/core/Card';
 import Typography from '@material-ui/core/Typography';
 import AddIcon from '@material-ui/icons/Add';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import MostradorMangas from './Componentes/MostradorMangas';
 import "./Library.css";
+
+const CssTextField = withStyles({
+    root: {
+        '& .MuiOutlinedInput-root': {
+            '& fieldset': {
+                borderColor: 'blue',
+            },
+        },
+    },
+})(TextField);
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -73,14 +85,18 @@ const useStyles = makeStyles((theme) => ({
         position: "relative",
         top: 120,
     },
+    divider: {
+        marginTop: theme.spacing(2),
+    },
 }));
 
-export default function SimpleLibrary({busqueda, mangas, states}){
+export default function SimpleLibrary({ mangas, states }){
     const classes = useStyles();
 
     const [active, setActive] = useState("Todos");
     const [mangasFiltrados, setMangasFiltrados] = useState([]);
     const [openAdd, setOpenAdd] = useState(false);
+    const [buscador, setBuscador] = useState("");
 
     const large = useMediaQuery('(min-width:800px)');
 
@@ -88,16 +104,47 @@ export default function SimpleLibrary({busqueda, mangas, states}){
         const filtrados = mangas.filter(
             (value) => active === "Todos" || value.status === active
         ).filter(
-            (value) => value.titleName.toLowerCase().includes(busqueda.toLowerCase())
+            (value) => value.titleName.toLowerCase().includes(buscador.toLowerCase())
         );
         setMangasFiltrados(filtrados);
-    }, [busqueda, active, mangas]);
+    }, [buscador, active, mangas]);
 
     const handleChange = (event) => {
         setActive(event.target.value);
     };
 
+    const handleChangeBuscador = (event) => {
+        setBuscador(event.target.value);
+    }
+
     return <div className={classes.root} >
+        <Grid container spacing={2}>
+            <Grid item xs={9}>
+                <CssTextField
+                    fullWidth
+                    onChange={handleChangeBuscador}
+                    value={buscador}
+                    label="Buscar Manga"
+                    variant="outlined"
+                    id="outlined-search"
+                    type="search"
+                />
+            </Grid>
+            <Grid item xs={3}>
+                <Link to={"/AvancedSearch"} style={{textDecoration: "none"}} ><Button
+                    size="large"
+                    className="buscar"
+                    fullWidth
+                    variant="contained"
+                    color="secondary"
+                >
+                    Búsqueda Avanzada
+                </Button></Link>
+            </Grid>
+
+        </Grid>
+
+            <Divider className={classes.divider} variant="middle" />
         <div className={classes.colbutton}>
             <ButtonGroup size="large" color="primary" aria-label="large outlined primary button group">
                 {states.map((value) =>

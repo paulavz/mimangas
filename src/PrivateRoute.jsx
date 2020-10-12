@@ -4,7 +4,7 @@ import { Redirect } from "react-router-dom";
 import firebase from "./Inicializer/firebase";
 require("firebase/firebase-firestore");
 
-export default function PrivateRoute({ logged, children, ...otrasProps }) {
+export default function PrivateRoute({ logged, component, ...otrasProps }) {
 
     const [isLogged, setLogged] = useState(null);
 
@@ -24,10 +24,10 @@ export default function PrivateRoute({ logged, children, ...otrasProps }) {
         return <Route {...otrasProps} />
     } else {
         if (isLogged === logged) {
-            return <Route {...otrasProps} > {children} </Route>
+            return <Route {...otrasProps} component={component} />
         } else {
             if (isLogged) {
-                return <Redirect to="/Library" />
+                return <Redirect to="/Dashboard" />
             } else {
                 return <Redirect to="/Login" />
             }

@@ -1,7 +1,7 @@
 import React from 'react';
 import {
   BrowserRouter as Router,
-  Switch, Redirect
+  Switch
 } from "react-router-dom";
 import PrivateRoute from './PrivateRoute';
 import Formulario from './Rutas/Formulario';
@@ -11,14 +11,9 @@ function App() {
   return (
     <Router>
       <div>
-        <Redirect to="/Login" />
         <Switch>
-          <PrivateRoute path="/Library" logged={true}>
-            <Library />
-          </PrivateRoute>
-          <PrivateRoute path="/" logged={false}>
-            <Formulario />
-          </PrivateRoute>
+          <PrivateRoute path="/Dashboard" logged={true} component={Library} />
+          <PrivateRoute path="/" logged={false} component={Formulario} />
         </Switch>
       </div>
     </Router>
