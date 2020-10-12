@@ -154,7 +154,7 @@ class TarjetaManga extends Component{
                             className={classes.button}
                             onClick={this.openDialog}
                         />
-                        <div className={classes.textSpace} >
+                        <div className={classes.textSpace} style={{height: this.state.eliminar ? "100%" : null}} >
                             {manga.titleName}<br/>
                             <div className={classes.desplegableButton}>
                                 <Button 
