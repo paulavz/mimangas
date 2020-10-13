@@ -21,3 +21,17 @@ code {
   font-size:1em !important;
   font-weight: bold;
 }
+
+#title{
+  color: white;
+  text-align: center;
+  margin-left: 10px;
+  margin-right: 10px;
+  margin-top: 5px;
+  letter-spacing: 2px;
+  font-size: 1em;
+  line-height: 15px;
+  text-shadow: 2px 0 0 #000, -2px 0 0 #000, 0 2px 0 #000, 0 -2px 0 #000,
+    1px 1px #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000;
+  font-family: "Luckiest Guy", cursive;
+}

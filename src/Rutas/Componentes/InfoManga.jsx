@@ -1,16 +1,19 @@
 import React from 'react';
 import Dialog from '@material-ui/core/Dialog';
-import IconButton from '@material-ui/core/IconButton';
+import Button from '@material-ui/core/Button';
 import CloseIcon from '@material-ui/icons/Close';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Slide from '@material-ui/core/Slide';
+import Divider from '@material-ui/core/Divider';
 import Box from '@material-ui/core/Box';
 import Paper from '@material-ui/core/Paper';
-import BrushIcon from '@material-ui/icons/Brush';
-import PersonIcon from '@material-ui/icons/Person';
+import pink from '@material-ui/core/colors/pink';
 import PropTypes from 'prop-types';
+import Chip from '@material-ui/core/Chip';
+import InfoIcon from '@material-ui/icons/Info';
+import AddCircleIcon from '@material-ui/icons/AddCircle';
 import Typography from '@material-ui/core/Typography';
 import AppBar from '@material-ui/core/AppBar';
 import Grid from '@material-ui/core/Grid';
@@ -19,6 +22,10 @@ import Valoration from './Valoration';
 const useStyles = makeStyles((theme) => ({
     root: {
         flexGrow: 1,
+    },
+    item: {
+        display: "inline-flex",
+        fontFamily: "Pacifico, cursive"
     },
     paper: {
         padding: theme.spacing(2),
@@ -38,7 +45,52 @@ const useStyles = makeStyles((theme) => ({
     title: {
         fontSize: "1.5em !important",
         textAlign: "center"
+    },
+    datos: {
+        marginLeft: "20px",
+        marginTop: "3px"
+    },
+    label: {
+        backgroundColor: pink[500],
+        borderRadius: "30px",
+        textAlign: "center",
+        padding: "2px",
+        border: "2px solid white",
+        color: "white",
+        fontWeight: "bold",
+        fontSize: "15px",
+    },
+
+    divider: {
+        margin: "5px"
+    },
+    publication: {
+        fontSize: "13px"
+    },
+    minfont: {
+        marginLeft: "20px",
+    },
+    chips: {
+        '& > *': {
+            margin: theme.spacing(0.5),
+        },
+        marginLeft: "15px"
+    },
+    number: {
+        position: "relative",
+        bottom: "4px",
+    },
+    status: {
+        fontFamily: "Luckiest Guy",
+        fontSize: "1.5em",
+    },
+    close: {
+        width: "100%",
+        textAlign: "center",
+        minHeight: "40px",
+        justifyContent: "center"
     }
+
 }));
 
 
@@ -60,7 +112,7 @@ function TabPanel(props) {
         >
             {value === index && (
                 <Box p={3}>
-                    <Typography>{children}</Typography>
+                    {children}
                 </Box>
             )}
         </div>
@@ -82,7 +134,60 @@ function a11yProps(index) {
 
 export default function InfoManga({ manga, open, onClose }) {
     const classes = useStyles();
+    const colors = {
+        "Siguiendo": "lightCyan",
+        "Completos": "lightGreen",
+        "Favoritos": "gold",
+        "Pausados": "midnightBlue",
+        "Pendientes": "orange",
+        "Abandonados": "crimson",
+    };
     const [value, setValue] = React.useState(0);
+    const label = ["Tipo", "País de Origen", "Autor", "Artista", "Otros Nombres", "Demografía", "Sinopsis", "Género", "Estado de Publicación", "Revista", "Serializado", "Editorial"];
+    let newLecture = manga.lecture ? manga.lecture : "";
+    if (newLecture !== "") {
+        if (newLecture.includes("www")) {
+            newLecture = newLecture.split(".");
+            newLecture = newLecture[1];
+        } else if (newLecture.includes("facebook")) {
+            newLecture = "facebook";
+        } else {
+            newLecture = newLecture.split(".");
+            newLecture = newLecture[0];
+            newLecture = newLecture.replace("http://", "")
+            newLecture = newLecture.replace("https://", "")
+        }
+    }
+    let newOtherLinks = manga.otherlink ? manga.otherlink : "";
+    let finalLink = [];
+    let band;
+    if (newOtherLinks !== "") {
+        for (let i = 0; i < newOtherLinks.length; i++) {
+            if (newOtherLinks[i].includes("www")) {
+                band = newOtherLinks[i].split(".");
+                band = band[1];
+                finalLink.push(band);
+            } else if (newOtherLinks[i].includes("facebook")) {
+                finalLink.push("facebook");
+            }
+            else {
+                band = newOtherLinks[i].split(".");
+                band = band[0];
+                band = band.replace("http://", "")
+                band = band.replace("https://", "")
+                finalLink.push(band)
+            }
+        }
+    }
+
+    const info = [manga.type,
+        "",
+    manga.author,
+    manga.artist,
+    manga.otherNames ? manga.otherNames.concat([manga.englishtitle, manga.spanishtitle]).filter((value) => Boolean(value)).join(", ") : "",
+    manga.demo,
+    manga.synopsis,
+    manga.category, "", "", "", ""]
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
@@ -134,18 +239,19 @@ export default function InfoManga({ manga, open, onClose }) {
     return (
         <div>
             <Dialog fullScreen open={open} onClose={onClose} TransitionComponent={Transition}>
-                <IconButton edge="start" color="inherit" onClick={onClose} aria-label="close">
+                <Button onClick={onClose} className={classes.close}>
                     <CloseIcon />
-                </IconButton>
+                </Button>
                 <div className={classes.root}>
                     <Grid container>
                         <Grid item xs={3}>
                             <Paper className={classes.paper}>
-                                <div>
+                                <div className={classes.item}>
                                     <Valoration puntuacion={manga.punctuation} />
-
+                                    <div className={classes.number}>{manga.punctuation}</div>
                                 </div>
                                 <img className={classes.cover} src={manga.cover || "https://firebasestorage.googleapis.com/v0/b/mismangas-7e620.appspot.com/o/uploads%2F3oesb3tldzt?alt=media&token=e006a18c-b59d-4a74-b2c7-d3849a0d49ba"} alt="" />
+                                <div className={classes.status} style={{ color: colors[manga.status] }}>{manga.status}</div>
                             </Paper>
                         </Grid>
                         <Grid item xs={9}>
@@ -156,28 +262,93 @@ export default function InfoManga({ manga, open, onClose }) {
                             </AppBar>
                             <div className={classes.demo1}>
                                 <AntTabs value={value} onChange={handleChange} aria-label="ant example">
-                                    <AntTab label="Item One" {...a11yProps(0)} />
-                                    <AntTab label="Item Two" {...a11yProps(1)} />
-                                    <AntTab label="Item Three" {...a11yProps(2)} />
+                                    <AntTab label={<InfoIcon />} {...a11yProps(0)} />
+                                    <AntTab label={<AddCircleIcon />} {...a11yProps(1)} />
 
                                 </AntTabs>
                                 <Typography className={classes.padding} />
                             </div>
                             <TabPanel value={value} index={0}>
-                                <PersonIcon />
-                                <BrushIcon />
+                                <Grid container>
+                                    {label.map((value, index) => {
+                                        if (!(info[index] || ["Autor", "Artista", "Demografía", "Género"].includes(value)))
+                                            return <div key={index} />;
+                                        let newInfo = info[index];
+                                        if (value === "Género") {
+                                            newInfo = newInfo ? newInfo.join(" ") : "N/A";
+                                        }
+
+                                        return <React.Fragment key={index}>
+                                            <Grid item xs={2}>
+                                                <div className={(value === "Estado de Publicación" || value === "Otros Nombres" ? (classes.publication + " ") : "") + classes.label}>{value}</div>
+                                            </Grid>
+                                            <Grid item xs={10}>
+                                                <div className={classes.datos}>{newInfo || "N/A"}</div>
+                                            </Grid>
+                                            <Grid item xs={12}>
+                                                <Divider className={classes.divider} />
+                                            </Grid>
+                                        </React.Fragment>
+                                    }
+                                    ).filter((value) => value !== <div />)}
+                                </Grid>
                             </TabPanel>
                             <TabPanel value={value} index={1}>
-                                Item Two
-                            </TabPanel>
-                            <TabPanel value={value} index={2}>
-                                Item Three
+                                <Grid container>
+                                    <Grid item xs={2}>
+                                        <div className={classes.publication + " " + classes.label}>Último Capítulo</div>
+                                    </Grid>
+                                    <Grid item xs={10}>
+                                        <div className={classes.minfont}>{manga.lastchapter || "N/A"}</div>
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <Divider className={classes.divider} />
+                                    </Grid>
+                                    <Grid item xs={2}>
+                                        <div className={classes.label} style={{ marginTop: "5px" }}>Etiquetas</div>
+                                    </Grid>
+                                    <Grid item xs={10}>
+                                        <div className={classes.chips}>
+                                            {manga.tags && manga.tags.map((value) =>
+                                                <Chip label={value} key={value} color="primary" />)}
+                                        </div>
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <Divider className={classes.divider} />
+                                    </Grid>
+                                    <Grid item xs={2}>
+                                        <div className={classes.label}>Link de Lectura</div>
+                                    </Grid>
+                                    <Grid item xs={10}>
+                                        <div className={classes.datos}>{newLecture}</div>
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <Divider className={classes.divider} />
+                                    </Grid>
+                                    <Grid item xs={2}>
+                                        <div className={classes.label}> Otros Link</div>
+                                    </Grid>
+                                    <Grid item xs={10}>
+                                        <div className={classes.datos}>{finalLink || "N/A"}</div>
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <Divider className={classes.divider} />
+                                    </Grid>
+                                    <Grid item xs={2}>
+                                        <div className={classes.label}>Ubicación</div>
+                                    </Grid>
+                                    <Grid item xs={10}>
+                                        <div className={classes.datos}>{manga.ubication || "N/A"}</div>
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <Divider className={classes.divider} />
+                                    </Grid>
+                                </Grid>
                             </TabPanel>
                         </Grid>
-
                     </Grid>
                 </div>
             </Dialog>
-        </div>
+        </div >
     );
 }

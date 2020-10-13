@@ -3,6 +3,7 @@ import StarBorderIcon from '@material-ui/icons/StarBorder';
 import StarIcon from '@material-ui/icons/Star';
 import StarHalfIcon from '@material-ui/icons/StarHalf';
 
+
 export default function Valoration({ puntuacion }) {
 
     const estrellas = () => {
@@ -24,7 +25,7 @@ export default function Valoration({ puntuacion }) {
         return estrellitas[newPuntuation];
     }
 
-    return <div>
+    return <div className="estrellitas">
         {estrellas()}
     </div>
 

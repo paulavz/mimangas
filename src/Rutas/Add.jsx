@@ -134,9 +134,9 @@ class Add extends Component {
         this.handleUpload = this.handleUpload.bind(this);
     }
 
-    componentDidUpdate(nextProps,nextState){
-        if(this.props.openAdd !== nextProps.openAdd){
-            this.setState({open: true});
+    componentDidUpdate(nextProps, nextState) {
+        if (this.props.openAdd !== nextProps.openAdd) {
+            this.setState({ open: true });
         }
     }
 
@@ -303,7 +303,8 @@ class Add extends Component {
             fansub: [],
             category: [],
             preview: '',
-            file: ''
+            file: '',
+            otherNames: []
         });
 
     }

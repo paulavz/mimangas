@@ -29,7 +29,12 @@ const useStyles = (theme) => ({
         width: "100%",
         textAlign: "center",
         position: "absolute",
-        top: 4,
+        top: 0,
+        color: "white",
+        fontFamily: "Pacifico, cursive",
+        textShadow: "1px 0 0 #000, -1px 0 0 #000, 0 1px 0 #000, 0 -1px 0 #000, 0.5px 0.5px #000, -0.5px -0.5px 0 #000, 0.5px -0.5px 0 #000,-0.5px 0.5px 0 #000",
+        fontWidth: "bold",
+        textSize: "0.4em",
     },
     content: {
         padding: theme.spacing(1),
@@ -87,7 +92,7 @@ class TarjetaManga extends Component {
         super(props);
         this.state = {
             open: false,
-            eliminar: false
+            eliminar: false,
         };
         this.shouldComponentUpdate = this.shouldComponentUpdate.bind(this);
         this.openDialog = this.openDialog.bind(this);
@@ -154,8 +159,8 @@ class TarjetaManga extends Component {
                             className={classes.button}
                             onClick={this.openDialog}
                         />
-                        <div className={classes.textSpace} style={{height: this.state.eliminar ? "100%" : null}} >
-                            {manga.titleName}<br/>
+                        <div className={classes.textSpace} style={{ height: this.state.eliminar ? "100%" : null }} >
+                            <h2 id="title">{manga.titleName}</h2><br />
                             <div className={classes.desplegableButton}>
                                 <Button
                                     className={classes.botonLeer}
