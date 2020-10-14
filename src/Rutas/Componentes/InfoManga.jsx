@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from "react-router-dom";
 import Dialog from '@material-ui/core/Dialog';
 import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import Tabs from '@material-ui/core/Tabs';
@@ -18,7 +19,9 @@ import AddCircleIcon from '@material-ui/icons/AddCircle';
 import Typography from '@material-ui/core/Typography';
 import AppBar from '@material-ui/core/AppBar';
 import Grid from '@material-ui/core/Grid';
+import EditIcon from '@material-ui/icons/Edit'
 import Valoration from './Valoration';
+import Add from '../Add';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -99,7 +102,11 @@ const useStyles = makeStyles((theme) => ({
     noStyledLink: {
         color: "inherit",
         textDecoration: "none",
-    }
+    },
+    rigthAbsolute: {
+        position: "absolute",
+        right: 0,
+    },
 
 }));
 
@@ -153,6 +160,7 @@ export default function InfoManga({ manga, open, onClose }) {
         "Abandonados": "crimson",
     };
     const [value, setValue] = React.useState(0);
+    const [editDialog, setEditD] = React.useState(false);
     const label = ["Tipo", "País de Origen", "Autor", "Artista", "Otros Nombres", "Demografía", "Sinopsis", "Género", "Estado de Publicación", "Revista", "Serializado", "Editorial"];
     let newLecture = manga.lecture ? manga.lecture : "";
     if (newLecture !== "") {
@@ -255,7 +263,7 @@ export default function InfoManga({ manga, open, onClose }) {
             </Grid>
             <Grid item xs={10}>
                 <div className={classes.datos}>
-                    <p>{
+                    <div>{
                     newInfo.map((categoria, indice)=>
                     <React.Fragment key={categoria + indice}>
                         <Link onClick={()=>onClose()}
@@ -271,7 +279,7 @@ export default function InfoManga({ manga, open, onClose }) {
                         {indice < newInfo.length-1 && ", "}
                     </React.Fragment>
                     )}
-                    </p>
+                    </div>
                 </div>
             </Grid>
             <Grid item xs={12}>
@@ -309,6 +317,13 @@ export default function InfoManga({ manga, open, onClose }) {
                                 <AntTabs value={value} onChange={handleChange} aria-label="ant example">
                                     <AntTab label={<InfoIcon />} {...a11yProps(0)} />
                                     <AntTab label={<AddCircleIcon />} {...a11yProps(1)} />
+
+                                    <IconButton
+                                        onClick={()=>setEditD(!editDialog)}
+                                        className={classes.rigthAbsolute}
+                                    >
+                                        <EditIcon/>
+                                    </IconButton>
 
                                 </AntTabs>
                                 <Typography className={classes.padding} />
@@ -433,6 +448,7 @@ export default function InfoManga({ manga, open, onClose }) {
                     </Grid>
                 </div>
             </Dialog>
+            <Add openAdd={editDialog} manga={manga} />
         </div >
     );
 }

@@ -110,7 +110,7 @@ class Add extends Component {
             author: '',
             synopsis: '',
             lastchapter: '',
-            demo: '',
+            demo: 'Shounen',
             category: [],
             tags: [],
             ubication: '',
@@ -130,6 +130,13 @@ class Add extends Component {
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleChangeSlider = this.handleChangeSlider.bind(this);
         this.handleUpload = this.handleUpload.bind(this);
+    }
+
+    componentDidMount() {
+        if(this.props.manga){
+            const { id, ...campos} = this.props.manga;
+            this.setState(campos);
+        }
     }
 
     componentDidUpdate(nextProps, nextState) {
