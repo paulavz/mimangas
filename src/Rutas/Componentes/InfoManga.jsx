@@ -106,8 +106,11 @@ const useStyles = makeStyles((theme) => ({
     rigthAbsolute: {
         position: "absolute",
         right: 0,
+        top: 0,
     },
-
+    demo1 : {
+        position: "relative",
+    },
 }));
 
 
@@ -318,14 +321,15 @@ export default function InfoManga({ manga, open, onClose }) {
                                     <AntTab label={<InfoIcon />} {...a11yProps(0)} />
                                     <AntTab label={<AddCircleIcon />} {...a11yProps(1)} />
 
-                                    <IconButton
-                                        onClick={()=>setEditD(!editDialog)}
-                                        className={classes.rigthAbsolute}
-                                    >
-                                        <EditIcon/>
-                                    </IconButton>
+                                    
 
                                 </AntTabs>
+                                <IconButton
+                                    onClick={()=>setEditD(!editDialog)}
+                                    className={classes.rigthAbsolute}
+                                >
+                                    <EditIcon/>
+                                </IconButton>
                                 <Typography className={classes.padding} />
                             </div>
                             <TabPanel value={value} index={0}>

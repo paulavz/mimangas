@@ -88,7 +88,7 @@ const useStyles = (theme) => ({
 
 });
 
-const outStates = ["open", "uploadValue", "uid", "file", "preview", "selectedF", "selectedO", "selectedN", "alert"];
+const outStates = ["open", "id", "uploadValue", "uid", "file", "preview", "selectedF", "selectedO", "selectedN", "alert"];
 class Add extends Component {
 
     constructor(props) {
@@ -121,7 +121,9 @@ class Add extends Component {
             uid: "",
             file: "",
             preview: "",
-            otherNames: ""
+            otherNames: "",
+            id: "",
+            createAt: "",
         };
 
         this.handleClickOpen = this.handleClickOpen.bind(this);
@@ -134,8 +136,10 @@ class Add extends Component {
 
     componentDidMount() {
         if(this.props.manga){
-            const { id, ...campos} = this.props.manga;
-            this.setState(campos);
+            this.setState({
+                ...this.props.manga,
+                preview: this.props.manga.cover || ""
+            });
         }
     }
 
@@ -207,11 +211,16 @@ class Add extends Component {
                 }
             }
         }
+        if(!this.state.createAt)
         data = {
             ...data,
             createAt: firebase.firestore.FieldValue.serverTimestamp(),
         }
-        this.saveData(data);
+        if(this.state.id){
+            this.editData(data)
+        }else{
+            this.saveData(data);
+        }
 
     }
 
@@ -278,6 +287,20 @@ class Add extends Component {
         })
     }
 
+    editData(data) {
+        let user = firebase.auth().currentUser;
+        let db = firebase.firestore();
+        db.collection("users")
+            .doc(user.uid)
+            .collection("mangas")
+            .doc(this.state.id)
+            .set(
+                data
+            ).then(() => {
+                console.log("Data editada")
+            });
+    }
+
     saveData(data) {
         let user = firebase.auth().currentUser;
         let db = firebase.firestore();
@@ -320,7 +343,7 @@ class Add extends Component {
         const demografia = ['Shounen', 'Shoujo', 'Josei', 'Seinen', 'Kodomo'];
         const types = ['Manga', 'Manhwa', 'Manhua', 'Cómic', 'Original'];
         const categorias = ['Romance', 'Misterio', 'Acción', 'Comedia'];
-        const { titleName, tags, punctuation, category, synopsis, alert, lastchapter, ubication } = this.state;
+        const { titleName, tags, punctuation, category, synopsis, alert, lastchapter, ubication, id } = this.state;
         const inputs = ["lecture", "englishtitle", "spanishtitle", "author", "artist"];
         const labels = ["Link de Lectura", "Título en Inglés", "Título en Español", "Autor", "Artista"]
         const Inputs = ["otherNames", "fansub", "otherlink"];
@@ -329,7 +352,7 @@ class Add extends Component {
 
         return <div>
             <Dialog open={this.state.open} maxWidth="xs" onClose={this.handleClose} aria-labelledby="form-dialog-title">
-                <DialogTitle id="form-dialog-title">Añadir Cómic</DialogTitle>
+                <DialogTitle id="form-dialog-title">{id ? "Editar" : "Añadir"} Cómic</DialogTitle>
                 <DialogContent>
                     <Grid container>
                         <Grid item xs={12} sm={12}>
