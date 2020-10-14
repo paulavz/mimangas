@@ -108,7 +108,7 @@ export default function SimpleLibrary({ mangas, states }){
     const [openAdd, setOpenAdd] = useState(false);
     const [buscador, setBuscador] = useState("");
 
-    const large = useMediaQuery('(min-width:800px)');
+    const large = useMediaQuery('(min-width:1000px)');
 
     useEffect(() => {
         const filtrados = mangas.filter(

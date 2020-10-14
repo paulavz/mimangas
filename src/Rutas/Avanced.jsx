@@ -17,6 +17,10 @@ import Divider from '@material-ui/core/Divider';
 import SearchIcon from '@material-ui/icons/Search';
 import Checkbox from '@material-ui/core/Checkbox';
 import Button from '@material-ui/core/Button';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import ExpandLessIcon from '@material-ui/icons/ExpandLess';
+import Collapse from '@material-ui/core/Collapse';
 import MostradorMangas from './Componentes/MostradorMangas';
 import {
     types as tipos,
@@ -55,7 +59,9 @@ const useStyles = makeStyles((theme) => ({
         padding: theme.spacing(1),
         position: 'sticky',
         top: 0,
-        maxHeight: '657px'
+        maxHeight: '657px',
+        overflow: "hidden",
+        transition: "height 1s",
     },
     chip: {
         margin: theme.spacing(0.5),
@@ -71,6 +77,19 @@ const useStyles = makeStyles((theme) => ({
         marginTop: theme.spacing(2),
         marginBottom: theme.spacing(2),
         width: `calc(100% - 32px)`,
+    },
+    opcionesMovil: {
+        minWidth: "100%",
+        position: "static",
+    },
+    botonFiltros: {
+        width: "-webkit-fill-available",
+        borderRadius: 0,
+        marginTop: theme.spacing(1),
+        '& .MuiButton-label': {
+            textAlign: "left",
+            justifyContent: "start",
+        },
     },
 }));
 
@@ -111,8 +130,8 @@ function buscar(filtros, mangas) {
     arrays.forEach((nombre)=>{
         if(filtros[nombre] && filtros[nombre].length > 0){
             nuevoMangas = nuevoMangas.filter(
-                (manga) => filtros[nombre].every(
-                    (campo) => manga[nombre] && manga[nombre].indexOf(campo) > -1
+                (manga) => manga[nombre] && filtros[nombre].every(
+                    (campo) => manga[nombre].indexOf(campo) > -1
                 )
             );
         }
@@ -148,6 +167,8 @@ const tagsPrueba = ["isekai", "4-koma", "musica", "buen dibujo", "lentes"];
 export default function Avanced({ estados, mangas }) {
     const classes = useStyles();
 
+    const movil = useMediaQuery('(max-width:800px)');
+
     const [selected, setSelected] = useState({
         demo: "",
         type: "",
@@ -161,6 +182,7 @@ export default function Avanced({ estados, mangas }) {
     const [mangasFiltrados, setMangasFiltrados] = useState([]);
     const [punctuation, setPunctuation] = useState([0, 100]);
     const [buscador, setBuscador] = useState("");
+    const [openFiltros, setOpenFiltros] = useState(false);
 
     const handleChange = (event, newValue) => {
         setPunctuation(newValue);
@@ -177,6 +199,10 @@ export default function Avanced({ estados, mangas }) {
     ));
 
     const location = useLocation();
+
+    useEffect(()=>{
+        setOpenFiltros(!movil)
+    }, [movil]);
 
     useEffect(()=>{
         if(location.state){
@@ -243,14 +269,28 @@ export default function Avanced({ estados, mangas }) {
             />
         </Grid>
 
-        <Divider className={classes.divider} variant="middle" />
+        {!movil && <Divider className={classes.divider} variant="middle" />}
 
-        <Grid item xs={3} md={3} className={classes.gridOpciones} >
+        {movil && 
+            <Button 
+                className={classes.botonFiltros} 
+                onClick={()=>setOpenFiltros(!openFiltros)}
+                endIcon={openFiltros ? <ExpandLessIcon/> : <ExpandMoreIcon/>}
+            >
+                <Typography variant="h5" color="primary">Filtros</Typography>
+            </Button>
+        }
+
+        <Grid item xs={3} md={3} className={[
+            classes.gridOpciones, movil ? classes.opcionesMovil : "",
+            ].join(" ")}  style={{padding: openFiltros ? null : 0, border: openFiltros ? null: 0}}
+        >
+            <Collapse in={openFiltros}>
             <div className={classes.titulo}>
                 <Typography variant="h6" color="primary">Filtros
-                <IconButton onClick={filtrar} size="small" aria-label="search" className={classes.search}>
+                {!movil && <IconButton onClick={filtrar} size="small" aria-label="search" className={classes.search}>
                         <SearchIcon color="primary" fontSize="small" />
-                    </IconButton>
+                    </IconButton>}
                 </Typography>
             </div>
             <TextField
@@ -401,9 +441,10 @@ export default function Avanced({ estados, mangas }) {
                 />
             </div>
             <Button variant="contained" color="primary" fullWidth onClick={filtrar}>Buscar</Button>
+            </Collapse>
 
         </Grid>
-        <Grid item xs={9} md={9}>
+        <Grid item xs={9} md={9} className={movil ? classes.opcionesMovil : ""} >
             <MostradorMangas
                 mangas={mangasFiltrados}
                 style={{ minHeight: "90%" }}
