@@ -18,6 +18,11 @@ import SearchIcon from '@material-ui/icons/Search';
 import Checkbox from '@material-ui/core/Checkbox';
 import Button from '@material-ui/core/Button';
 import MostradorMangas from './Componentes/MostradorMangas';
+import {
+    types as tipos,
+    demographies as demografias,
+    categories as categorias
+} from './Globales';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -139,10 +144,7 @@ function buscar(filtros, mangas) {
     return nuevoMangas;
 }
 
-const tipos = ["Manga", "Manhwa", "Manhua", "Cómic", "Original"];
-const dermografias = ["Seinen", "Shounen", "Shoujo", "Josei", "Kodomo"];
 const tagsPrueba = ["isekai", "4-koma", "musica", "buen dibujo", "lentes"];
-const categorias = ["Horror", "Acción", "Comedia", "Romance", "Ecchi", "Slice of Life"];
 export default function Avanced({ estados, mangas }) {
     const classes = useStyles();
 
@@ -291,7 +293,7 @@ export default function Avanced({ estados, mangas }) {
                     className={classes.input}
                 >
                     <MenuItem value={""} >Cualquiera</MenuItem>
-                    {dermografias.map((tipo) => <MenuItem key={tipo} value={tipo}>{tipo}</MenuItem>)}
+                    {demografias.map((tipo) => <MenuItem key={tipo} value={tipo}>{tipo}</MenuItem>)}
                 </Select>
             </FormControl>
             <br />
