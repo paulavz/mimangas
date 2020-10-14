@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from "react-router-dom";
 import Dialog from '@material-ui/core/Dialog';
 import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import Tabs from '@material-ui/core/Tabs';
@@ -16,7 +17,6 @@ import Paper from '@material-ui/core/Paper';
 import pink from '@material-ui/core/colors/pink';
 import CancelIcon from '@material-ui/icons/Cancel';
 import green from '@material-ui/core/colors/green';
-import IconButton from '@material-ui/core/IconButton';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import PropTypes from 'prop-types';
 import SaveIcon from '@material-ui/icons/Save';
@@ -26,7 +26,9 @@ import AddCircleIcon from '@material-ui/icons/AddCircle';
 import Typography from '@material-ui/core/Typography';
 import AppBar from '@material-ui/core/AppBar';
 import Grid from '@material-ui/core/Grid';
+import EditIcon from '@material-ui/icons/Edit'
 import Valoration from './Valoration';
+import Add from '../Add';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -119,8 +121,16 @@ const useStyles = makeStyles((theme) => ({
     },
     marginLeft: {
         marginLeft: theme.spacing(1),
-    }
+    },
 
+    rigthAbsolute: {
+        position: "absolute",
+        right: 0,
+        top: 0,
+    },
+    demo1 : {
+        position: "relative",
+    },
 }));
 
 
@@ -179,6 +189,8 @@ export default function InfoManga({ manga, open, onClose }) {
         tags: false
     });
 
+    const [editDialog, setEditD] = React.useState(false);
+
     const estado = ['Siguiendo', 'Pendientes', 'Abandonados', 'Completos', 'Favoritos', 'Pausados'];
 
     const [newValue, setNewValue] = React.useState({
@@ -197,7 +209,6 @@ export default function InfoManga({ manga, open, onClose }) {
 
         console.log(newValue)
     };
-
     const label = ["Tipo", "País de Origen", "Autor", "Artista", "Otros Nombres", "Demografía", "Sinopsis", "Género", "Estado de Publicación", "Revista", "Serializado", "Editorial"];
     let newLecture = manga.lecture ? manga.lecture : "";
     if (newLecture !== "") {
@@ -394,7 +405,15 @@ export default function InfoManga({ manga, open, onClose }) {
                                     <AntTab label={<InfoIcon />} {...a11yProps(0)} />
                                     <AntTab label={<AddCircleIcon />} {...a11yProps(1)} />
 
+                                    
+
                                 </AntTabs>
+                                <IconButton
+                                    onClick={()=>setEditD(!editDialog)}
+                                    className={classes.rigthAbsolute}
+                                >
+                                    <EditIcon/>
+                                </IconButton>
                                 <Typography className={classes.padding} />
                             </div>
                             <TabPanel value={value} index={0}>
@@ -565,6 +584,7 @@ export default function InfoManga({ manga, open, onClose }) {
                     </Grid>
                 </div>
             </Dialog>
+            <Add openAdd={editDialog} manga={manga} />
         </div >
     );
 }
