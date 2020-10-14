@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
 import IconButton from '@material-ui/core/IconButton';
 import { withStyles } from "@material-ui/core/styles";
-import AddIcon from '@material-ui/icons/Add';
 import { pink } from '@material-ui/core/colors';
 import Grid from "@material-ui/core/Grid";
-import Avatar from '@material-ui/core/Avatar';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import Slider from '@material-ui/core/Slider';
@@ -323,13 +321,6 @@ class Add extends Component {
         const Selectors = ["selectedN", "selectedF", "selectedO"];
 
         return <div>
-            <div className="add">
-                <IconButton size="small" onClick={this.handleClickOpen}>
-                    <Avatar className={classes.pink}>
-                        <AddIcon />
-                    </Avatar>
-                </IconButton>
-            </div>
             <Dialog open={this.state.open} maxWidth="xs" onClose={this.handleClose} aria-labelledby="form-dialog-title">
                 <DialogTitle id="form-dialog-title">Añadir Cómic</DialogTitle>
                 <DialogContent>

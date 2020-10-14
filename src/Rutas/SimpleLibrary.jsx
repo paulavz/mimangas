@@ -11,7 +11,11 @@ import Card from '@material-ui/core/Card';
 import Typography from '@material-ui/core/Typography';
 import AddIcon from '@material-ui/icons/Add';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
+import IconButton from '@material-ui/core/IconButton';
+import Avatar from '@material-ui/core/Avatar';
+import { pink } from '@material-ui/core/colors';
 import MostradorMangas from './Componentes/MostradorMangas';
+import './Add.css';
 import "./Library.css";
 
 const CssTextField = withStyles({
@@ -66,6 +70,12 @@ const useStyles = makeStyles((theme) => ({
         '& .MuiTablePagination-toolbar': {
             width: "max-content",
         },
+    },
+    pink: {
+        color: theme.palette.getContrastText(pink[500]),
+        backgroundColor: '#f50057',
+        width: theme.spacing(7),
+        height: theme.spacing(7),
     },
     cardNew:{
         height: 300,
@@ -163,7 +173,13 @@ export default function SimpleLibrary({ mangas, states }){
                     </Button>)}
             </ButtonGroup>
 
-
+            <div className="add">
+                <IconButton size="small" onClick={()=>setOpenAdd(!openAdd)}>
+                    <Avatar className={classes.pink}>
+                        <AddIcon />
+                    </Avatar>
+                </IconButton>
+            </div>
             <Add openAdd={openAdd} />
         </div>
 
