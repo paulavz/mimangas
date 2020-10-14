@@ -5,13 +5,21 @@ import Button from '@material-ui/core/Button';
 import CloseIcon from '@material-ui/icons/Close';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import Tabs from '@material-ui/core/Tabs';
+import TextField from '@material-ui/core/TextField';
 import Tab from '@material-ui/core/Tab';
 import Slide from '@material-ui/core/Slide';
 import Divider from '@material-ui/core/Divider';
+import CreateIcon from '@material-ui/icons/Create';
 import Box from '@material-ui/core/Box';
+import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import Paper from '@material-ui/core/Paper';
 import pink from '@material-ui/core/colors/pink';
+import CancelIcon from '@material-ui/icons/Cancel';
+import green from '@material-ui/core/colors/green';
+import IconButton from '@material-ui/core/IconButton';
+import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import PropTypes from 'prop-types';
+import SaveIcon from '@material-ui/icons/Save';
 import Chip from '@material-ui/core/Chip';
 import InfoIcon from '@material-ui/icons/Info';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
@@ -23,6 +31,9 @@ import Valoration from './Valoration';
 const useStyles = makeStyles((theme) => ({
     root: {
         flexGrow: 1,
+    },
+    flex: {
+        display: "inline-flex",
     },
     item: {
         display: "inline-flex",
@@ -99,6 +110,15 @@ const useStyles = makeStyles((theme) => ({
     noStyledLink: {
         color: "inherit",
         textDecoration: "none",
+    },
+    edit: {
+        '& .MuiTextField-root': {
+            margin: theme.spacing(1),
+            width: '25ch',
+        }
+    },
+    marginLeft: {
+        marginLeft: theme.spacing(1),
     }
 
 }));
@@ -153,6 +173,31 @@ export default function InfoManga({ manga, open, onClose }) {
         "Abandonados": "crimson",
     };
     const [value, setValue] = React.useState(0);
+    const [edit, setEdit] = React.useState({
+        cap: false,
+        status: false,
+        tags: false
+    });
+
+    const estado = ['Siguiendo', 'Pendientes', 'Abandonados', 'Completos', 'Favoritos', 'Pausados'];
+
+    const [newValue, setNewValue] = React.useState({
+        lastchapter: manga.lastchapter,
+        status: manga.status,
+        tags: ""
+    });
+
+
+    const handleChange2 = (e) => {
+        const { name, value } = e.target;
+        setNewValue({
+            ...newValue,
+            [name]: value
+        })
+
+        console.log(newValue)
+    };
+
     const label = ["Tipo", "País de Origen", "Autor", "Artista", "Otros Nombres", "Demografía", "Sinopsis", "Género", "Estado de Publicación", "Revista", "Serializado", "Editorial"];
     let newLecture = manga.lecture ? manga.lecture : "";
     if (newLecture !== "") {
@@ -202,6 +247,7 @@ export default function InfoManga({ manga, open, onClose }) {
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
+
 
     const AntTabs = withStyles({
         root: {
@@ -255,23 +301,23 @@ export default function InfoManga({ manga, open, onClose }) {
             </Grid>
             <Grid item xs={10}>
                 <div className={classes.datos}>
-                    <p>{
-                    newInfo.map((categoria, indice)=>
-                    <React.Fragment key={categoria + indice}>
-                        <Link onClick={()=>onClose()}
-                            className={classes.noStyledLink}
-                            to={{
-                            pathname: "/AvancedSearch",
-                            state: {
-                                category: [categoria]
-                            }
-                        }} >
-                            {categoria}
-                        </Link>
-                        {indice < newInfo.length-1 && ", "}
-                    </React.Fragment>
-                    )}
-                    </p>
+                    <div>{
+                        newInfo.map((categoria, indice) =>
+                            <React.Fragment key={categoria + indice}>
+                                <Link onClick={() => onClose()}
+                                    className={classes.noStyledLink}
+                                    to={{
+                                        pathname: "/AvancedSearch",
+                                        state: {
+                                            category: [categoria]
+                                        }
+                                    }} >
+                                    {categoria}
+                                </Link>
+                                {indice < newInfo.length - 1 && ", "}
+                            </React.Fragment>
+                        )}
+                    </div>
                 </div>
             </Grid>
             <Grid item xs={12}>
@@ -296,7 +342,45 @@ export default function InfoManga({ manga, open, onClose }) {
                                     <div className={classes.number}>{manga.punctuation}</div>
                                 </div>
                                 <img className={classes.cover} src={manga.cover || "https://firebasestorage.googleapis.com/v0/b/mismangas-7e620.appspot.com/o/uploads%2F3oesb3tldzt?alt=media&token=e006a18c-b59d-4a74-b2c7-d3849a0d49ba"} alt="" />
-                                <div className={classes.status} style={{ color: colors[manga.status] }}>{manga.status}</div>
+                                {edit.status ? <div className={classes.flex}><TextField
+                                    className={classes.edit}
+                                    size="small"
+                                    select
+                                    defaultValue={manga.status}
+                                    onChange={handleChange2}
+                                    name="status"
+                                    SelectProps={{
+                                        native: true,
+                                    }}
+                                >
+                                    {estado.map((value) =>
+                                        <option key={value} value={value}>
+                                            {value}
+                                        </option>
+                                    )}
+
+                                </TextField>
+                                    <IconButton className={classes.marginLeft} size="small">
+                                        <SaveIcon style={{ color: green[500] }} fontSize="small" />
+                                    </IconButton>
+                                    <IconButton onClick={() => setEdit({
+                                        ...edit,
+                                        status: false
+                                    })} size="small">
+                                        <CancelIcon color="error" fontSize="small" />
+                                    </IconButton>
+                                </div> :
+                                    <div className={classes.flex}>
+                                        <div className={classes.status} style={{ color: colors[manga.status] }}>{manga.status}</div>
+                                        <IconButton onClick={() => setEdit({
+                                            ...edit,
+                                            status: true
+                                        })} size="small">
+                                            <CreateIcon />
+                                        </IconButton>
+                                    </div>
+                                }
+
                             </Paper>
                         </Grid>
                         <Grid item xs={9}>
@@ -319,15 +403,15 @@ export default function InfoManga({ manga, open, onClose }) {
                                         const obligatorias = ["Autor", "Artista", "Demografía", "Género"];
                                         if (!(info[index] || obligatorias.includes(value)))
                                             return <div key={index} />;
-                                        
+
                                         const linkStates = ["author_artist", "author_artist", "demo", "category"];
 
                                         let newInfo = info[index];
                                         if (value === "Género") {
-                                            if(newInfo && newInfo.length>0){
+                                            if (newInfo && newInfo.length > 0) {
                                                 return generos(value, index);
-                                            }else
-                                            newInfo = "";
+                                            } else
+                                                newInfo = "";
                                         }
 
                                         return <React.Fragment key={index}>
@@ -337,15 +421,15 @@ export default function InfoManga({ manga, open, onClose }) {
                                             <Grid item xs={10}>
                                                 <div className={classes.datos}>{
                                                     (obligatorias.includes(value) && newInfo) ?
-                                                    <Link onClick={()=>onClose()}
-                                                        className={classes.noStyledLink}
-                                                        to={{
-                                                        pathname: "/AvancedSearch",
-                                                        state: {
-                                                            [linkStates[obligatorias.indexOf(value)]]: newInfo
-                                                        }
-                                                    }} >{newInfo || "N/A"}</Link>:
-                                                    (newInfo || "N/A")
+                                                        <Link onClick={() => onClose()}
+                                                            className={classes.noStyledLink}
+                                                            to={{
+                                                                pathname: "/AvancedSearch",
+                                                                state: {
+                                                                    [linkStates[obligatorias.indexOf(value)]]: newInfo
+                                                                }
+                                                            }} >{newInfo || "N/A"}</Link> :
+                                                        (newInfo || "N/A")
                                                 }</div>
                                             </Grid>
                                             <Grid item xs={12}>
@@ -362,7 +446,28 @@ export default function InfoManga({ manga, open, onClose }) {
                                         <div className={classes.publication + " " + classes.label}>Último Capítulo</div>
                                     </Grid>
                                     <Grid item xs={10}>
-                                        <div className={classes.minfont}>{manga.lastchapter || "N/A"}</div>
+                                        {edit.cap ? <div className={classes.datos + " " + classes.flex}>
+                                            <TextField style={{ width: "8ch" }} type="number" onChange={handleChange2} className={classes.edit} autoFocus name="lastchapter" value={newValue.lastchapter} />
+                                            <IconButton className={classes.marginLeft} size="small">
+                                                <SaveIcon style={{ color: green[500] }} fontSize="small" />
+                                            </IconButton>
+                                            <IconButton onClick={() => setEdit({
+                                                ...edit,
+                                                cap: false
+                                            })} size="small">
+                                                <CancelIcon color="error" fontSize="small" />
+                                            </IconButton>
+                                        </div> :
+                                            <div className={classes.flex}>
+                                                <div className={classes.minfont}>{manga.lastchapter || "N/A"}</div>
+                                                <IconButton onClick={() => setEdit({
+                                                    ...edit,
+                                                    cap: true
+                                                })} id="pencil" size="small">
+                                                    <CreateIcon />
+                                                </IconButton>
+                                            </div>
+                                        }
                                     </Grid>
                                     <Grid item xs={12}>
                                         <Divider className={classes.divider} />
@@ -373,19 +478,46 @@ export default function InfoManga({ manga, open, onClose }) {
                                     <Grid item xs={10}>
                                         <div className={classes.chips}>
                                             {manga.tags && manga.tags.map((value) =>
-                                            <Link 
-                                                to={{
-                                                    pathname: "/AvancedSearch",
-                                                    state: {
-                                                        tags: [value]
-                                                    }
-                                                }}
-                                                 key={value}
-                                                className={classes.noStyledLink}
-                                                onClick={()=>onClose()}
-                                            >
-                                                <Chip label={value} className={classes.linkChip} color="primary" />
-                                            </Link>)}
+                                                <Link
+                                                    to={{
+                                                        pathname: "/AvancedSearch",
+                                                        state: {
+                                                            tags: [value]
+                                                        }
+                                                    }}
+                                                    key={value}
+                                                    className={classes.noStyledLink}
+                                                    onClick={() => onClose()}
+                                                >
+                                                    <Chip label={value} className={classes.linkChip} color="primary" />
+                                                </Link>)}
+                                            {
+                                                edit.tags ? <div><TextField style={{ width: "12ch" }} onChange={handleChange2} className={classes.edit} autoFocus name="tags" value={newValue.tags} />
+                                                    <IconButton className={classes.marginLeft} size="small">
+                                                        <CheckCircleIcon style={{ color: green[500] }} fontSize="small" />
+                                                    </IconButton>
+                                                    <IconButton onClick={() => {
+                                                        setEdit({
+                                                            ...edit,
+                                                            tags: false
+                                                        });
+                                                        setNewValue({
+                                                            ...newValue,
+                                                            tags: ""
+                                                        });
+                                                    }} size="small">
+                                                        <CancelIcon color="error" fontSize="small" />
+                                                    </IconButton>
+                                                </div>
+                                                    : <IconButton onClick={() => setEdit({
+                                                        ...edit,
+                                                        tags: true
+                                                    })} size="small">
+                                                        <AddCircleOutlineIcon fontSize="small" />
+                                                    </IconButton>
+
+                                            }
+
                                         </div>
                                     </Grid>
                                     <Grid item xs={12}>
@@ -396,7 +528,7 @@ export default function InfoManga({ manga, open, onClose }) {
                                     </Grid>
                                     <Grid item xs={10}>
                                         <div className={classes.datos}>
-                                            <a 
+                                            <a
                                                 className={classes.noStyledLink}
                                                 href={manga.lecture}
                                                 rel="noopener noreferrer"
