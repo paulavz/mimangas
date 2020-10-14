@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from "react-router-dom";
 import Dialog from '@material-ui/core/Dialog';
 import Button from '@material-ui/core/Button';
 import CloseIcon from '@material-ui/icons/Close';
@@ -89,6 +90,15 @@ const useStyles = makeStyles((theme) => ({
         textAlign: "center",
         minHeight: "40px",
         justifyContent: "center"
+    },
+    linkChip: {
+        '&:hover': {
+            cursor: "pointer",
+        },
+    },
+    noStyledLink: {
+        color: "inherit",
+        textDecoration: "none",
     }
 
 }));
@@ -235,6 +245,41 @@ export default function InfoManga({ manga, open, onClose }) {
         selected: {},
     }))((props) => <Tab disableRipple {...props} />);
 
+    const generos = (value, index) => {
+
+        let newInfo = info[index];
+
+        return <React.Fragment key={index}>
+            <Grid item xs={2}>
+                <div className={classes.label}>{value}</div>
+            </Grid>
+            <Grid item xs={10}>
+                <div className={classes.datos}>
+                    <p>{
+                    newInfo.map((categoria, indice)=>
+                    <React.Fragment key={categoria + indice}>
+                        <Link onClick={()=>onClose()}
+                            className={classes.noStyledLink}
+                            to={{
+                            pathname: "/AvancedSearch",
+                            state: {
+                                category: [categoria]
+                            }
+                        }} >
+                            {categoria}
+                        </Link>
+                        {indice < newInfo.length-1 && ", "}
+                    </React.Fragment>
+                    )}
+                    </p>
+                </div>
+            </Grid>
+            <Grid item xs={12}>
+                <Divider className={classes.divider} />
+            </Grid>
+        </React.Fragment>
+    }
+
 
     return (
         <div>
@@ -271,11 +316,18 @@ export default function InfoManga({ manga, open, onClose }) {
                             <TabPanel value={value} index={0}>
                                 <Grid container>
                                     {label.map((value, index) => {
-                                        if (!(info[index] || ["Autor", "Artista", "Demografía", "Género"].includes(value)))
+                                        const obligatorias = ["Autor", "Artista", "Demografía", "Género"];
+                                        if (!(info[index] || obligatorias.includes(value)))
                                             return <div key={index} />;
+                                        
+                                        const linkStates = ["author_artist", "author_artist", "demo", "category"];
+
                                         let newInfo = info[index];
                                         if (value === "Género") {
-                                            newInfo = newInfo ? newInfo.join(" ") : "N/A";
+                                            if(newInfo && newInfo.length>0){
+                                                return generos(value, index);
+                                            }else
+                                            newInfo = "";
                                         }
 
                                         return <React.Fragment key={index}>
@@ -283,14 +335,25 @@ export default function InfoManga({ manga, open, onClose }) {
                                                 <div className={(value === "Estado de Publicación" || value === "Otros Nombres" ? (classes.publication + " ") : "") + classes.label}>{value}</div>
                                             </Grid>
                                             <Grid item xs={10}>
-                                                <div className={classes.datos}>{newInfo || "N/A"}</div>
+                                                <div className={classes.datos}>{
+                                                    (obligatorias.includes(value) && newInfo) ?
+                                                    <Link onClick={()=>onClose()}
+                                                        className={classes.noStyledLink}
+                                                        to={{
+                                                        pathname: "/AvancedSearch",
+                                                        state: {
+                                                            [linkStates[obligatorias.indexOf(value)]]: newInfo
+                                                        }
+                                                    }} >{newInfo || "N/A"}</Link>:
+                                                    (newInfo || "N/A")
+                                                }</div>
                                             </Grid>
                                             <Grid item xs={12}>
                                                 <Divider className={classes.divider} />
                                             </Grid>
                                         </React.Fragment>
                                     }
-                                    ).filter((value) => value !== <div />)}
+                                    ).filter((value, index) => (info[index] || ["Autor", "Artista", "Demografía", "Género"].includes(label[index])))}
                                 </Grid>
                             </TabPanel>
                             <TabPanel value={value} index={1}>
@@ -310,7 +373,19 @@ export default function InfoManga({ manga, open, onClose }) {
                                     <Grid item xs={10}>
                                         <div className={classes.chips}>
                                             {manga.tags && manga.tags.map((value) =>
-                                                <Chip label={value} key={value} color="primary" />)}
+                                            <Link 
+                                                to={{
+                                                    pathname: "/AvancedSearch",
+                                                    state: {
+                                                        tags: [value]
+                                                    }
+                                                }}
+                                                 key={value}
+                                                className={classes.noStyledLink}
+                                                onClick={()=>onClose()}
+                                            >
+                                                <Chip label={value} className={classes.linkChip} color="primary" />
+                                            </Link>)}
                                         </div>
                                     </Grid>
                                     <Grid item xs={12}>
@@ -320,7 +395,16 @@ export default function InfoManga({ manga, open, onClose }) {
                                         <div className={classes.label}>Link de Lectura</div>
                                     </Grid>
                                     <Grid item xs={10}>
-                                        <div className={classes.datos}>{newLecture}</div>
+                                        <div className={classes.datos}>
+                                            <a 
+                                                className={classes.noStyledLink}
+                                                href={manga.lecture}
+                                                rel="noopener noreferrer"
+                                                target="_blank"
+                                            >
+                                                {newLecture}
+                                            </a>
+                                        </div>
                                     </Grid>
                                     <Grid item xs={12}>
                                         <Divider className={classes.divider} />

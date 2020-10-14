@@ -83,7 +83,11 @@ const CssTextField = withStyles({
  * Devuelve los mangas que coincidan con todos los states
  */
 function buscar(filtros, mangas) {
-    const {selected, buscador, tagArray, categories, punctuation} = filtros;
+    const { buscador, punctuation } = filtros;
+
+    const iguales = ["demo", "type", "status"];
+    const includes = ["author_artist", "fansub"];
+    const arrays = ["tags", "category"];
 
     let nuevoMangas = mangas;
 
@@ -99,28 +103,30 @@ function buscar(filtros, mangas) {
         });
     }
 
-    if(selected)
-    for (let i in selected) {
-        if (!selected[i] || i === "tag") continue;
-        if (["demo", "type", "status"].includes(i)) {
-            nuevoMangas = nuevoMangas.filter((value) => selected[i] === value[i]);
-        } else if (["author_artist", "fansub"].includes(i)) {
-            let campos = i.split('_');
+    arrays.forEach((nombre)=>{
+        if(filtros[nombre] && filtros[nombre].length > 0){
+            nuevoMangas = nuevoMangas.filter(
+                (manga) => filtros[nombre].every(
+                    (campo) => manga[nombre] && manga[nombre].indexOf(campo) > -1
+                )
+            );
+        }
+    });
+
+    iguales.forEach((nombre)=>{
+        if(filtros[nombre]){
+            nuevoMangas = nuevoMangas.filter((value)=> filtros[nombre] === value[nombre]);
+        }
+    });
+
+    includes.forEach((nombre)=>{
+        if(filtros[nombre]){
+            let campos =nombre.split("_");
             nuevoMangas = nuevoMangas.filter((manga) => campos.some(
-                (campo) => manga[campo] && manga[campo].toLowerCase().includes(selected[i].toLowerCase())
+                (campo) => manga[campo] &&manga[campo].toLowerCase().includes(filtros[nombre].toLowerCase())
             ));
         }
-    }
-
-    if (tagArray && tagArray.length > 0)
-        nuevoMangas = nuevoMangas.filter(
-            (manga) => tagArray.every(
-                (etiqueta) => manga.tags && manga.tags.indexOf(etiqueta) > -1));
-
-    if (categories && categories.length > 0)
-        nuevoMangas = nuevoMangas.filter(
-            (value) => categories.every(
-                (categoria) => value.category && value.category.indexOf(categoria) > -1));
+    });
 
     if (punctuation && (punctuation[0] !== 0 || punctuation[1] !== 100)) {
         let minim = (acc, act) => Math.min(acc, act);
@@ -161,10 +167,10 @@ export default function Avanced({ estados, mangas }) {
     const filtrar = () => setMangasFiltrados(buscar(
         {
             buscador: buscador,
-            selected: selected,
-            categories: categories,
-            tagArray: tagArray,
-            punctuation: punctuation
+            category: categories,
+            tags: tagArray,
+            punctuation: punctuation,
+            ...selected,
         }, mangas
     ));
 
@@ -172,7 +178,18 @@ export default function Avanced({ estados, mangas }) {
 
     useEffect(()=>{
         if(location.state){
-            setBuscador(location.state.buscador);
+            setBuscador(location.state.buscador || "");
+            setSelected({
+                demo: location.state.demo || "",
+                type: location.state.type || "",
+                status: location.state.status || "",
+                tag: "",
+                author_artist: location.state.author_artist || "",
+                fansub: location.state.fansub || "",
+            });
+            setCategories(location.state.category || []);
+            setTagArray(location.state.tags || []);
+            setPunctuation(location.state.punctuation || [0, 100]);
         }
         setMangasFiltrados(buscar({
             ...location.state
