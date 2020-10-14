@@ -13,6 +13,7 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import SimpleLibrary from './SimpleLibrary';
 import Avanced from './Avanced';
+import { states as realStates } from './Globales';
 import "./Library.css";
 require("firebase/auth");
 
@@ -44,7 +45,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const states = ["Todos", "Siguiendo", "Completos", "Favoritos", "Pausados", "Pendientes", "Abandonados"]
+const states = ["Todos", ...realStates];
 
 export default function Library(props) {
     const classes = useStyles();

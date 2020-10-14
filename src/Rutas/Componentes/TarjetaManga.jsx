@@ -10,6 +10,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import InfoManga from './InfoManga';
+import { statusColors as colors } from '../Globales';
 import firebase from "../../Inicializer/firebase";
 require("firebase/auth");
 
@@ -123,15 +124,6 @@ class TarjetaManga extends Component {
 
     render() {
         const { manga, classes } = this.props;
-
-        const colors = {
-            "Siguiendo": "lightCyan",
-            "Completos": "lightGreen",
-            "Favoritos": "gold",
-            "Pausados": "midnightBlue",
-            "Pendientes": "orange",
-            "Abandonados": "crimson",
-        };
 
         return <div className={classes.root} >
             <div className={classes.content}>

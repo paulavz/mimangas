@@ -17,16 +17,18 @@ import MenuItem from '@material-ui/core/MenuItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
-
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import CancelIcon from '@material-ui/icons/Cancel';
-
 import Collapse from '@material-ui/core/Collapse';
 import CloseIcon from '@material-ui/icons/Close';
 import Alert from '@material-ui/lab/Alert';
-
+import { types,
+    states as estado, 
+    demographies as demografia, 
+    categories as categorias 
+} from './Globales';
 import './Add.css'
 require("firebase/auth");
 require("firebase/firestore");
@@ -339,10 +341,6 @@ class Add extends Component {
 
     render() {
         const { classes } = this.props;
-        const estado = ['Siguiendo', 'Pendientes', 'Abandonados', 'Completos', 'Favoritos', 'Pausados'];
-        const demografia = ['Shounen', 'Shoujo', 'Josei', 'Seinen', 'Kodomo'];
-        const types = ['Manga', 'Manhwa', 'Manhua', 'Cómic', 'Original'];
-        const categorias = ['Romance', 'Misterio', 'Acción', 'Comedia'];
         const { titleName, tags, punctuation, category, synopsis, alert, lastchapter, ubication, id } = this.state;
         const inputs = ["lecture", "englishtitle", "spanishtitle", "author", "artist"];
         const labels = ["Link de Lectura", "Título en Inglés", "Título en Español", "Autor", "Artista"]

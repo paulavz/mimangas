@@ -28,6 +28,7 @@ import AppBar from '@material-ui/core/AppBar';
 import Grid from '@material-ui/core/Grid';
 import EditIcon from '@material-ui/icons/Edit'
 import Valoration from './Valoration';
+import { statusColors as colors} from '../Globales';
 import Add from '../Add';
 
 const useStyles = makeStyles((theme) => ({
@@ -174,14 +175,6 @@ function a11yProps(index) {
 
 export default function InfoManga({ manga, open, onClose }) {
     const classes = useStyles();
-    const colors = {
-        "Siguiendo": "lightCyan",
-        "Completos": "lightGreen",
-        "Favoritos": "gold",
-        "Pausados": "midnightBlue",
-        "Pendientes": "orange",
-        "Abandonados": "crimson",
-    };
     const [value, setValue] = React.useState(0);
     const [edit, setEdit] = React.useState({
         cap: false,
