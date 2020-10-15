@@ -26,7 +26,7 @@ import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import EditIcon from '@material-ui/icons/Edit'
 import Valoration from './Valoration';
-import { statusColors as colors } from '../Globales';
+import { statusColors as colors, states as estado } from '../Globales';
 import BarTitle from '../Componentes/BarTitle';
 import Add from '../Add';
 import firebase from '../../Inicializer/firebase';
@@ -180,8 +180,6 @@ export default function InfoManga({ manga, open, onClose }) {
     });
 
     const [editDialog, setEditD] = React.useState(false);
-
-    const estado = ['Siguiendo', 'Pendientes', 'Abandonados', 'Completos', 'Favoritos', 'Pausados'];
 
     const [newValue, setNewValue] = React.useState({
         lastchapter: manga.lastchapter,
