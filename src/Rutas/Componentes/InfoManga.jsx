@@ -35,6 +35,8 @@ import Hidden from '@material-ui/core/Hidden';
 require("firebase/firestore");
 require("firebase/auth");
 
+//Estilos
+
 const useStyles = makeStyles((theme) => ({
     root: {
         flexGrow: 1,
@@ -131,7 +133,7 @@ const useStyles = makeStyles((theme) => ({
 
 }));
 
-
+//Tabs
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -171,6 +173,9 @@ function a11yProps(index) {
 }
 
 export default function InfoManga({ manga, open, onClose }) {
+
+    //Constantes
+
     const classes = useStyles();
     const [value, setValue] = React.useState(0);
     const [edit, setEdit] = React.useState({
@@ -332,12 +337,12 @@ export default function InfoManga({ manga, open, onClose }) {
         let newInfo = info[index];
 
         return <React.Fragment key={index}>
-            <Grid item xs={12} sm={2} >
+            <Grid item xs={12} md={2} sm={4} >
                 <div className={classes.centro}>
                     <div className="label">{value}</div>
                 </div>
             </Grid>
-            <Grid item xs={12} sm={10}>
+            <Grid item xs={12} md={10} sm={6} >
                 <div className={classes.datos}>
                     <div>{
                         newInfo.map((categoria, indice) =>
@@ -376,7 +381,7 @@ export default function InfoManga({ manga, open, onClose }) {
                                 <BarTitle titleName={manga.titleName} />
                             </Grid>
                         </Hidden>
-                        <Grid item xs={12} sm={3}>
+                        <Grid item xs={12} sm={5} md={3}>
                             <Paper className={classes.paper}>
                                 <div className={classes.item}>
                                     <Valoration puntuacion={manga.punctuation} />
@@ -434,7 +439,7 @@ export default function InfoManga({ manga, open, onClose }) {
 
                             </Paper>
                         </Grid>
-                        <Grid item xs={12} sm={9}>
+                        <Grid item xs={12} sm={7} md={9}>
                             <Hidden only="xs">
 
                                 <BarTitle titleName={manga.titleName} />
@@ -470,10 +475,10 @@ export default function InfoManga({ manga, open, onClose }) {
                                         }
 
                                         return <React.Fragment key={index}>
-                                            <Grid item xs={12} sm={2}>
+                                            <Grid item xs={12} md={2} sm={4}>
                                                 <div className={(value === "Estado de Publicación" || value === "Otros Nombres" ? (classes.publication + " ") : "") + "label " + value}>{value}</div>
                                             </Grid>
-                                            <Grid item xs={12} sm={10}>
+                                            <Grid item xs={12} md={10} sm={6}>
                                                 <div className={classes.datos}>{
                                                     (obligatorias.includes(value) && newInfo) ?
                                                         <Link onClick={() => onClose()}
@@ -495,10 +500,10 @@ export default function InfoManga({ manga, open, onClose }) {
                             </TabPanel>
                             <TabPanel value={value} index={1}>
                                 <Grid container>
-                                    <Grid item xs={12} sm={2}>
+                                    <Grid item xs={12} md={2} sm={4}>
                                         <div className={classes.publication + " label cero ancho"}>Último Capítulo</div>
                                     </Grid>
-                                    <Grid item xs={12} sm={10}>
+                                    <Grid item xs={12} md={10} sm={6}>
                                         {edit.cap ? <div className={classes.datos + " " + classes.flex}>
                                             <TextField style={{ width: "8ch" }} type="number" onChange={handleChange2} className={classes.edit} autoFocus name="lastchapter" value={newValue.lastchapter} />
                                             <IconButton onClick={() => {
@@ -529,10 +534,10 @@ export default function InfoManga({ manga, open, onClose }) {
                                         }
                                     </Grid>
                                     {divider()}
-                                    <Grid item xs={12} sm={2}>
+                                    <Grid item xs={12} md={2} sm={4}>
                                         <div className="label Etiquetas" style={{ marginTop: "5px" }}>Etiquetas</div>
                                     </Grid>
-                                    <Grid item xs={12} sm={10}>
+                                    <Grid item xs={12} md={10} sm={6}>
                                         <div className={classes.chips}>
                                             {manga.tags && manga.tags.map((value) =>
                                                 <Link
@@ -590,10 +595,10 @@ export default function InfoManga({ manga, open, onClose }) {
                                         </div>
                                     </Grid>
                                     {divider()}
-                                    <Grid item xs={12} sm={2}>
+                                    <Grid item xs={12} md={2} sm={4}>
                                         <div className="label">Link de Lectura</div>
                                     </Grid>
-                                    <Grid item xs={12} sm={10}>
+                                    <Grid item xs={12} md={10} sm={6}>
                                         <div className={classes.datos}>
                                             <a
                                                 className={classes.noStyledLink}
@@ -606,17 +611,17 @@ export default function InfoManga({ manga, open, onClose }) {
                                         </div>
                                     </Grid>
                                     {divider()}
-                                    <Grid item xs={12} sm={2}>
+                                    <Grid item xs={12} md={2} sm={4}>
                                         <div className="label"> Otros Link</div>
                                     </Grid>
-                                    <Grid item xs={12} sm={10}>
+                                    <Grid item xs={12} md={10} sm={6}>
                                         <div className={classes.datos}>{finalLink || "N/A"}</div>
                                     </Grid>
                                     {divider()}
-                                    <Grid item xs={12} sm={2}>
+                                    <Grid item xs={12} md={2} sm={4}>
                                         <div className="label">Ubicación</div>
                                     </Grid>
-                                    <Grid item xs={12} sm={10}>
+                                    <Grid item xs={12} md={10} sm={6}>
                                         <div className={classes.datos}>{manga.ubication || "N/A"}</div>
                                     </Grid>
                                     {divider()}
