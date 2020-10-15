@@ -39,3 +39,48 @@ code {
 #pencil{
   bottom: 4px;
 }
+
+/*ROUTER ANIMATION*/
+
+.left-out-enter{
+  opacity:0;
+  transform: translateX(100%);
+}
+
+.left-out-enter.left-out-enter-active{
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.left-out-exit{
+  opacity: 1;
+  transform: translateX(100%);
+}
+
+.left-out-exit-active{
+  opacity:0;
+  transform: translateX(0);
+}
+  
+.status{
+  font-family: "Luckiest Guy";
+  font-size: 1.5em
+}
+
+.ocult{
+  width:0;
+  transition: width 300ms;
+  overflow-x: hidden;
+}
+
+.status:hover ~ .ocult{
+  width: 30px;
+}
+
+.status:hover{
+  cursor: pointer;
+}
+
+.ocult:hover{
+  width: 30px;
+}
