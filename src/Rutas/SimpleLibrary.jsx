@@ -22,7 +22,7 @@ const CssTextField = withStyles({
     root: {
         '& .MuiOutlinedInput-root': {
             '& fieldset': {
-                borderColor: 'blue',
+                borderColor: '#2196f3',
             },
         },
     },

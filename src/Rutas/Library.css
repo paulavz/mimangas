@@ -7,10 +7,11 @@
 }
 
 .active.MuiButton-outlinedPrimary{
-    background:aqua;
+    background:#2196f3;
+    color:white;
 }
 
 .active.MuiButton-outlinedPrimary:hover{
-    background:aqua;
+    background:#2196f3;
+    color:white;
 }
-
