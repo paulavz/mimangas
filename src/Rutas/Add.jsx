@@ -24,10 +24,11 @@ import CancelIcon from '@material-ui/icons/Cancel';
 import Collapse from '@material-ui/core/Collapse';
 import CloseIcon from '@material-ui/icons/Close';
 import Alert from '@material-ui/lab/Alert';
-import { types,
-    states as estado, 
-    demographies as demografia, 
-    categories as categorias 
+import {
+    types,
+    states as estado,
+    demographies as demografia,
+    categories as categorias
 } from './Globales';
 import './Add.css'
 require("firebase/auth");
@@ -137,7 +138,7 @@ class Add extends Component {
     }
 
     componentDidMount() {
-        if(this.props.manga){
+        if (this.props.manga) {
             this.setState({
                 ...this.props.manga,
                 preview: this.props.manga.cover || ""
@@ -213,14 +214,14 @@ class Add extends Component {
                 }
             }
         }
-        if(!this.state.createAt)
-        data = {
-            ...data,
-            createAt: firebase.firestore.FieldValue.serverTimestamp(),
-        }
-        if(this.state.id){
+        if (!this.state.createAt)
+            data = {
+                ...data,
+                createAt: firebase.firestore.FieldValue.serverTimestamp(),
+            }
+        if (this.state.id) {
             this.editData(data)
-        }else{
+        } else {
             this.saveData(data);
         }
 
@@ -313,6 +314,15 @@ class Add extends Component {
             ).then(() => {
                 console.log("Data guardada")
             })
+
+        if (this.state.tags.length > 0) {
+            db.collection("users")
+                .doc(user.uid)
+                .set({
+                    tags: firebase.firestore.FieldValue.arrayUnion(...this.state.tags)
+                },
+                    { merge: true })
+        }
 
         this.setState({
             titleName: '',
