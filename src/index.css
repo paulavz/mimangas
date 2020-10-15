@@ -84,3 +84,61 @@ code {
 .ocult:hover{
   width: 30px;
 }
+
+.padding{
+  padding: 10px;
+}
+
+@media (max-width: 600px) {
+  .padding{
+    padding: 0px;
+  }
+
+  .label{
+    background-color: #e91e63;
+    text-align: center;
+    color: white;
+    font-weight: bold;
+    margin-top: 5px;
+    font-size: 15px; 
+  }
+
+  .cero{
+    margin-top: 0;
+  }
+
+  .ancho{
+    height: 20px !important;
+    font-size: 15px !important;
+  }
+
+  .Tipo{
+    margin-top:0;
+  }
+
+  .chipspacing{
+    margin: 3px;
+  }
+
+  .Etiquetas{
+    margin-bottom: 5px;
+    margin-top: -5px !important;
+  }
+}
+
+
+@media (min-width:600px){
+  .label{
+    background-color: #e91e63;
+    text-align: center;
+    border-radius: 30px;
+    padding: 2px;
+    border: 2px solid white;
+    color: white;
+    font-weight: bold;
+    width: 118px;
+    font-size: 15px; 
+  }
+  
+}
+
