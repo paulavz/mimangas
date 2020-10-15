@@ -3,7 +3,7 @@ export const types = ['Manga', 'Manhwa', 'Manhua', 'Cómic', 'Original'];
 export const demographies = ['Shounen', 'Shoujo', 'Josei', 'Seinen', 'Kodomo'];
 
 export const states = [
-    "Siguiendo", "Completos", "Favoritos", "Pausados", "Pendientes", "Abandonados"
+    "Siguiendo", "Completos", "Favoritos", "OneShot", "Pausados", "Pendientes", "Abandonados"
 ];
 
 export const categories = [
@@ -51,6 +51,7 @@ export const statusColors = {
     "Siguiendo": "lightCyan",
     "Completos": "lightGreen",
     "Favoritos": "gold",
+    "OneShot": "rose",
     "Pausados": "midnightBlue",
     "Pendientes": "orange",
     "Abandonados": "crimson",
