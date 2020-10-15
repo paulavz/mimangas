@@ -110,8 +110,9 @@ function buscar(filtros, mangas) {
     const { buscador, punctuation } = filtros;
 
     const iguales = ["demo", "type", "status"];
-    const includes = ["author_artist", "fansub"];
+    const includes = ["author_artist"];
     const arrays = ["tags", "category"];
+    const strArrIncludes = ["fansub"];
 
     let nuevoMangas = mangas;
 
@@ -147,7 +148,15 @@ function buscar(filtros, mangas) {
         if(filtros[nombre]){
             let campos =nombre.split("_");
             nuevoMangas = nuevoMangas.filter((manga) => campos.some(
-                (campo) => manga[campo] &&manga[campo].toLowerCase().includes(filtros[nombre].toLowerCase())
+                (campo) => manga[campo] && manga[campo].toLowerCase().includes(filtros[nombre].toLowerCase())
+            ));
+        }
+    });
+
+    strArrIncludes.forEach((nombre)=>{
+        if(filtros[nombre]){
+            nuevoMangas = nuevoMangas.filter((manga) => manga[nombre] && manga[nombre].some(
+                (value) => value.toLowerCase().includes(filtros[nombre].toLowerCase())
             ));
         }
     });

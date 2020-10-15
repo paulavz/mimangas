@@ -272,7 +272,11 @@ export default function InfoManga({ manga, open, onClose }) {
         "",
     manga.author,
     manga.artist,
-    manga.otherNames ? manga.otherNames.concat([manga.englishtitle, manga.spanishtitle]).filter((value) => Boolean(value)).join(", ") : "",
+    manga.otherNames ? 
+    manga.otherNames
+        .concat([manga.englishtitle, manga.spanishtitle])
+        .filter((value) => Boolean(value)).join(", ") : 
+    [manga.englishtitle, manga.spanishtitle].filter((value) => Boolean(value)).join(", "),
     manga.demo,
     manga.synopsis,
     manga.category, "", "", "", ""]
