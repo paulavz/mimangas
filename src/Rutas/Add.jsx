@@ -302,6 +302,15 @@ class Add extends Component {
             ).then(() => {
                 console.log("Data editada")
             });
+
+        if (this.state.tags.length > 0) {
+            db.collection("users")
+                .doc(user.uid)
+                .set({
+                    tags: firebase.firestore.FieldValue.arrayUnion(...this.state.tags)
+                },
+                    { merge: true })
+        }
     }
 
     saveData(data) {
