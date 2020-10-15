@@ -204,7 +204,7 @@ export default function SimpleLibrary({ mangas, states }) {
                 </Grid>
             </Grid>
         </div>
-        
+
         <div className="add">
             <IconButton size="small" onClick={() => setOpenAdd(!openAdd)}>
                 <Avatar className={classes.pink}>
@@ -215,7 +215,7 @@ export default function SimpleLibrary({ mangas, states }) {
         <Add openAdd={openAdd} />
         <MostradorMangas
             spacing={2}
-            style={{textAlign: "center"}}
+            style={{ textAlign: "center" }}
             mangas={mangasFiltrados}
             paginationProps={{
                 className: classes.paginacion,

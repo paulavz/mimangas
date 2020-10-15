@@ -124,6 +124,13 @@ code {
     margin-bottom: 5px;
     margin-top: -5px !important;
   }
+
+  .MuiTablePagination-caption{
+    display:none;
+  }
+  .MuiTablePagination-input{
+    display: none !important;
+  }
 }
 
 
