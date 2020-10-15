@@ -13,7 +13,7 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import SimpleLibrary from './SimpleLibrary';
 import Avanced from './Avanced';
-import { states as realStates } from './Globales';
+import { states as realStates, Global } from './Globales';
 import "./Library.css";
 require("firebase/auth");
 
@@ -51,13 +51,15 @@ export default function Library(props) {
     const classes = useStyles();
 
     const [mangas, setMangas] = useState([]);
+    const [tags, setTags] = useState([]);
     const [cargando, setCargando] = useState(true);
 
     useEffect(() => {
         let user = firebase.auth().currentUser;
 
-        let coleccion = firebase.firestore().collection("users").doc(user.uid)
-            .collection("mangas").orderBy("createAt", "desc");
+        let userRoot = firebase.firestore().collection("users").doc(user.uid);
+
+        let coleccion = userRoot.collection("mangas").orderBy("createAt", "desc");
 
 
         let unsubscribe = coleccion.onSnapshot(
@@ -70,7 +72,17 @@ export default function Library(props) {
             (error) => console.log(error.message)
         );
 
-        return () => unsubscribe();
+        let unsubscribeTags = userRoot.onSnapshot(
+            function(doc) {
+                Global.tags = doc.data().tags;
+                setTags(doc.data().tags);
+            }
+        );
+
+        return () => {
+            unsubscribe();
+            unsubscribeTags();
+        };
 
     }, []);
 
@@ -122,6 +134,7 @@ export default function Library(props) {
                     <Route path="/AvancedSearch" render={()=><Avanced
                         estados={states}
                         mangas={mangas}
+                        tags={tags}
                     />} />
                     <Route path="/Library" render={()=><SimpleLibrary
                         mangas={mangas}

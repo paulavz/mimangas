@@ -28,7 +28,8 @@ import {
     types,
     states as estado,
     demographies as demografia,
-    categories as categorias
+    categories as categorias,
+    Global
 } from './Globales';
 import './Add.css'
 require("firebase/auth");
@@ -346,6 +347,7 @@ class Add extends Component {
             cover: '',
             author: '',
             synopsis: '',
+            demo: 'Shounen',
             lastchapter: '',
             ubication: '',
             otherlink: [],
@@ -423,6 +425,7 @@ class Add extends Component {
                                 SelectProps={{
                                     native: true,
                                 }}
+                                value={this.state.status}
                                 variant="outlined"
                             >
                                 {estado.map((value) =>
@@ -445,6 +448,7 @@ class Add extends Component {
                                 SelectProps={{
                                     native: true,
                                 }}
+                                value={this.state.type}
                                 variant="outlined"
                             >
                                 {types.map((value) =>
@@ -467,6 +471,7 @@ class Add extends Component {
                                 SelectProps={{
                                     native: true,
                                 }}
+                                value={this.state.demo}
                                 variant="outlined"
                             >
                                 {demografia.map((value) =>
@@ -642,11 +647,16 @@ class Add extends Component {
                                 InputProps={{
                                     inputProps: {
                                         className: classes.inputChip,
+                                        list: "tags",
                                     }
                                 }}
                                 variant="outlined"
                                 label='Etiquetas'
                             />
+                            {Global.tags.length>0 &&
+                            <datalist id="tags">
+                                {Global.tags.map((value, index) => <option value={value} key={value + index} />)}
+                            </datalist>}
                         </Grid>
 
 
