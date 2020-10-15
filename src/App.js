@@ -6,16 +6,18 @@ import {
 import PrivateRoute from './PrivateRoute';
 import Formulario from './Rutas/Formulario';
 import Library from './Rutas/Library';
+import { ThemeProvider } from '@material-ui/core/styles';
+import theme from './Inicializer/temaConfig';
 
 function App() {
   return (
     <Router>
-      <div>
+      <ThemeProvider theme={theme}>
         <Switch>
           <PrivateRoute path="/Dashboard" logged={true} component={Library} />
           <PrivateRoute path="/" logged={false} component={Formulario} />
         </Switch>
-      </div>
+      </ThemeProvider>
     </Router>
   );
 }

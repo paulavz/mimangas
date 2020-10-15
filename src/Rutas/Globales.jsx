@@ -2,6 +2,8 @@ export const types = ['Manga', 'Manhwa', 'Manhua', 'Cómic', 'Original'];
 
 export const demographies = ['Shounen', 'Shoujo', 'Josei', 'Seinen', 'Kodomo'];
 
+
+
 export const states = [
     "Siguiendo", "Completos", "Favoritos", "OneShot", "Pausados", "Pendientes", "Abandonados"
 ];
@@ -48,26 +50,27 @@ export const categories = [
 ];
 
 export const statusColors = {
-    "Siguiendo": "lightCyan",
-    "Completos": "lightGreen",
+
+    "Siguiendo": "#d500f9",
+    "Completos": "#A2D729",
     "Favoritos": "gold",
-    "OneShot": "rose",
-    "Pausados": "midnightBlue",
-    "Pendientes": "orange",
-    "Abandonados": "crimson",
+    "OneShot": "#1975D2",
+    "Pausados": "#F86624",
+    "Pendientes": "#6E2594",
+    "Abandonados": "#ea3546",
 };
 
 export class Global {
 
-    static get tags(){
-        if(Global.allTags){
+    static get tags() {
+        if (Global.allTags) {
             return Global.allTags;
         }
         return [];
     }
 
-    static set tags(valor){
-        if(valor!==Global.tags){
+    static set tags(valor) {
+        if (valor !== Global.tags) {
             Global.allTags = valor;
         }
     }
