@@ -17,7 +17,7 @@ require("firebase/auth");
 const useStyles = (theme) => ({
     root: {
         width: "100%",
-        maxWidth: 300,
+        maxWidth: 250,
         display: "inline-block",
     },
     puntos: {

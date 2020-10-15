@@ -447,7 +447,7 @@ export default function Avanced({ estados, mangas }) {
         <Grid item xs={9} md={9} className={movil ? classes.opcionesMovil : ""} >
             <MostradorMangas
                 mangas={mangasFiltrados}
-                style={{ minHeight: "90%" }}
+                style={{ minHeight: "90%", textAlign: "center" }}
                 paginationProps={{
                     rowsPerPageOptions: [12, 24, 40]
                 }}

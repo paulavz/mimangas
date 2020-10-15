@@ -33,7 +33,7 @@ export default function ({ mangas, itemsPorFila, initialRPP, paginationProps, ..
         <Grid container {...otrasProps} >
             {mangas.slice(rowsPerPage * page, (rowsPerPage * page) + rowsPerPage)
                 .map((value, index) =>
-                    <Grid item md={3} sm={4} xs={6}
+                    <Grid item md={3} sm={6} xs={12}
                         style={itemsPorFila ? {
                             maxWidth: `${100 / itemsPorFila}%`,
                             textAlign: "center"

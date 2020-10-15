@@ -108,7 +108,7 @@ export default function SimpleLibrary({ mangas, states }) {
     const [openAdd, setOpenAdd] = useState(false);
     const [buscador, setBuscador] = useState("");
 
-    const large = useMediaQuery('(min-width:1000px)');
+    const large = useMediaQuery('(min-width:1100px)');
 
     useEffect(() => {
         const filtrados = mangas.filter(
@@ -129,7 +129,7 @@ export default function SimpleLibrary({ mangas, states }) {
 
     return <div className={classes.root} >
         <Grid container spacing={2}>
-            <Grid item xs={9}>
+            <Grid item sm={9} xs={12}>
                 <CssTextField
                     fullWidth
                     onChange={handleChangeBuscador}
@@ -140,7 +140,7 @@ export default function SimpleLibrary({ mangas, states }) {
                     type="search"
                 />
             </Grid>
-            <Grid item xs={3}>
+            <Grid item sm={3} xs={12}>
                 <Link
                     to={{
                         pathname: "/AvancedSearch",
@@ -173,14 +173,6 @@ export default function SimpleLibrary({ mangas, states }) {
                     </Button>)}
             </ButtonGroup>
 
-            <div className="add">
-                <IconButton size="small" onClick={() => setOpenAdd(!openAdd)}>
-                    <Avatar className={classes.pink}>
-                        <AddIcon />
-                    </Avatar>
-                </IconButton>
-            </div>
-            <Add openAdd={openAdd} />
         </div>
 
         <div className={classes.selector}>
@@ -212,8 +204,18 @@ export default function SimpleLibrary({ mangas, states }) {
                 </Grid>
             </Grid>
         </div>
+        
+        <div className="add">
+            <IconButton size="small" onClick={() => setOpenAdd(!openAdd)}>
+                <Avatar className={classes.pink}>
+                    <AddIcon />
+                </Avatar>
+            </IconButton>
+        </div>
+        <Add openAdd={openAdd} />
         <MostradorMangas
             spacing={2}
+            style={{textAlign: "center"}}
             mangas={mangasFiltrados}
             paginationProps={{
                 className: classes.paginacion,
