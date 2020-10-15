@@ -163,8 +163,7 @@ function buscar(filtros, mangas) {
     return nuevoMangas;
 }
 
-const tagsPrueba = ["isekai", "4-koma", "musica", "buen dibujo", "lentes"];
-export default function Avanced({ estados, mangas }) {
+export default function Avanced({ estados, mangas, tags }) {
     const classes = useStyles();
 
     const movil = useMediaQuery('(max-width:800px)');
@@ -374,7 +373,7 @@ export default function Avanced({ estados, mangas }) {
                 label='Etiquetas'
             />
             <datalist id="tags">
-                {tagsPrueba.map((value, index) => <option value={value} key={value + index} />)}
+                {tags.map((value, index) => <option value={value} key={value + index} />)}
             </datalist>
 
 

@@ -7,10 +7,44 @@ export const states = [
 ];
 
 export const categories = [
-    'Romance',
-    'Misterio',
-    'Acción',
-    'Comedia'
+    "Acción",
+    "Artes Marciales",
+    "Aventura",
+    "Boys Love",
+    "Ciencia Ficción",
+    "Comedia",
+    "Demonios",
+    "Deporte",
+    "Drama",
+    "Ecchi",
+    "Fantasia",
+    "Gender Bender",
+    "Girls Love",
+    "Gore",
+    "Guerra",
+    "Harem",
+    "Historia",
+    "Horror",
+    "Magia",
+    "Mecha",
+    "Misterio",
+    "Musica",
+    "Oeste",
+    "Parodia",
+    "Policiaco",
+    "Psicológico",
+    "Realidad",
+    "Reencarnación",
+    "Romance",
+    "Samurái",
+    "Slice of Life",
+    "Sobrenatural",
+    "Superpoderes",
+    "Supervivencia",
+    "Thriller",
+    "Tragedia",
+    "Vampiros",
+    "Vida Escolar"
 ];
 
 export const statusColors = {
@@ -21,3 +55,19 @@ export const statusColors = {
     "Pendientes": "orange",
     "Abandonados": "crimson",
 };
+
+export class Global {
+
+    static get tags(){
+        if(Global.allTags){
+            return Global.allTags;
+        }
+        return [];
+    }
+
+    static set tags(valor){
+        if(valor!==Global.tags){
+            Global.allTags = valor;
+        }
+    }
+}
