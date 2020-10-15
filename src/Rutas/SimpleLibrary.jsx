@@ -77,7 +77,7 @@ const useStyles = makeStyles((theme) => ({
         width: theme.spacing(7),
         height: theme.spacing(7),
     },
-    cardNew:{
+    cardNew: {
         height: 300,
         border: "1px solid black",
         '&:hover': {
@@ -100,7 +100,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function SimpleLibrary({ mangas, states }){
+export default function SimpleLibrary({ mangas, states }) {
     const classes = useStyles();
 
     const [active, setActive] = useState("Todos");
@@ -141,26 +141,26 @@ export default function SimpleLibrary({ mangas, states }){
                 />
             </Grid>
             <Grid item xs={3}>
-                <Link 
+                <Link
                     to={{
                         pathname: "/AvancedSearch",
                         state: {
                             buscador: buscador,
                         },
-                    }} style={{textDecoration: "none"}} ><Button
-                    size="large"
-                    className="buscar"
-                    fullWidth
-                    variant="contained"
-                    color="secondary"
-                >
-                    Búsqueda Avanzada
+                    }} style={{ textDecoration: "none" }} ><Button
+                        size="large"
+                        className="buscar"
+                        fullWidth
+                        variant="contained"
+                        color="secondary"
+                    >
+                        Búsqueda Avanzada
                 </Button></Link>
             </Grid>
 
         </Grid>
 
-            <Divider className={classes.divider} variant="middle" />
+        <Divider className={classes.divider} variant="middle" />
         <div className={classes.colbutton}>
             <ButtonGroup size="large" color="primary" aria-label="large outlined primary button group">
                 {states.map((value) =>
@@ -174,7 +174,7 @@ export default function SimpleLibrary({ mangas, states }){
             </ButtonGroup>
 
             <div className="add">
-                <IconButton size="small" onClick={()=>setOpenAdd(!openAdd)}>
+                <IconButton size="small" onClick={() => setOpenAdd(!openAdd)}>
                     <Avatar className={classes.pink}>
                         <AddIcon />
                     </Avatar>
@@ -212,22 +212,22 @@ export default function SimpleLibrary({ mangas, states }){
                 </Grid>
             </Grid>
         </div>
-        <MostradorMangas 
-            spacing={2} 
+        <MostradorMangas
+            spacing={2}
             mangas={mangasFiltrados}
             paginationProps={{
                 className: classes.paginacion,
-                rowsPerPageOptions: [10,20,50,100]
+                rowsPerPageOptions: [10, 20, 50, 100]
             }}
-            itemsPorFila={large ? 5: null}
+            itemsPorFila={large ? 5 : null}
         />
 
-        {mangas.length===0 && 
+        {mangas.length === 0 &&
             <Grid container spacing={2} >
                 <Grid item md={3} sm={6} xs={6} className={classes.gridManga} >
-                    <Card className={classes.cardNew} onClick={()=>setOpenAdd(!openAdd)} >
+                    <Card className={classes.cardNew} onClick={() => setOpenAdd(!openAdd)} >
                         <div className={classes.cardNewIcon}>
-                            <AddIcon style={{fontSize: 50}} />
+                            <AddIcon style={{ fontSize: 50 }} />
                             <Typography>Añadir primer manga</Typography>
                         </div>
                     </Card>

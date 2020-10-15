@@ -14,6 +14,7 @@ import CreateIcon from '@material-ui/icons/Create';
 import Box from '@material-ui/core/Box';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import Paper from '@material-ui/core/Paper';
+import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import pink from '@material-ui/core/colors/pink';
 import CancelIcon from '@material-ui/icons/Cancel';
 import green from '@material-ui/core/colors/green';
@@ -28,8 +29,11 @@ import AppBar from '@material-ui/core/AppBar';
 import Grid from '@material-ui/core/Grid';
 import EditIcon from '@material-ui/icons/Edit'
 import Valoration from './Valoration';
-import { statusColors as colors} from '../Globales';
+import { statusColors as colors } from '../Globales';
 import Add from '../Add';
+import firebase from '../../Inicializer/firebase';
+require("firebase/firestore");
+require("firebase/auth");
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -42,6 +46,7 @@ const useStyles = makeStyles((theme) => ({
         display: "inline-flex",
         fontFamily: "Pacifico, cursive"
     },
+
     paper: {
         padding: theme.spacing(2),
         textAlign: 'center',
@@ -95,10 +100,6 @@ const useStyles = makeStyles((theme) => ({
         position: "relative",
         bottom: "4px",
     },
-    status: {
-        fontFamily: "Luckiest Guy",
-        fontSize: "1.5em",
-    },
     close: {
         width: "100%",
         textAlign: "center",
@@ -129,7 +130,7 @@ const useStyles = makeStyles((theme) => ({
         right: 0,
         top: 0,
     },
-    demo1 : {
+    demo1: {
         position: "relative",
     },
 }));
@@ -202,6 +203,35 @@ export default function InfoManga({ manga, open, onClose }) {
 
         console.log(newValue)
     };
+
+    const updateData = (name, data) => {
+        const user = firebase.auth().currentUser;
+        const db = firebase.firestore();
+        db.collection("users")
+            .doc(user.uid)
+            .collection("mangas").doc(manga.id).update({
+                [name]: data
+            }).catch(console.log)
+    }
+
+    const updateTag = (name, data) => {
+        const user = firebase.auth().currentUser;
+        const db = firebase.firestore();
+        db.collection("users")
+            .doc(user.uid)
+            .collection("mangas").doc(manga.id).update({
+                [name]: firebase.firestore.FieldValue.arrayUnion(data)
+            }).catch(console.log)
+        const database = firebase.firestore();
+        database.collection("users")
+            .doc(user.uid)
+            .set({
+                [name]: firebase.firestore.FieldValue.arrayUnion(data)
+            },
+                { merge: true })
+
+    }
+
     const label = ["Tipo", "País de Origen", "Autor", "Artista", "Otros Nombres", "Demografía", "Sinopsis", "Género", "Estado de Publicación", "Revista", "Serializado", "Editorial"];
     let newLecture = manga.lecture ? manga.lecture : "";
     if (newLecture !== "") {
@@ -364,7 +394,13 @@ export default function InfoManga({ manga, open, onClose }) {
                                     )}
 
                                 </TextField>
-                                    <IconButton className={classes.marginLeft} size="small">
+                                    <IconButton onClick={() => {
+                                        updateData("status", newValue.status);
+                                        setEdit({
+                                            ...edit,
+                                            status: false
+                                        })
+                                    }} className={classes.marginLeft} size="small">
                                         <SaveIcon style={{ color: green[500] }} fontSize="small" />
                                     </IconButton>
                                     <IconButton onClick={() => setEdit({
@@ -375,13 +411,15 @@ export default function InfoManga({ manga, open, onClose }) {
                                     </IconButton>
                                 </div> :
                                     <div className={classes.flex}>
-                                        <div className={classes.status} style={{ color: colors[manga.status] }}>{manga.status}</div>
-                                        <IconButton onClick={() => setEdit({
-                                            ...edit,
-                                            status: true
-                                        })} size="small">
-                                            <CreateIcon />
-                                        </IconButton>
+                                        <div className={classes.status + " status"} style={{ color: colors[manga.status] }}>{manga.status}</div>
+                                        <div className="ocult">
+                                            <IconButton onClick={() => setEdit({
+                                                ...edit,
+                                                status: true
+                                            })} size="small">
+                                                <ArrowDropDownIcon />
+                                            </IconButton>
+                                        </div>
                                     </div>
                                 }
 
@@ -398,14 +436,14 @@ export default function InfoManga({ manga, open, onClose }) {
                                     <AntTab label={<InfoIcon />} {...a11yProps(0)} />
                                     <AntTab label={<AddCircleIcon />} {...a11yProps(1)} />
 
-                                    
+
 
                                 </AntTabs>
                                 <IconButton
-                                    onClick={()=>setEditD(!editDialog)}
+                                    onClick={() => setEditD(!editDialog)}
                                     className={classes.rigthAbsolute}
                                 >
-                                    <EditIcon/>
+                                    <EditIcon />
                                 </IconButton>
                                 <Typography className={classes.padding} />
                             </div>
@@ -460,7 +498,13 @@ export default function InfoManga({ manga, open, onClose }) {
                                     <Grid item xs={10}>
                                         {edit.cap ? <div className={classes.datos + " " + classes.flex}>
                                             <TextField style={{ width: "8ch" }} type="number" onChange={handleChange2} className={classes.edit} autoFocus name="lastchapter" value={newValue.lastchapter} />
-                                            <IconButton className={classes.marginLeft} size="small">
+                                            <IconButton onClick={() => {
+                                                updateData("lastchapter", newValue.lastchapter);
+                                                setEdit({
+                                                    ...edit,
+                                                    cap: false
+                                                })
+                                            }} className={classes.marginLeft} size="small">
                                                 <SaveIcon style={{ color: green[500] }} fontSize="small" />
                                             </IconButton>
                                             <IconButton onClick={() => setEdit({
@@ -505,7 +549,19 @@ export default function InfoManga({ manga, open, onClose }) {
                                                 </Link>)}
                                             {
                                                 edit.tags ? <div><TextField style={{ width: "12ch" }} onChange={handleChange2} className={classes.edit} autoFocus name="tags" value={newValue.tags} />
-                                                    <IconButton className={classes.marginLeft} size="small">
+                                                    <IconButton onClick={() => {
+                                                        // let newTag = manga.tags;
+                                                        // newTag.push(newValue.tags)
+                                                        updateTag("tags", newValue.tags);
+                                                        setEdit({
+                                                            ...edit,
+                                                            tags: false
+                                                        });
+                                                        setNewValue({
+                                                            ...newValue,
+                                                            tags: ""
+                                                        });
+                                                    }} className={classes.marginLeft} size="small">
                                                         <CheckCircleIcon style={{ color: green[500] }} fontSize="small" />
                                                     </IconButton>
                                                     <IconButton onClick={() => {
