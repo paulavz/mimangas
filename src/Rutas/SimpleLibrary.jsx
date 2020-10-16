@@ -161,7 +161,6 @@ export default function SimpleLibrary({ mangas, states }) {
         </Grid>
 
         <Divider className={classes.divider} variant="middle" />
-        <div>Hola Mundo</div>
         <div className={classes.colbutton}>
             <ButtonGroup size="large" color="primary" aria-label="large outlined primary button group">
                 {states.map((value) =>
