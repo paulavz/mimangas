@@ -231,7 +231,7 @@ export default function InfoManga({ manga, open, onClose }) {
 
     }
 
-    const label = ["Tipo", "País de Origen", "Autor", "Artista", "Otros Nombres", "Demografía", "Sinopsis", "Género", "Estado de Publicación", "Revista", "Serializado", "Editorial"];
+    const label = ["Tipo", "País de Origen", "Autor", "Artista", "Otros Nombres", "Demografía", "Sinopsis", "Género", "Fansubs", "Estado de Publicación", "Revista", "Serializado", "Editorial"];
     let newLecture = manga.lecture ? manga.lecture : "";
     if (newLecture !== "") {
         if (newLecture.includes("www")) {
@@ -279,7 +279,9 @@ export default function InfoManga({ manga, open, onClose }) {
     [manga.englishtitle, manga.spanishtitle].filter((value) => Boolean(value)).join(", "),
     manga.demo,
     manga.synopsis,
-    manga.category, "", "", "", ""]
+    manga.category, 
+    manga.fansub ? manga.fansub.join(", ") : "",
+    "", "", "", ""]
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
