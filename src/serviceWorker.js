@@ -54,6 +54,10 @@ export function register(config) {
   }
 }
 
+self.addEventListener('install', function(event) {
+  console.log("Evento install")
+});
+
 function registerValidSW(swUrl, config) {
   navigator.serviceWorker
     .register(swUrl)
