@@ -125,7 +125,6 @@ export default function Library(props) {
                     </Toolbar>
 
                 </AppBar>
-                <h1>Hola Mundo</h1>
                 <div className={classes.gridd}>
 
                     {!cargando &&
