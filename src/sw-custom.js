@@ -21,9 +21,7 @@ if ('function' === typeof importScripts) {
 
         // https://github.com/GoogleChrome/workbox/issues/2095
         const handler = workbox.precaching.createHandlerBoundToURL('/index.html');
-        const navigationRoute = new workbox.routing.NavigationRoute(handler, {
-            denylist: [/^\/__/, /\/[^\/]+.[^\/]+$/]
-        });
+        const navigationRoute = new workbox.routing.NavigationRoute(handler);
         workbox.routing.registerRoute(navigationRoute);
 
         workbox.routing.registerRoute(
