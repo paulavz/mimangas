@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {
-  BrowserRouter as Router,
-  Switch, Route, NavLink, Redirect, useLocation
+    BrowserRouter as Router,
+    Switch, Route, NavLink, Redirect, useLocation
 } from "react-router-dom";
 import { makeStyles } from '@material-ui/core/styles';
 import firebase from "../Inicializer/firebase";
@@ -65,7 +65,7 @@ export default function Library(props) {
         let unsubscribe = coleccion.onSnapshot(
             function (snap) {
                 let mangasArray = [];
-                snap.forEach((doc) => mangasArray.push({...doc.data(), id: doc.id}));
+                snap.forEach((doc) => mangasArray.push({ ...doc.data(), id: doc.id }));
                 setMangas(mangasArray);
                 setCargando(false);
             },
@@ -73,7 +73,7 @@ export default function Library(props) {
         );
 
         let unsubscribeTags = userRoot.onSnapshot(
-            function(doc) {
+            function (doc) {
                 Global.tags = doc.data().tags;
                 setTags(doc.data().tags);
             }
@@ -103,48 +103,49 @@ export default function Library(props) {
     return (
         <div className={classes.root}>
             <Router basename="/Dashboard" >
-            <AppBar position="static">
-                <Toolbar>
-                    <NavLink to={"/Library"} style={{color: "white"}} activeStyle={{display: "none"}} >
-                        <IconButton
-                            edge="start"
-                            color="inherit"
-                            aria-label="lib"
-                            title="Volver"
-                        >
-                            <ArrowBackIcon />
-                        </IconButton>
-                    </NavLink>
-                    <Typography variant="h6" className={classes.title}>
-                        Mis Mangas
+                <AppBar position="static">
+                    <Toolbar>
+                        <NavLink to={"/Library"} style={{ color: "white" }} activeStyle={{ display: "none" }} >
+                            <IconButton
+                                edge="start"
+                                color="inherit"
+                                aria-label="lib"
+                                title="Volver"
+                            >
+                                <ArrowBackIcon />
+                            </IconButton>
+                        </NavLink>
+                        <Typography variant="h6" className={classes.title}>
+                            Mis Mangas
                     </Typography>
-                    <IconButton edge="start" onClick={cerrar} color="inherit" aria-label="menu">
-                        <ExitToAppIcon />
-                    </IconButton>
+                        <IconButton edge="start" onClick={cerrar} color="inherit" aria-label="menu">
+                            <ExitToAppIcon />
+                        </IconButton>
 
-                </Toolbar>
+                    </Toolbar>
 
-            </AppBar>
-            <div className={classes.gridd}>
+                </AppBar>
+                <h1>Hola Mundo</h1>
+                <div className={classes.gridd}>
 
-            {!cargando && 
-                <div>
-                {pathname!=="/Dashboard/AvancedSearch" && <Redirect to="/Library" />}
-                <Switch>
-                    <Route path="/AvancedSearch" render={()=><Avanced
-                        estados={states}
-                        mangas={mangas}
-                        tags={tags}
-                    />} />
-                    <Route path="/Library" render={()=><SimpleLibrary
-                        mangas={mangas}
-                        states={states}
-                    />} />
-                </Switch>
+                    {!cargando &&
+                        <div>
+                            {pathname !== "/Dashboard/AvancedSearch" && <Redirect to="/Library" />}
+                            <Switch>
+                                <Route path="/AvancedSearch" render={() => <Avanced
+                                    estados={states}
+                                    mangas={mangas}
+                                    tags={tags}
+                                />} />
+                                <Route path="/Library" render={() => <SimpleLibrary
+                                    mangas={mangas}
+                                    states={states}
+                                />} />
+                            </Switch>
+                        </div>
+                    }
+
                 </div>
-            }
-
-            </div>
             </Router>
         </div>
     )
