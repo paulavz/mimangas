@@ -13,7 +13,7 @@ import AddIcon from '@material-ui/icons/Add';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import IconButton from '@material-ui/core/IconButton';
 import Avatar from '@material-ui/core/Avatar';
-import { pink } from '@material-ui/core/colors';
+import { purple } from '@material-ui/core/colors';
 import MostradorMangas from './Componentes/MostradorMangas';
 import './Add.css';
 import "./Library.css";
@@ -72,8 +72,8 @@ const useStyles = makeStyles((theme) => ({
         },
     },
     pink: {
-        color: theme.palette.getContrastText(pink[500]),
-        backgroundColor: '#f50057',
+        color: theme.palette.getContrastText(purple[500]),
+        backgroundColor: '#7b1fa2',
         width: theme.spacing(7),
         height: theme.spacing(7),
     },
@@ -161,7 +161,6 @@ export default function SimpleLibrary({ mangas, states }) {
         </Grid>
 
         <Divider className={classes.divider} variant="middle" />
-        <h1>Hola Mundo Prueba 2</h1>
         <div className={classes.colbutton}>
             <ButtonGroup size="large" color="primary" aria-label="large outlined primary button group">
                 {states.map((value) =>
