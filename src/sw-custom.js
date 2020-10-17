@@ -9,14 +9,9 @@ if ('function' === typeof importScripts) {
         }
         // We have access to all the workbox modules here so 
         // we can configure our service worker how we want
+        self.addEventListener('install', event => event.waitUntil(self.skipWaiting()));
+        self.addEventListener('activate', event => event.waitUntil(self.clients.claim()));
 
-
-        self.addEventListener('waiting', async (event) => {
-            console.log("esperando");
-            if (event.data && event.data.type === 'SKIP_WAITING') {
-                skipWaiting();
-            }
-        });
         // Manifest injection point
         workbox.precaching.precacheAndRoute(self.__WB_MANIFEST);
 
