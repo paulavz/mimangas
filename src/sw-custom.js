@@ -10,16 +10,10 @@ if ('function' === typeof importScripts) {
 
         // We have access to all the workbox modules here so 
         // we can configure our service worker how we want
-        addEventListener('message', (event) => {
-            if (event.data && event.data.type === 'SKIP_WAITING') {
-                // Use this, and not workbox.skipWaiting()
-                skipWaiting();
-            }
-        });
-
 
         // Manifest injection point
         workbox.precaching.precacheAndRoute(self.__WB_MANIFEST);
+        workbox.skipWaiting();
 
         /**
          * BEYOND THIS POINT, MOST OF THIS CONFIG IS UP TO YOU...
