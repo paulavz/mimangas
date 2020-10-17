@@ -13,8 +13,6 @@ if ('function' === typeof importScripts) {
 
         // Manifest injection point
         workbox.precaching.precacheAndRoute(self.__WB_MANIFEST);
-        workbox.skipWaiting();
-
         /**
          * BEYOND THIS POINT, MOST OF THIS CONFIG IS UP TO YOU...
          * YOU CAN CUSTOMIZE YOUR WORKBOX SERVICE-WORKER HOWEVER YOU WANT
