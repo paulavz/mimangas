@@ -30,7 +30,8 @@
     "eject": "react-scripts eject",
     "build-sw": "workbox injectManifest workbox.config.js",
     "clean-cra-sw": "rm -f build/precache-manifest.*.js && rm -f build/service-worker.js",
-    "replace-sw": "npm run build-sw && npm run clean-cla-sw"
+    "replace-sw": "npm run build-sw && npm run clean-cla-sw",
+    "build-p": "react-scripts build"
   },
   "eslintConfig": {
     "extends": "react-app"

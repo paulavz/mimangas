@@ -7,12 +7,19 @@ if ('function' === typeof importScripts) {
             console.log('Localhost detected. Running Workbox in debug mode!');
             workbox.setConfig({ debug: true });
         }
-
         // We have access to all the workbox modules here so 
         // we can configure our service worker how we want
 
+
+        self.addEventListener('waiting', async (event) => {
+            console.log("esperando");
+            if (event.data && event.data.type === 'SKIP_WAITING') {
+                skipWaiting();
+            }
+        });
         // Manifest injection point
         workbox.precaching.precacheAndRoute(self.__WB_MANIFEST);
+
         /**
          * BEYOND THIS POINT, MOST OF THIS CONFIG IS UP TO YOU...
          * YOU CAN CUSTOMIZE YOUR WORKBOX SERVICE-WORKER HOWEVER YOU WANT
@@ -21,6 +28,7 @@ if ('function' === typeof importScripts) {
         // https://github.com/GoogleChrome/workbox/issues/2095
         const handler = workbox.precaching.createHandlerBoundToURL('/index.html');
         const navigationRoute = new workbox.routing.NavigationRoute(handler);
+
         workbox.routing.registerRoute(navigationRoute);
 
         workbox.routing.registerRoute(
