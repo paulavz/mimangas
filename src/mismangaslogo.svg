@@ -6,15 +6,11 @@
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    width="150mm"
    height="40mm"
    viewBox="0 0 150 40"
    version="1.1"
-   id="svg8"
-   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)"
-   sodipodi:docname="mismangaslogo.svg">
+   id="svg8">
   <defs
      id="defs2">
     <linearGradient
@@ -25,49 +21,7 @@
          offset="0"
          id="stop887" />
     </linearGradient>
-    <inkscape:path-effect
-       effect="bspline"
-       id="path-effect26"
-       is_visible="true"
-       lpeversion="1"
-       weight="33.333333"
-       steps="2"
-       helper_size="0"
-       apply_no_weight="true"
-       apply_with_weight="true"
-       only_selected="false" />
-    <inkscape:path-effect
-       effect="bspline"
-       id="path-effect22"
-       is_visible="true"
-       lpeversion="1"
-       weight="33.333333"
-       steps="2"
-       helper_size="0"
-       apply_no_weight="true"
-       apply_with_weight="true"
-       only_selected="false" />
   </defs>
-  <sodipodi:namedview
-     id="base"
-     pagecolor="#ffffff"
-     bordercolor="#666666"
-     borderopacity="1.0"
-     inkscape:pageopacity="0.0"
-     inkscape:pageshadow="2"
-     inkscape:zoom="0.37830213"
-     inkscape:cx="407.19328"
-     inkscape:cy="339.51622"
-     inkscape:document-units="mm"
-     inkscape:current-layer="layer1"
-     inkscape:document-rotation="0"
-     showgrid="false"
-     inkscape:snap-global="false"
-     inkscape:window-width="1024"
-     inkscape:window-height="578"
-     inkscape:window-x="-8"
-     inkscape:window-y="-8"
-     inkscape:window-maximized="1" />
   <metadata
      id="metadata5">
     <rdf:RDF>
@@ -81,8 +35,6 @@
     </rdf:RDF>
   </metadata>
   <g
-     inkscape:label="Capa 1"
-     inkscape:groupmode="layer"
      id="layer1">
     <text
        xml:space="preserve"
@@ -110,19 +62,16 @@
        id="path955"
        transform="scale(0.26458333)" />
     <g
-       inkscape:label="Image"
        id="g1080"
        transform="matrix(0.27776906,0,0,0.19518749,61.908564,-11.099819)">
       <path
          style="fill:#ffffff;fill-rule:evenodd;stroke:#ffffff;stroke-width:4.14826;stroke-opacity:1"
          d="m 135.49378,130.68844 c -9.08181,-0.2596 -69.079877,-28.24021 -98.098917,-37.474306 -2.614051,-2.610729 -1.908401,-2.618219 0.818328,-6.897222 18.652959,-19.939141 74.407089,-1.042638 92.934609,21.527938 1.05049,1.35302 3.76074,4.65515 4.34598,4.65515 0.58524,0 2.93613,-2.07233 5.22418,-4.60518 22.46795,-25.596536 76.47381,-41.305921 93.53803,-20.600301 2.58246,3.421529 2.60272,3.588037 0.6134,5.042656 -31.12811,8.515505 -89.22966,37.853175 -99.37561,38.351265 z"
-         id="path1084"
-         sodipodi:nodetypes="cccsccccc" />
+         id="path1084" />
       <path
          style="fill:#ffffff;fill-rule:evenodd;stroke:#ffffff;stroke-width:4.14826;stroke-opacity:1"
          d="M 126.21951,145.329 33.475609,110.01924 c -7.653367,-2.87592 -8.780487,-3.77229 -8.780487,-6.9829 0,-3.45395 2.570469,-3.39746 10.669924,0.23447 l 95.117254,36.54763 c 3.14639,1.19572 5.89956,0.96686 9.02476,0.1716 l 96.22545,-36.69985 c 8.44679,-3.81354 10.66993,-3.76022 10.66993,0.25588 0,2.86489 -0.64897,3.36374 -7.95732,6.11664 l -94.76041,35.66651 c -3.95035,1.32781 -7.8542,1.92969 -9.26473,1.90871 -1.50049,-0.0223 -4.57852,-0.76814 -8.20047,-1.90871 z"
-         id="path1086"
-         sodipodi:nodetypes="ccsccccsccscc" />
+         id="path1086" />
     </g>
   </g>
 </svg>
