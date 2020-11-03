@@ -7,12 +7,12 @@ import { makeStyles } from '@material-ui/core/styles';
 import firebase from "../Inicializer/firebase";
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import SimpleLibrary from './SimpleLibrary';
 import Avanced from './Avanced';
+import mismangaslogo from "../mismangaslogo.svg";
 import { states as realStates, Global } from './Globales';
 import "./Library.css";
 require("firebase/auth");
@@ -115,9 +115,14 @@ export default function Library(props) {
                                 <ArrowBackIcon />
                             </IconButton>
                         </NavLink>
-                        <Typography variant="h6" className={classes.title}>
-                            Mis Mangas
-                    </Typography>
+                        <div className="divlogo">
+                            <img 
+                                id="logo" 
+                                src={mismangaslogo} 
+                                alt="Logo Mis Mangas" 
+                                style={{height: "inherit"}}
+                            />
+                        </div>
                         <IconButton edge="start" onClick={cerrar} color="inherit" aria-label="menu">
                             <ExitToAppIcon />
                         </IconButton>
