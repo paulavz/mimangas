@@ -12,7 +12,7 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import SimpleLibrary from './SimpleLibrary';
 import Avanced from './Avanced';
-import mismangaslogo from "../mismangaslogo.svg";
+import mismangaslogo from "../mismangaslogo.png";
 import { states as realStates, Global } from './Globales';
 import "./Library.css";
 require("firebase/auth");
