@@ -6,6 +6,7 @@ import Grid from "@material-ui/core/Grid";
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import Slider from '@material-ui/core/Slider';
+import Snackbar from '@material-ui/core/Snackbar';
 import Checkbox from '@material-ui/core/Checkbox';
 import ChipInput from "material-ui-chip-input";
 import Dialog from '@material-ui/core/Dialog';
@@ -92,7 +93,7 @@ const useStyles = (theme) => ({
 
 });
 
-const outStates = ["open", "id", "uploadValue", "uid", "file", "preview", "selectedF", "selectedO", "selectedN", "alert"];
+const outStates = ["open", "id", "uploadValue", "uid", "file", "preview", "selectedF", "selectedO", "selectedN", "alert", "snackbar"];
 class Add extends Component {
 
     constructor(props) {
@@ -128,6 +129,11 @@ class Add extends Component {
             otherNames: "",
             id: "",
             createAt: "",
+            snackbar: {
+                open: false,
+                severity: "",
+                message: ""
+            }
         };
 
         this.handleClickOpen = this.handleClickOpen.bind(this);
@@ -136,6 +142,7 @@ class Add extends Component {
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleChangeSlider = this.handleChangeSlider.bind(this);
         this.handleUpload = this.handleUpload.bind(this);
+        this.closeSnackbar = this.closeSnackbar.bind(this);
     }
 
     componentDidMount() {
@@ -233,6 +240,13 @@ class Add extends Component {
 
         if (this.state.titleName !== '') {
             this.handleClose();
+            this.setState({
+                snackbar: {
+                    open: true,
+                    severity: "info",
+                    message: "Guardando..."
+                }
+            });
             if (this.state.file) {
                 const id = Math.random().toString(36).substring(2);
                 const user = firebase.auth().currentUser;
@@ -262,7 +276,13 @@ class Add extends Component {
                     })
                 console.log(this.state.file);
             } else {
-                console.log("No se subio imagen");
+                this.setState({
+                    snackbar: {
+                        open: true,
+                        severity: "error",
+                        message: "No se pudo cargar la imagen"
+                    }
+                });
                 this.format();
             }
         } else {
@@ -355,14 +375,29 @@ class Add extends Component {
             category: [],
             preview: '',
             file: '',
-            otherNames: []
+            otherNames: [],
+            snackbar: {
+                open: true,
+                severity: "success",
+                message: `${data.type} guardado correctamente`
+            }
         });
 
     }
 
+    closeSnackbar(e){
+        this.setState({
+            snackbar: {
+                open: false,
+                severity: "",
+                info: ""
+            }
+        })
+    }
+
     render() {
         const { classes } = this.props;
-        const { titleName, tags, punctuation, category, synopsis, alert, lastchapter, ubication, id } = this.state;
+        const { titleName, tags, punctuation, category, synopsis, snackbar, alert, lastchapter, ubication, id } = this.state;
         const inputs = ["lecture", "englishtitle", "spanishtitle", "author", "artist"];
         const labels = ["Link de Lectura", "Título en Inglés", "Título en Español", "Autor", "Artista"]
         const Inputs = ["otherNames", "fansub", "otherlink"];
@@ -370,6 +405,14 @@ class Add extends Component {
         const Selectors = ["selectedN", "selectedF", "selectedO"];
 
         return <div>
+            <Snackbar open={snackbar.open} autoHideDuration={6000} onClose={this.closeSnackbar}>
+                <Alert variant="filled" 
+                    onClose={this.closeSnackbar} 
+                    severity={snackbar.severity}
+                >
+                    {snackbar.message}
+                </Alert>
+            </Snackbar>
             <Dialog open={this.state.open} maxWidth="xs" onClose={this.handleClose} aria-labelledby="form-dialog-title">
                 <DialogTitle id="form-dialog-title">{id ? "Editar" : "Añadir"} Cómic</DialogTitle>
                 <DialogContent>
