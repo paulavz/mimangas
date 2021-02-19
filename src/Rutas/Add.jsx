@@ -313,243 +313,213 @@ class Add extends Component {
                     { merge: true })
         }
     }
-
-    saveData(data) {
-        let user = firebase.auth().currentUser;
-        let db = firebase.firestore();
-        db.collection("users")
-            .doc(user.uid)
-            .collection("mangas").add(
-                data
-            ).then(() => {
-                console.log("Data guardada")
-            })
-
-        if (this.state.tags.length > 0) {
-            db.collection("users")
-                .doc(user.uid)
-                .set({
-                    tags: firebase.firestore.FieldValue.arrayUnion(...this.state.tags)
-                },
-                    { merge: true })
-        }
-
-        this.setState({
-            titleName: '',
-            status: 'Siguiendo',
-            type: 'Manga',
-            lecture: '',
-            tags: [],
-            punctuation: 0,
-            englishtitle: '',
-            spanishtitle: '',
-            artist: '',
-            cover: '',
-            author: '',
-            synopsis: '',
-            demo: 'Shounen',
-            lastchapter: '',
-            ubication: '',
-            otherlink: [],
-            fansub: [],
-            category: [],
-            preview: '',
-            file: '',
-            otherNames: []
-        });
-
-    }
-
-    render() {
+    firstPage(){
         const { classes } = this.props;
-        const { titleName, tags, punctuation, category, synopsis, alert, lastchapter, ubication, id } = this.state;
+        const { titleName, punctuation, category, alert, lastchapter } = this.state;
+        return <React.Fragment>
+            <Grid item xs={12} sm={12}>
+        <div className={classes.select}>
+            <Collapse in={alert}>
+                <Alert
+                    severity="error"
+                    action={
+                        <IconButton
+                            size="small"
+                            onClick={() => {
+                                this.setState({
+                                    alert: false
+                                })
+                            }}
+                        >
+                            <CloseIcon fontSize="inherit" />
+                        </IconButton>
+                    }
+                >
+                    Escribe un titulo.
+</Alert>
+            </Collapse>
+        </div>
+    </Grid>
+    <Grid item xs={12} sm={12}>
+        <TextField
+            autoFocus
+            label="Titulo"
+            onChange={this.handleChange}
+            fullWidth
+            className={classes.select}
+            variant="outlined"
+            required
+            name="titleName"
+            size="small"
+            value={titleName}
+        />
+    </Grid>
+    <Grid item xs={12} sm={12}>
+        <TextField
+            label="Estado"
+            className={classes.select}
+            size="small"
+            select
+            required
+            fullWidth
+            onChange={this.handleChange}
+            name="status"
+            SelectProps={{
+                native: true,
+            }}
+            value={this.state.status}
+            variant="outlined"
+        >
+            {estado.map((value) =>
+                <option key={value} value={value}>
+                    {value}
+                </option>
+            )}
+        </TextField>
+    </Grid>
+    <Grid item xs={12} sm={12}>
+        <TextField
+            label="Tipo"
+            className={classes.select}
+            select
+            fullWidth
+            onChange={this.handleChange}
+            size="small"
+            required
+            name="type"
+            SelectProps={{
+                native: true,
+            }}
+            value={this.state.type}
+            variant="outlined"
+        >
+            {types.map((value) =>
+                <option key={value} value={value}>
+                    {value}
+                </option>
+            )}
+        </TextField>
+    </Grid>
+    <Grid item xs={12} sm={12}>
+        <TextField
+            label="Demografía"
+            className={classes.select}
+            select
+            fullWidth
+            onChange={this.handleChange}
+            size="small"
+            required
+            name="demo"
+            SelectProps={{
+                native: true,
+            }}
+            value={this.state.demo}
+            variant="outlined"
+        >
+            {demografia.map((value) =>
+                <option key={value} value={value}>
+                    {value}
+                </option>
+            )}
+        </TextField>
+    </Grid>
+
+    <Grid item xs={12} sm={12}>
+        <TextField
+            label="Categorías"
+            variant="outlined"
+            name="category"
+            fullWidth
+            value={category}
+            className={classes.select}
+            select
+            onChange={this.handleChange}
+            size="small"
+            SelectProps={{
+                multiple: true,
+                renderValue: selected => (
+                    <div style={{ display: "flex", flexWrap: "wrap" }}>
+                        {selected.map(value => (
+                            <Chip
+                                key={value}
+                                label={value}
+                                size="small"
+                                style={{ margin: 2 }}
+                            />
+                        ))}
+                    </div>
+                )
+            }}
+        >
+
+            {categorias.map((name) => (
+                <MenuItem key={name} value={name}>
+                    <Checkbox checked={category.indexOf(name) > -1} />
+                    <ListItemText primary={name} />
+                </MenuItem>
+            ))}
+        </TextField>
+    </Grid>
+    {this.state.preview && <div className="center">
+        <img className="cover" alt="cover" src={this.state.preview} />
+    </div>}
+    <Grid item xs={12} sm={12} className={classes.upload}>
+        <input
+            accept="image/*"
+            className={classes.input}
+            id="contained-button-file"
+            onChange={this.handleUpload}
+            multiple
+            type="file"
+        />
+        <label htmlFor="contained-button-file">
+            <Button variant="contained" color="primary" component="span">
+                Subir Portada
+            </Button>
+        </label>
+    </Grid>
+
+    <Grid item xs={12} sm={12}>
+        <TextField
+            label="Último capitulo leído"
+            fullWidth
+            className={classes.select}
+            variant="outlined"
+            size="small"
+            name="lastchapter"
+            type="number"
+            onChange={this.handleChange}
+            value={lastchapter}
+        />
+    </Grid>
+    <Grid item xs={12} sm={12}>
+        <div className="margin">
+            <Typography id="non-linear-slider" gutterBottom>
+                Puntuación
+</Typography>
+            <Slider
+                value={punctuation}
+                min={0}
+                step={1}
+                max={100}
+                name="punctuation"
+                onChange={this.handleChangeSlider}
+                valueLabelDisplay="auto"
+                aria-labelledby="non-linear-slider"
+            />
+        </div>
+    </Grid>
+    </React.Fragment>
+    }
+    secondPage(){
+        const { classes } = this.props;
+        const { tags, synopsis, ubication } = this.state;
         const inputs = ["lecture", "englishtitle", "spanishtitle", "author", "artist"];
         const labels = ["Link de Lectura", "Título en Inglés", "Título en Español", "Autor", "Artista"]
         const Inputs = ["otherNames", "fansub", "otherlink"];
         const Labels = ["Otros Nombres", "Fansubs", "Otros Links"];
         const Selectors = ["selectedN", "selectedF", "selectedO"];
-
-        return <div>
-            <Dialog open={this.state.open} maxWidth="xs" onClose={this.handleClose} aria-labelledby="form-dialog-title">
-                <DialogTitle id="form-dialog-title">{id ? "Editar" : "Añadir"} Cómic</DialogTitle>
-                <DialogContent>
-                    <Grid container>
-                        <Grid item xs={12} sm={12}>
-
-                            <div className={classes.select}>
-                                <Collapse in={alert}>
-                                    <Alert
-                                        severity="error"
-                                        action={
-                                            <IconButton
-                                                size="small"
-                                                onClick={() => {
-                                                    this.setState({
-                                                        alert: false
-                                                    })
-                                                }}
-                                            >
-                                                <CloseIcon fontSize="inherit" />
-                                            </IconButton>
-                                        }
-                                    >
-                                        Escribe un titulo.
-        </Alert>
-                                </Collapse>
-                            </div>
-                        </Grid>
-                        <Grid item xs={12} sm={12}>
-                            <TextField
-                                autoFocus
-                                label="Titulo"
-                                onChange={this.handleChange}
-                                fullWidth
-                                className={classes.select}
-                                variant="outlined"
-                                required
-                                name="titleName"
-                                size="small"
-                                value={titleName}
-                            />
-                        </Grid>
-                        <Grid item xs={12} sm={12}>
-                            <TextField
-                                label="Estado"
-                                className={classes.select}
-                                size="small"
-                                select
-                                required
-                                fullWidth
-                                onChange={this.handleChange}
-                                name="status"
-                                SelectProps={{
-                                    native: true,
-                                }}
-                                value={this.state.status}
-                                variant="outlined"
-                            >
-                                {estado.map((value) =>
-                                    <option key={value} value={value}>
-                                        {value}
-                                    </option>
-                                )}
-                            </TextField>
-                        </Grid>
-                        <Grid item xs={12} sm={12}>
-                            <TextField
-                                label="Tipo"
-                                className={classes.select}
-                                select
-                                fullWidth
-                                onChange={this.handleChange}
-                                size="small"
-                                required
-                                name="type"
-                                SelectProps={{
-                                    native: true,
-                                }}
-                                value={this.state.type}
-                                variant="outlined"
-                            >
-                                {types.map((value) =>
-                                    <option key={value} value={value}>
-                                        {value}
-                                    </option>
-                                )}
-                            </TextField>
-                        </Grid>
-                        <Grid item xs={12} sm={12}>
-                            <TextField
-                                label="Demografía"
-                                className={classes.select}
-                                select
-                                fullWidth
-                                onChange={this.handleChange}
-                                size="small"
-                                required
-                                name="demo"
-                                SelectProps={{
-                                    native: true,
-                                }}
-                                value={this.state.demo}
-                                variant="outlined"
-                            >
-                                {demografia.map((value) =>
-                                    <option key={value} value={value}>
-                                        {value}
-                                    </option>
-                                )}
-                            </TextField>
-                        </Grid>
-
-                        <Grid item xs={12} sm={12}>
-                            <TextField
-                                label="Categorías"
-                                variant="outlined"
-                                name="category"
-                                fullWidth
-                                value={category}
-                                className={classes.select}
-                                select
-                                onChange={this.handleChange}
-                                size="small"
-                                SelectProps={{
-                                    multiple: true,
-                                    renderValue: selected => (
-                                        <div style={{ display: "flex", flexWrap: "wrap" }}>
-                                            {selected.map(value => (
-                                                <Chip
-                                                    key={value}
-                                                    label={value}
-                                                    size="small"
-                                                    style={{ margin: 2 }}
-                                                />
-                                            ))}
-                                        </div>
-                                    )
-                                }}
-                            >
-
-                                {categorias.map((name) => (
-                                    <MenuItem key={name} value={name}>
-                                        <Checkbox checked={category.indexOf(name) > -1} />
-                                        <ListItemText primary={name} />
-                                    </MenuItem>
-                                ))}
-                            </TextField>
-                        </Grid>
-                        {this.state.preview && <div className="center">
-                            <img className="cover" alt="cover" src={this.state.preview} />
-                        </div>}
-                        <Grid item xs={12} sm={12} className={classes.upload}>
-                            <input
-                                accept="image/*"
-                                className={classes.input}
-                                id="contained-button-file"
-                                onChange={this.handleUpload}
-                                multiple
-                                type="file"
-                            />
-                            <label htmlFor="contained-button-file">
-                                <Button variant="contained" color="primary" component="span">
-                                    Subir Portada
-                                </Button>
-                            </label>
-                        </Grid>
-
-                        <Grid item xs={12} sm={12}>
-                            <TextField
-                                label="Último capitulo leído"
-                                fullWidth
-                                className={classes.select}
-                                variant="outlined"
-                                size="small"
-                                name="lastchapter"
-                                type="number"
-                                onChange={this.handleChange}
-                                value={lastchapter}
-                            />
-                        </Grid>
+        return <React.Fragment>
                         {
                             inputs.map((value, index) => <Grid key={value} item xs={12} sm={12}>
                                 <TextField
@@ -565,7 +535,6 @@ class Add extends Component {
                             </Grid>
                             )
                         }
-
                         <Grid item xs={12} sm={12}>
                             <TextField
                                 label="Sinopsis"
@@ -658,26 +627,63 @@ class Add extends Component {
                                 {Global.tags.map((value, index) => <option value={value} key={value + index} />)}
                             </datalist>}
                         </Grid>
+        </React.Fragment>
+    }
+    saveData(data) {
+        let user = firebase.auth().currentUser;
+        let db = firebase.firestore();
+        db.collection("users")
+            .doc(user.uid)
+            .collection("mangas").add(
+                data
+            ).then(() => {
+                console.log("Data guardada")
+            })
 
+        if (this.state.tags.length > 0) {
+            db.collection("users")
+                .doc(user.uid)
+                .set({
+                    tags: firebase.firestore.FieldValue.arrayUnion(...this.state.tags)
+                },
+                    { merge: true })
+        }
 
-                        <Grid item xs={12} sm={12}>
-                            <div className="margin">
-                                <Typography id="non-linear-slider" gutterBottom>
-                                    Puntuación
-      </Typography>
-                                <Slider
-                                    value={punctuation}
-                                    min={0}
-                                    step={1}
-                                    max={100}
-                                    name="punctuation"
-                                    onChange={this.handleChangeSlider}
-                                    valueLabelDisplay="auto"
-                                    aria-labelledby="non-linear-slider"
-                                />
-                            </div>
-                        </Grid>
+        this.setState({
+            titleName: '',
+            status: 'Siguiendo',
+            type: 'Manga',
+            lecture: '',
+            tags: [],
+            punctuation: 0,
+            englishtitle: '',
+            spanishtitle: '',
+            artist: '',
+            cover: '',
+            author: '',
+            synopsis: '',
+            demo: 'Shounen',
+            lastchapter: '',
+            ubication: '',
+            otherlink: [],
+            fansub: [],
+            category: [],
+            preview: '',
+            file: '',
+            otherNames: []
+        });
 
+    }
+
+    render() {
+        const { id } = this.state;
+        return <div>
+            <Dialog open={this.state.open} maxWidth="xs" onClose={this.handleClose} aria-labelledby="form-dialog-title">
+                <DialogTitle id="form-dialog-title"><div className="title"><div>{id ? "Editar" : "Añadir"} Cómic </div> <div className="m-r">Hola</div></div></DialogTitle>
+                <DialogContent>
+                    <Grid container>
+                       {this.firstPage()}
+                       {this.secondPage()}
                     </Grid>
                 </DialogContent>
                 <DialogActions>
