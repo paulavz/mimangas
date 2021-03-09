@@ -263,7 +263,13 @@ class Add extends Component {
                             uploadValue: porcentaje,
                         });
                     },
-                    (error) => console.log(error),
+                    (error) => this.setState({
+                        snackbar: {
+                            open: true,
+                            severity: "error",
+                            message: "No se pudo cargar la imagen"
+                        }
+                    }),
                     () => {
                         task.snapshot.ref.getDownloadURL().then((downloadUrl) => {
                             this.setState({
@@ -276,13 +282,6 @@ class Add extends Component {
                     })
                 console.log(this.state.file);
             } else {
-                this.setState({
-                    snackbar: {
-                        open: true,
-                        severity: "error",
-                        message: "No se pudo cargar la imagen"
-                    }
-                });
                 this.format();
             }
         } else {
@@ -321,7 +320,11 @@ class Add extends Component {
             .set(
                 data
             ).then(() => {
-                console.log("Data editada")
+                this.setState({snackbar: {
+                    open: true,
+                    severity: "success",
+                    message: `${data.type} guardado correctamente`
+                }})
             });
 
         if (this.state.tags.length > 0) {
