@@ -32,3 +32,11 @@
 .m-r {
    margin-right: 1em;
 }
+.inChip .MuiInputBase-input:hover {
+   position: relative;
+   bottom: 5px;
+}
+.inChip .MuiInputBase-input:focus {
+   position: relative;
+   bottom: 5px;
+}

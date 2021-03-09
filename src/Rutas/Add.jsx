@@ -17,6 +17,12 @@ import MenuItem from '@material-ui/core/MenuItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import BottomNavigation from '@material-ui/core/BottomNavigation';
+import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
+import CreateIcon from '@material-ui/icons/Create';
+import AddBoxIcon from '@material-ui/icons/AddBox';
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
@@ -35,9 +41,6 @@ import './Add.css'
 require("firebase/auth");
 require("firebase/firestore");
 require("firebase/storage");
-
-
-
 
 const useStyles = (theme) => ({
     pink: {
@@ -88,11 +91,20 @@ const useStyles = (theme) => ({
     },
     warning: {
         color: theme.palette.error.main
+    },
+    aTitle: {
+        paddingBottom: '0px !important'
+    },
+    navDialog: {
+        minWidth: '30px !important'
+    },
+    mTop: {
+        marginTop: '0.8em'
     }
 
 });
 
-const outStates = ["open", "id", "uploadValue", "uid", "file", "preview", "selectedF", "selectedO", "selectedN", "alert"];
+const outStates = ["open", "id", "uploadValue", "uid", "file", "preview", "selectedF", "selectedO", "selectedN", "alert","value"];
 class Add extends Component {
 
     constructor(props) {
@@ -128,6 +140,7 @@ class Add extends Component {
             otherNames: "",
             id: "",
             createAt: "",
+            value: 0
         };
 
         this.handleClickOpen = this.handleClickOpen.bind(this);
@@ -159,6 +172,7 @@ class Add extends Component {
 
     handleClose() {
         this.setState({ open: false });
+        this.setState({ value: 0 })
     };
 
     handleChange = (e) => {
@@ -230,7 +244,6 @@ class Add extends Component {
 
     handleSubmit = (e) => {
         e.preventDefault();
-
         if (this.state.titleName !== '') {
             this.handleClose();
             if (this.state.file) {
@@ -275,7 +288,7 @@ class Add extends Component {
                 })
             }, 3000);
         }
-
+        this.setState({ value:0 })
     };
 
     handleChangeSlider(event, newValue) {
@@ -318,9 +331,10 @@ class Add extends Component {
         const { titleName, punctuation, category, alert, lastchapter } = this.state;
         return <React.Fragment>
             <Grid item xs={12} sm={12}>
-        <div className={classes.select}>
+        <div>
             <Collapse in={alert}>
                 <Alert
+                    className={classes.select}
                     severity="error"
                     action={
                         <IconButton
@@ -346,7 +360,7 @@ class Add extends Component {
             label="Titulo"
             onChange={this.handleChange}
             fullWidth
-            className={classes.select}
+            className={classes.top}
             variant="outlined"
             required
             name="titleName"
@@ -550,6 +564,29 @@ class Add extends Component {
                             />
                         </Grid>
                         <Grid item xs={12} sm={12}>
+                            <ChipInput
+                                value={tags}
+                                onBeforeAdd={(chip) => this.onBeforeAdd(chip)}
+                                onAdd={(chip) => this.handleAdd(chip)}
+                                onDelete={(deletedChip) => this.handleDelete(deletedChip)}
+                                fullWidth
+                                size="small"
+                                className={`inChip ${classes.select}`}
+                                InputProps={{
+                                    inputProps: {
+                                        className: classes.inputChip,
+                                        list: "tags",
+                                    }
+                                }}
+                                variant="outlined"
+                                label='Etiquetas'
+                            />
+                            {Global.tags.length>0 &&
+                            <datalist id="tags">
+                                {Global.tags.map((value, index) => <option value={value} key={value + index} />)}
+                            </datalist>}
+                        </Grid>
+                        <Grid item xs={12} sm={12}>
                             <TextField
                                 label="Ubicación"
                                 fullWidth
@@ -604,29 +641,6 @@ class Add extends Component {
                                 </Grid>
                             )
                         }
-                        <Grid item xs={12} sm={12}>
-                            <ChipInput
-                                value={tags}
-                                onBeforeAdd={(chip) => this.onBeforeAdd(chip)}
-                                onAdd={(chip) => this.handleAdd(chip)}
-                                onDelete={(deletedChip) => this.handleDelete(deletedChip)}
-                                fullWidth
-                                size="small"
-                                className={classes.select}
-                                InputProps={{
-                                    inputProps: {
-                                        className: classes.inputChip,
-                                        list: "tags",
-                                    }
-                                }}
-                                variant="outlined"
-                                label='Etiquetas'
-                            />
-                            {Global.tags.length>0 &&
-                            <datalist id="tags">
-                                {Global.tags.map((value, index) => <option value={value} key={value + index} />)}
-                            </datalist>}
-                        </Grid>
         </React.Fragment>
     }
     saveData(data) {
@@ -676,24 +690,55 @@ class Add extends Component {
     }
 
     render() {
-        const { id } = this.state;
+        const { id, value } = this.state;
+        const { classes } = this.props;
+
         return <div>
             <Dialog open={this.state.open} maxWidth="xs" onClose={this.handleClose} aria-labelledby="form-dialog-title">
-                <DialogTitle id="form-dialog-title"><div className="title"><div>{id ? "Editar" : "Añadir"} Cómic </div> <div className="m-r">Hola</div></div></DialogTitle>
+                <DialogTitle className={classes.aTitle} id="form-dialog-title"><div className="title"><div className={classes.mTop}>{id ? "Editar" : "Añadir"} Cómic </div> 
+                <div className="m-r">
+                    <BottomNavigation
+                    value={value}
+                    onChange={(event, newValue) => {
+                        this.setState({ value:newValue });
+                        console.log(newValue);           
+                    }}
+                    showLabels
+                    >
+                        <BottomNavigationAction className={classes.navDialog} label="Info" fontSize="small" icon={<CreateIcon />} />
+                        <BottomNavigationAction className={classes.navDialog} label="Avanzado" fontSize="small" icon={<AddBoxIcon />} />
+                    </BottomNavigation>
+                </div>
+                </div></DialogTitle>
                 <DialogContent>
                     <Grid container>
-                       {this.firstPage()}
-                       {this.secondPage()}
+                        {(value===0) ?
+                        this.firstPage() :
+                        this.secondPage()
+                        } 
                     </Grid>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={this.handleClose} color="primary">
-                        Cancel
-          </Button>
+                    {(value===1) ? 
                     <Button type="submit"
-                        onClick={this.handleSubmit} color="primary">
+                            color="primary"
+                            onClick={()=>{this.setState({ value:0 })}}
+                            >                                
+                        <ArrowBackIcon/>
+                   </Button> : ''}
+                    <Button onClick={this.handleClose} color="primary">
+                        Cancelar
+                    </Button>
+                    <Button type="submit"
+                            onClick={this.handleSubmit} color="primary">
                         Guardar
-          </Button>
+                    </Button>
+                    {(value===0) ? 
+                    <Button type="submit"
+                            color="primary"
+                            onClick={()=>{this.setState({ value:1 })}}>
+                        <ArrowForwardIcon/>
+                    </Button> : ''}    
                 </DialogActions>
             </Dialog>
 
