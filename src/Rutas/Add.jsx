@@ -17,6 +17,12 @@ import MenuItem from '@material-ui/core/MenuItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import BottomNavigation from '@material-ui/core/BottomNavigation';
+import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
+import CreateIcon from '@material-ui/icons/Create';
+import AddBoxIcon from '@material-ui/icons/AddBox';
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
@@ -35,9 +41,6 @@ import './Add.css'
 require("firebase/auth");
 require("firebase/firestore");
 require("firebase/storage");
-
-
-
 
 const useStyles = (theme) => ({
     pink: {
@@ -88,11 +91,20 @@ const useStyles = (theme) => ({
     },
     warning: {
         color: theme.palette.error.main
+    },
+    aTitle: {
+        paddingBottom: '0px !important'
+    },
+    navDialog: {
+        minWidth: '30px !important'
+    },
+    mTop: {
+        marginTop: '0.8em'
     }
 
 });
 
-const outStates = ["open", "id", "uploadValue", "uid", "file", "preview", "selectedF", "selectedO", "selectedN", "alert"];
+const outStates = ["open", "id", "uploadValue", "uid", "file", "preview", "selectedF", "selectedO", "selectedN", "alert","value"];
 class Add extends Component {
 
     constructor(props) {
@@ -128,6 +140,7 @@ class Add extends Component {
             otherNames: "",
             id: "",
             createAt: "",
+            value: 0
         };
 
         this.handleClickOpen = this.handleClickOpen.bind(this);
@@ -159,6 +172,7 @@ class Add extends Component {
 
     handleClose() {
         this.setState({ open: false });
+        this.setState({ value: 0 })
     };
 
     handleChange = (e) => {
@@ -230,7 +244,6 @@ class Add extends Component {
 
     handleSubmit = (e) => {
         e.preventDefault();
-
         if (this.state.titleName !== '') {
             this.handleClose();
             if (this.state.file) {
@@ -275,7 +288,7 @@ class Add extends Component {
                 })
             }, 3000);
         }
-
+        this.setState({ value:0 })
     };
 
     handleChangeSlider(event, newValue) {
@@ -313,243 +326,214 @@ class Add extends Component {
                     { merge: true })
         }
     }
-
-    saveData(data) {
-        let user = firebase.auth().currentUser;
-        let db = firebase.firestore();
-        db.collection("users")
-            .doc(user.uid)
-            .collection("mangas").add(
-                data
-            ).then(() => {
-                console.log("Data guardada")
-            })
-
-        if (this.state.tags.length > 0) {
-            db.collection("users")
-                .doc(user.uid)
-                .set({
-                    tags: firebase.firestore.FieldValue.arrayUnion(...this.state.tags)
-                },
-                    { merge: true })
-        }
-
-        this.setState({
-            titleName: '',
-            status: 'Siguiendo',
-            type: 'Manga',
-            lecture: '',
-            tags: [],
-            punctuation: 0,
-            englishtitle: '',
-            spanishtitle: '',
-            artist: '',
-            cover: '',
-            author: '',
-            synopsis: '',
-            demo: 'Shounen',
-            lastchapter: '',
-            ubication: '',
-            otherlink: [],
-            fansub: [],
-            category: [],
-            preview: '',
-            file: '',
-            otherNames: []
-        });
-
-    }
-
-    render() {
+    firstPage(){
         const { classes } = this.props;
-        const { titleName, tags, punctuation, category, synopsis, alert, lastchapter, ubication, id } = this.state;
+        const { titleName, punctuation, category, alert, lastchapter } = this.state;
+        return <React.Fragment>
+            <Grid item xs={12} sm={12}>
+        <div>
+            <Collapse in={alert}>
+                <Alert
+                    className={classes.select}
+                    severity="error"
+                    action={
+                        <IconButton
+                            size="small"
+                            onClick={() => {
+                                this.setState({
+                                    alert: false
+                                })
+                            }}
+                        >
+                            <CloseIcon fontSize="inherit" />
+                        </IconButton>
+                    }
+                >
+                    Escribe un titulo.
+</Alert>
+            </Collapse>
+        </div>
+    </Grid>
+    <Grid item xs={12} sm={12}>
+        <TextField
+            autoFocus
+            label="Titulo"
+            onChange={this.handleChange}
+            fullWidth
+            className={classes.top}
+            variant="outlined"
+            required
+            name="titleName"
+            size="small"
+            value={titleName}
+        />
+    </Grid>
+    <Grid item xs={12} sm={12}>
+        <TextField
+            label="Estado"
+            className={classes.select}
+            size="small"
+            select
+            required
+            fullWidth
+            onChange={this.handleChange}
+            name="status"
+            SelectProps={{
+                native: true,
+            }}
+            value={this.state.status}
+            variant="outlined"
+        >
+            {estado.map((value) =>
+                <option key={value} value={value}>
+                    {value}
+                </option>
+            )}
+        </TextField>
+    </Grid>
+    <Grid item xs={12} sm={12}>
+        <TextField
+            label="Tipo"
+            className={classes.select}
+            select
+            fullWidth
+            onChange={this.handleChange}
+            size="small"
+            required
+            name="type"
+            SelectProps={{
+                native: true,
+            }}
+            value={this.state.type}
+            variant="outlined"
+        >
+            {types.map((value) =>
+                <option key={value} value={value}>
+                    {value}
+                </option>
+            )}
+        </TextField>
+    </Grid>
+    <Grid item xs={12} sm={12}>
+        <TextField
+            label="Demografía"
+            className={classes.select}
+            select
+            fullWidth
+            onChange={this.handleChange}
+            size="small"
+            required
+            name="demo"
+            SelectProps={{
+                native: true,
+            }}
+            value={this.state.demo}
+            variant="outlined"
+        >
+            {demografia.map((value) =>
+                <option key={value} value={value}>
+                    {value}
+                </option>
+            )}
+        </TextField>
+    </Grid>
+
+    <Grid item xs={12} sm={12}>
+        <TextField
+            label="Categorías"
+            variant="outlined"
+            name="category"
+            fullWidth
+            value={category}
+            className={classes.select}
+            select
+            onChange={this.handleChange}
+            size="small"
+            SelectProps={{
+                multiple: true,
+                renderValue: selected => (
+                    <div style={{ display: "flex", flexWrap: "wrap" }}>
+                        {selected.map(value => (
+                            <Chip
+                                key={value}
+                                label={value}
+                                size="small"
+                                style={{ margin: 2 }}
+                            />
+                        ))}
+                    </div>
+                )
+            }}
+        >
+
+            {categorias.map((name) => (
+                <MenuItem key={name} value={name}>
+                    <Checkbox checked={category.indexOf(name) > -1} />
+                    <ListItemText primary={name} />
+                </MenuItem>
+            ))}
+        </TextField>
+    </Grid>
+    {this.state.preview && <div className="center">
+        <img className="cover" alt="cover" src={this.state.preview} />
+    </div>}
+    <Grid item xs={12} sm={12} className={classes.upload}>
+        <input
+            accept="image/*"
+            className={classes.input}
+            id="contained-button-file"
+            onChange={this.handleUpload}
+            multiple
+            type="file"
+        />
+        <label htmlFor="contained-button-file">
+            <Button variant="contained" color="primary" component="span">
+                Subir Portada
+            </Button>
+        </label>
+    </Grid>
+
+    <Grid item xs={12} sm={12}>
+        <TextField
+            label="Último capitulo leído"
+            fullWidth
+            className={classes.select}
+            variant="outlined"
+            size="small"
+            name="lastchapter"
+            type="number"
+            onChange={this.handleChange}
+            value={lastchapter}
+        />
+    </Grid>
+    <Grid item xs={12} sm={12}>
+        <div className="margin">
+            <Typography id="non-linear-slider" gutterBottom>
+                Puntuación
+</Typography>
+            <Slider
+                value={punctuation}
+                min={0}
+                step={1}
+                max={100}
+                name="punctuation"
+                onChange={this.handleChangeSlider}
+                valueLabelDisplay="auto"
+                aria-labelledby="non-linear-slider"
+            />
+        </div>
+    </Grid>
+    </React.Fragment>
+    }
+    secondPage(){
+        const { classes } = this.props;
+        const { tags, synopsis, ubication } = this.state;
         const inputs = ["lecture", "englishtitle", "spanishtitle", "author", "artist"];
         const labels = ["Link de Lectura", "Título en Inglés", "Título en Español", "Autor", "Artista"]
         const Inputs = ["otherNames", "fansub", "otherlink"];
         const Labels = ["Otros Nombres", "Fansubs", "Otros Links"];
         const Selectors = ["selectedN", "selectedF", "selectedO"];
-
-        return <div>
-            <Dialog open={this.state.open} maxWidth="xs" onClose={this.handleClose} aria-labelledby="form-dialog-title">
-                <DialogTitle id="form-dialog-title">{id ? "Editar" : "Añadir"} Cómic</DialogTitle>
-                <DialogContent>
-                    <Grid container>
-                        <Grid item xs={12} sm={12}>
-
-                            <div className={classes.select}>
-                                <Collapse in={alert}>
-                                    <Alert
-                                        severity="error"
-                                        action={
-                                            <IconButton
-                                                size="small"
-                                                onClick={() => {
-                                                    this.setState({
-                                                        alert: false
-                                                    })
-                                                }}
-                                            >
-                                                <CloseIcon fontSize="inherit" />
-                                            </IconButton>
-                                        }
-                                    >
-                                        Escribe un titulo.
-        </Alert>
-                                </Collapse>
-                            </div>
-                        </Grid>
-                        <Grid item xs={12} sm={12}>
-                            <TextField
-                                autoFocus
-                                label="Titulo"
-                                onChange={this.handleChange}
-                                fullWidth
-                                className={classes.select}
-                                variant="outlined"
-                                required
-                                name="titleName"
-                                size="small"
-                                value={titleName}
-                            />
-                        </Grid>
-                        <Grid item xs={12} sm={12}>
-                            <TextField
-                                label="Estado"
-                                className={classes.select}
-                                size="small"
-                                select
-                                required
-                                fullWidth
-                                onChange={this.handleChange}
-                                name="status"
-                                SelectProps={{
-                                    native: true,
-                                }}
-                                value={this.state.status}
-                                variant="outlined"
-                            >
-                                {estado.map((value) =>
-                                    <option key={value} value={value}>
-                                        {value}
-                                    </option>
-                                )}
-                            </TextField>
-                        </Grid>
-                        <Grid item xs={12} sm={12}>
-                            <TextField
-                                label="Tipo"
-                                className={classes.select}
-                                select
-                                fullWidth
-                                onChange={this.handleChange}
-                                size="small"
-                                required
-                                name="type"
-                                SelectProps={{
-                                    native: true,
-                                }}
-                                value={this.state.type}
-                                variant="outlined"
-                            >
-                                {types.map((value) =>
-                                    <option key={value} value={value}>
-                                        {value}
-                                    </option>
-                                )}
-                            </TextField>
-                        </Grid>
-                        <Grid item xs={12} sm={12}>
-                            <TextField
-                                label="Demografía"
-                                className={classes.select}
-                                select
-                                fullWidth
-                                onChange={this.handleChange}
-                                size="small"
-                                required
-                                name="demo"
-                                SelectProps={{
-                                    native: true,
-                                }}
-                                value={this.state.demo}
-                                variant="outlined"
-                            >
-                                {demografia.map((value) =>
-                                    <option key={value} value={value}>
-                                        {value}
-                                    </option>
-                                )}
-                            </TextField>
-                        </Grid>
-
-                        <Grid item xs={12} sm={12}>
-                            <TextField
-                                label="Categorías"
-                                variant="outlined"
-                                name="category"
-                                fullWidth
-                                value={category}
-                                className={classes.select}
-                                select
-                                onChange={this.handleChange}
-                                size="small"
-                                SelectProps={{
-                                    multiple: true,
-                                    renderValue: selected => (
-                                        <div style={{ display: "flex", flexWrap: "wrap" }}>
-                                            {selected.map(value => (
-                                                <Chip
-                                                    key={value}
-                                                    label={value}
-                                                    size="small"
-                                                    style={{ margin: 2 }}
-                                                />
-                                            ))}
-                                        </div>
-                                    )
-                                }}
-                            >
-
-                                {categorias.map((name) => (
-                                    <MenuItem key={name} value={name}>
-                                        <Checkbox checked={category.indexOf(name) > -1} />
-                                        <ListItemText primary={name} />
-                                    </MenuItem>
-                                ))}
-                            </TextField>
-                        </Grid>
-                        {this.state.preview && <div className="center">
-                            <img className="cover" alt="cover" src={this.state.preview} />
-                        </div>}
-                        <Grid item xs={12} sm={12} className={classes.upload}>
-                            <input
-                                accept="image/*"
-                                className={classes.input}
-                                id="contained-button-file"
-                                onChange={this.handleUpload}
-                                multiple
-                                type="file"
-                            />
-                            <label htmlFor="contained-button-file">
-                                <Button variant="contained" color="primary" component="span">
-                                    Subir Portada
-                                </Button>
-                            </label>
-                        </Grid>
-
-                        <Grid item xs={12} sm={12}>
-                            <TextField
-                                label="Último capitulo leído"
-                                fullWidth
-                                className={classes.select}
-                                variant="outlined"
-                                size="small"
-                                name="lastchapter"
-                                type="number"
-                                onChange={this.handleChange}
-                                value={lastchapter}
-                            />
-                        </Grid>
+        return <React.Fragment>
                         {
                             inputs.map((value, index) => <Grid key={value} item xs={12} sm={12}>
                                 <TextField
@@ -565,7 +549,6 @@ class Add extends Component {
                             </Grid>
                             )
                         }
-
                         <Grid item xs={12} sm={12}>
                             <TextField
                                 label="Sinopsis"
@@ -579,6 +562,29 @@ class Add extends Component {
                                 onChange={this.handleChange}
                                 value={synopsis}
                             />
+                        </Grid>
+                        <Grid item xs={12} sm={12}>
+                            <ChipInput
+                                value={tags}
+                                onBeforeAdd={(chip) => this.onBeforeAdd(chip)}
+                                onAdd={(chip) => this.handleAdd(chip)}
+                                onDelete={(deletedChip) => this.handleDelete(deletedChip)}
+                                fullWidth
+                                size="small"
+                                className={`inChip ${classes.select}`}
+                                InputProps={{
+                                    inputProps: {
+                                        className: classes.inputChip,
+                                        list: "tags",
+                                    }
+                                }}
+                                variant="outlined"
+                                label='Etiquetas'
+                            />
+                            {Global.tags.length>0 &&
+                            <datalist id="tags">
+                                {Global.tags.map((value, index) => <option value={value} key={value + index} />)}
+                            </datalist>}
                         </Grid>
                         <Grid item xs={12} sm={12}>
                             <TextField
@@ -635,59 +641,104 @@ class Add extends Component {
                                 </Grid>
                             )
                         }
-                        <Grid item xs={12} sm={12}>
-                            <ChipInput
-                                value={tags}
-                                onBeforeAdd={(chip) => this.onBeforeAdd(chip)}
-                                onAdd={(chip) => this.handleAdd(chip)}
-                                onDelete={(deletedChip) => this.handleDelete(deletedChip)}
-                                fullWidth
-                                size="small"
-                                className={classes.select}
-                                InputProps={{
-                                    inputProps: {
-                                        className: classes.inputChip,
-                                        list: "tags",
-                                    }
-                                }}
-                                variant="outlined"
-                                label='Etiquetas'
-                            />
-                            {Global.tags.length>0 &&
-                            <datalist id="tags">
-                                {Global.tags.map((value, index) => <option value={value} key={value + index} />)}
-                            </datalist>}
-                        </Grid>
+        </React.Fragment>
+    }
+    saveData(data) {
+        let user = firebase.auth().currentUser;
+        let db = firebase.firestore();
+        db.collection("users")
+            .doc(user.uid)
+            .collection("mangas").add(
+                data
+            ).then(() => {
+                console.log("Data guardada")
+            })
 
+        if (this.state.tags.length > 0) {
+            db.collection("users")
+                .doc(user.uid)
+                .set({
+                    tags: firebase.firestore.FieldValue.arrayUnion(...this.state.tags)
+                },
+                    { merge: true })
+        }
 
-                        <Grid item xs={12} sm={12}>
-                            <div className="margin">
-                                <Typography id="non-linear-slider" gutterBottom>
-                                    Puntuación
-      </Typography>
-                                <Slider
-                                    value={punctuation}
-                                    min={0}
-                                    step={1}
-                                    max={100}
-                                    name="punctuation"
-                                    onChange={this.handleChangeSlider}
-                                    valueLabelDisplay="auto"
-                                    aria-labelledby="non-linear-slider"
-                                />
-                            </div>
-                        </Grid>
+        this.setState({
+            titleName: '',
+            status: 'Siguiendo',
+            type: 'Manga',
+            lecture: '',
+            tags: [],
+            punctuation: 0,
+            englishtitle: '',
+            spanishtitle: '',
+            artist: '',
+            cover: '',
+            author: '',
+            synopsis: '',
+            demo: 'Shounen',
+            lastchapter: '',
+            ubication: '',
+            otherlink: [],
+            fansub: [],
+            category: [],
+            preview: '',
+            file: '',
+            otherNames: []
+        });
 
+    }
+
+    render() {
+        const { id, value } = this.state;
+        const { classes } = this.props;
+
+        return <div>
+            <Dialog open={this.state.open} maxWidth="xs" onClose={this.handleClose} aria-labelledby="form-dialog-title">
+                <DialogTitle className={classes.aTitle} id="form-dialog-title"><div className="title"><div className={classes.mTop}>{id ? "Editar" : "Añadir"} Cómic </div> 
+                <div className="m-r">
+                    <BottomNavigation
+                    value={value}
+                    onChange={(event, newValue) => {
+                        this.setState({ value:newValue });
+                        console.log(newValue);           
+                    }}
+                    showLabels
+                    >
+                        <BottomNavigationAction className={classes.navDialog} label="Info" fontSize="small" icon={<CreateIcon />} />
+                        <BottomNavigationAction className={classes.navDialog} label="Avanzado" fontSize="small" icon={<AddBoxIcon />} />
+                    </BottomNavigation>
+                </div>
+                </div></DialogTitle>
+                <DialogContent>
+                    <Grid container>
+                        {(value===0) ?
+                        this.firstPage() :
+                        this.secondPage()
+                        } 
                     </Grid>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={this.handleClose} color="primary">
-                        Cancel
-          </Button>
+                    {(value===1) ? 
                     <Button type="submit"
-                        onClick={this.handleSubmit} color="primary">
+                            color="primary"
+                            onClick={()=>{this.setState({ value:0 })}}
+                            >                                
+                        <ArrowBackIcon/>
+                   </Button> : ''}
+                    <Button onClick={this.handleClose} color="primary">
+                        Cancelar
+                    </Button>
+                    <Button type="submit"
+                            onClick={this.handleSubmit} color="primary">
                         Guardar
-          </Button>
+                    </Button>
+                    {(value===0) ? 
+                    <Button type="submit"
+                            color="primary"
+                            onClick={()=>{this.setState({ value:1 })}}>
+                        <ArrowForwardIcon/>
+                    </Button> : ''}    
                 </DialogActions>
             </Dialog>
 
