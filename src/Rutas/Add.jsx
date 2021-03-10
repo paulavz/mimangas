@@ -6,6 +6,7 @@ import Grid from "@material-ui/core/Grid";
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import Slider from '@material-ui/core/Slider';
+import Snackbar from '@material-ui/core/Snackbar';
 import Checkbox from '@material-ui/core/Checkbox';
 import ChipInput from "material-ui-chip-input";
 import Dialog from '@material-ui/core/Dialog';
@@ -104,7 +105,8 @@ const useStyles = (theme) => ({
 
 });
 
-const outStates = ["open", "id", "uploadValue", "uid", "file", "preview", "selectedF", "selectedO", "selectedN", "alert","value"];
+
+const outStates = ["open", "id", "uploadValue", "uid", "file", "preview", "selectedF", "selectedO", "selectedN", "alert", "value", "snackbar"];
 class Add extends Component {
 
     constructor(props) {
@@ -140,6 +142,11 @@ class Add extends Component {
             otherNames: "",
             id: "",
             createAt: "",
+            snackbar: {
+                open: false,
+                severity: "",
+                message: ""
+            },
             value: 0
         };
 
@@ -149,6 +156,7 @@ class Add extends Component {
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleChangeSlider = this.handleChangeSlider.bind(this);
         this.handleUpload = this.handleUpload.bind(this);
+        this.closeSnackbar = this.closeSnackbar.bind(this);
     }
 
     componentDidMount() {
@@ -246,6 +254,13 @@ class Add extends Component {
         e.preventDefault();
         if (this.state.titleName !== '') {
             this.handleClose();
+            this.setState({
+                snackbar: {
+                    open: true,
+                    severity: "info",
+                    message: "Guardando..."
+                }
+            });
             if (this.state.file) {
                 const id = Math.random().toString(36).substring(2);
                 const user = firebase.auth().currentUser;
@@ -262,7 +277,13 @@ class Add extends Component {
                             uploadValue: porcentaje,
                         });
                     },
-                    (error) => console.log(error),
+                    (error) => this.setState({
+                        snackbar: {
+                            open: true,
+                            severity: "error",
+                            message: "No se pudo cargar la imagen"
+                        }
+                    }),
                     () => {
                         task.snapshot.ref.getDownloadURL().then((downloadUrl) => {
                             this.setState({
@@ -275,7 +296,6 @@ class Add extends Component {
                     })
                 console.log(this.state.file);
             } else {
-                console.log("No se subio imagen");
                 this.format();
             }
         } else {
@@ -314,7 +334,11 @@ class Add extends Component {
             .set(
                 data
             ).then(() => {
-                console.log("Data editada")
+                this.setState({snackbar: {
+                    open: true,
+                    severity: "success",
+                    message: `${data.type} guardado correctamente`
+                }})
             });
 
         if (this.state.tags.length > 0) {
@@ -326,6 +350,68 @@ class Add extends Component {
                     { merge: true })
         }
     }
+
+    saveData(data) {
+        let user = firebase.auth().currentUser;
+        let db = firebase.firestore();
+        db.collection("users")
+            .doc(user.uid)
+            .collection("mangas").add(
+                data
+            ).then(() => {
+                console.log("Data guardada")
+            })
+
+        if (this.state.tags.length > 0) {
+            db.collection("users")
+                .doc(user.uid)
+                .set({
+                    tags: firebase.firestore.FieldValue.arrayUnion(...this.state.tags)
+                },
+                    { merge: true })
+        }
+
+        this.setState({
+            titleName: '',
+            status: 'Siguiendo',
+            type: 'Manga',
+            lecture: '',
+            tags: [],
+            punctuation: 0,
+            englishtitle: '',
+            spanishtitle: '',
+            artist: '',
+            cover: '',
+            author: '',
+            synopsis: '',
+            demo: 'Shounen',
+            lastchapter: '',
+            ubication: '',
+            otherlink: [],
+            fansub: [],
+            category: [],
+            preview: '',
+            file: '',
+            otherNames: [],
+            snackbar: {
+                open: true,
+                severity: "success",
+                message: `${data.type} guardado correctamente`
+            }
+        });
+
+    }
+
+    closeSnackbar(e){
+        this.setState({
+            snackbar: {
+                open: false,
+                severity: "",
+                info: ""
+            }
+        })
+    }
+
     firstPage(){
         const { classes } = this.props;
         const { titleName, punctuation, category, alert, lastchapter } = this.state;
@@ -690,10 +776,18 @@ class Add extends Component {
     }
 
     render() {
-        const { id, value } = this.state;
+        const { id, value, snackbar } = this.state;
         const { classes } = this.props;
 
         return <div>
+            <Snackbar open={snackbar.open} autoHideDuration={6000} onClose={this.closeSnackbar}>
+                <Alert variant="filled" 
+                    onClose={this.closeSnackbar} 
+                    severity={snackbar.severity}
+                >
+                    {snackbar.message}
+                </Alert>
+            </Snackbar>
             <Dialog open={this.state.open} maxWidth="xs" onClose={this.handleClose} aria-labelledby="form-dialog-title">
                 <DialogTitle className={classes.aTitle} id="form-dialog-title"><div className="title"><div className={classes.mTop}>{id ? "Editar" : "Añadir"} Cómic </div> 
                 <div className="m-r">

@@ -10,7 +10,6 @@ import Divider from '@material-ui/core/Divider';
 import Card from '@material-ui/core/Card';
 import Typography from '@material-ui/core/Typography';
 import AddIcon from '@material-ui/icons/Add';
-import useMediaQuery from '@material-ui/core/useMediaQuery';
 import IconButton from '@material-ui/core/IconButton';
 import Avatar from '@material-ui/core/Avatar';
 import { purple } from '@material-ui/core/colors';
@@ -107,8 +106,6 @@ export default function SimpleLibrary({ mangas, states }) {
     const [mangasFiltrados, setMangasFiltrados] = useState([]);
     const [openAdd, setOpenAdd] = useState(false);
     const [buscador, setBuscador] = useState("");
-
-    const large = useMediaQuery('(min-width:1100px)');
 
     useEffect(() => {
         const filtrados = mangas.filter(
@@ -219,9 +216,7 @@ export default function SimpleLibrary({ mangas, states }) {
             mangas={mangasFiltrados}
             paginationProps={{
                 className: classes.paginacion,
-                rowsPerPageOptions: [10, 20, 50, 100]
             }}
-            itemsPorFila={large ? 5 : null}
         />
 
         {mangas.length === 0 &&

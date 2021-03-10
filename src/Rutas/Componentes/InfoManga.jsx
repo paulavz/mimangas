@@ -254,16 +254,25 @@ export default function InfoManga({ manga, open, onClose }) {
             if (newOtherLinks[i].includes("www")) {
                 band = newOtherLinks[i].split(".");
                 band = band[1];
-                finalLink.push(band);
             } else if (newOtherLinks[i].includes("facebook")) {
-                finalLink.push("facebook");
+                band = "facebook";
             }
             else {
                 band = newOtherLinks[i].split(".");
                 band = band[0];
-                band = band.replace("http://", "")
-                band = band.replace("https://", "")
-                finalLink.push(band)
+                band = band.replace("http://", "");
+                band = band.replace("https://", "");
+            }
+            finalLink.push(
+                <a className={classes.noStyledLink}
+                    rel="noopener noreferrer"
+                    target="_blank"
+                    href={newOtherLinks[i]}
+                >{band}
+                </a>
+            );
+            if(i!==newOtherLinks.length-1){
+                finalLink.push(", ");
             }
         }
     }
