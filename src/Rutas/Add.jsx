@@ -729,51 +729,6 @@ class Add extends Component {
                         }
         </React.Fragment>
     }
-    saveData(data) {
-        let user = firebase.auth().currentUser;
-        let db = firebase.firestore();
-        db.collection("users")
-            .doc(user.uid)
-            .collection("mangas").add(
-                data
-            ).then(() => {
-                console.log("Data guardada")
-            })
-
-        if (this.state.tags.length > 0) {
-            db.collection("users")
-                .doc(user.uid)
-                .set({
-                    tags: firebase.firestore.FieldValue.arrayUnion(...this.state.tags)
-                },
-                    { merge: true })
-        }
-
-        this.setState({
-            titleName: '',
-            status: 'Siguiendo',
-            type: 'Manga',
-            lecture: '',
-            tags: [],
-            punctuation: 0,
-            englishtitle: '',
-            spanishtitle: '',
-            artist: '',
-            cover: '',
-            author: '',
-            synopsis: '',
-            demo: 'Shounen',
-            lastchapter: '',
-            ubication: '',
-            otherlink: [],
-            fansub: [],
-            category: [],
-            preview: '',
-            file: '',
-            otherNames: []
-        });
-
-    }
 
     render() {
         const { id, value, snackbar } = this.state;

@@ -26,12 +26,10 @@ export default function ({ mangas, paginationProps, ...otrasProps }) {
 
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
+    const [rppOptions, setRPPOptions] = useState([10])
 
     const large = useMediaQuery('(min-width:1100px)');
     const xLarge = useMediaQuery(theme.breakpoints.up('xl'));
-    const rppOptions = large 
-        ? (xLarge ? [18, 30, 60, 120] : [10, 20, 50, 100])
-        : [12, 20, 60, 100];
 
     useEffect(() => {
         if (page > mangas.length / rowsPerPage) {
@@ -40,7 +38,12 @@ export default function ({ mangas, paginationProps, ...otrasProps }) {
     }, [page, rowsPerPage, mangas]);
 
     useEffect(() => {
-        setRowsPerPage(rppOptions[0]);
+        const options = large 
+        ? (xLarge ? [18, 30, 60, 120] : [10, 20, 50, 100])
+        : [12, 20, 60, 100];
+        
+        setRPPOptions(options)
+        setRowsPerPage(options[0]);
     }, [large, xLarge])
 
     const handleChangePage = (event, newPage) => {
@@ -63,7 +66,7 @@ export default function ({ mangas, paginationProps, ...otrasProps }) {
             {mangas.slice(rowsPerPage * page, (rowsPerPage * page) + rowsPerPage)
                 .map((value, index) =>
                     <Grid item xl={2} md={3} sm={6} xs={12}
-                        className={large && classes.grid5}
+                        className={large ? classes.grid5: ""}
                         key={value.titleName + index}
                     >
                         <TarjetaManga manga={value} />

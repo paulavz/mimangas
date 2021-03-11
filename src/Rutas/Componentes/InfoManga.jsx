@@ -267,6 +267,7 @@ export default function InfoManga({ manga, open, onClose }) {
                 <a className={classes.noStyledLink}
                     rel="noopener noreferrer"
                     target="_blank"
+                    key={i}
                     href={newOtherLinks[i]}
                 >{band}
                 </a>
