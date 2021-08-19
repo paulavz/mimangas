@@ -385,7 +385,7 @@ export default function Avanced({ estados, mangas, tags }) {
                     label='Etiquetas'
                 />
                 <datalist id="tags">
-                    {tags.map((value, index) => <option value={value} key={value + index} />)}
+                    {tags?.map((value, index) => <option value={value} key={value + index} />)}
                 </datalist>
 
 
