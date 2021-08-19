@@ -55,6 +55,7 @@ const useStyles = makeStyles((theme) => ({
     },
     gridManga: {
         textAlign: "center",
+        margin: 10,
         [theme.breakpoints.up("md")]: {
             '&.MuiGrid-grid-md-3': {
                 maxWidth: "20%",
@@ -77,7 +78,7 @@ const useStyles = makeStyles((theme) => ({
         height: theme.spacing(7),
     },
     cardNew: {
-        height: 300,
+        height: 280,
         border: "1px solid black",
         '&:hover': {
             borderWidth: 2,
